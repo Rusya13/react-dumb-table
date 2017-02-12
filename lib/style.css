@@ -1,0 +1,65 @@
+/*th{*/
+    /*position: relative;*/
+    /*padding-right: 5px;*/
+/*}*/
+/*td{*/
+    /*overflow: hidden;*/
+    /*vertical-align: middle;*/
+    /*text-overflow: ellipsis;*/
+    /*border-collapse: separate;*/
+    /*border-spacing: 0;*/
+    /*empty-cells: show;*/
+    /*white-space: normal;*/
+/*}*/
+/*table {*/
+    /*width: 300px;*/
+    /*table-layout: fixed;*/
+/*}*/
+/*.resize-handle{*/
+    /*width: 5px;*/
+    /*background: red;*/
+    /*position: absolute;*/
+    /*top: 0;*/
+    /*bottom: 0;*/
+    /*cursor: col-resize;*/
+/*}*/
+
+/*.container{*/
+    /*width: 600px;*/
+    /*height: 600px;*/
+    /*background: rebeccapurple;*/
+/*}*/
+
+/*.table-simple__header{*/
+    /*position: relative;*/
+/*}*/
+
+.data-table{
+    position: relative;
+    zoom: 1;
+
+    border: 1px solid #E6E6E6;
+}
+
+.data-table__header{
+    position: relative;
+}
+
+.data-table table{
+    table-layout: fixed;
+    width: 100%;
+    -webkit-border-horizontal-spacing: 0;
+    -webkit-border-vertical-spacing: 0;
+}
+
+.resize-handle{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    top: 0;
+
+    background: black;
+    width: 5px;
+
+    display: none;
+}
