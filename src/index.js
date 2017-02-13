@@ -12,6 +12,7 @@ class SimpleDataTable extends React.Component {
 
     componentDidMount() {
         window.addEventListener( "resize", this.resizeTable.bind( this ) )
+        this._setColumnsSize(this.props.columns)
     }
 
     componentWillUnmount() {
@@ -47,9 +48,7 @@ class SimpleDataTable extends React.Component {
             let pieces  = (columns[ index ].width + columns[ index + 1 ].width);
             let piecePx = summPx / pieces;
 
-
             let newDiff = diff / piecePx;
-
 
             let newLeftWidth  = columns[ index ].width + newDiff;
             let newRightWidth = columns[ index + 1 ].width - newDiff;
@@ -60,10 +59,10 @@ class SimpleDataTable extends React.Component {
 
             columns[ index ].width += newDiff;
             columns[ index + 1 ].width -= newDiff;
-
+            this._setColumnsSize(this.props.columns);
             originalWidth  = newSize;
             originalOffset = newOffset;
-            this.forceUpdate()
+
         }.bind( this );
         document.onmouseup   = function () {
             document.body.className = document.body.className.replace( /(?:^|\s)no-selection(?!\S)/g, '' );
@@ -71,19 +70,108 @@ class SimpleDataTable extends React.Component {
         }.bind( this );
     }
 
-    _renderColumnsSync( columns ) {
+    _setColumnsSize(columns){
+
+        //style={col.width && { width: col.width + "%" || "auto" }}
+        let colgroupHeader = document.getElementsByClassName("data-table_colgroup-header") || [];
+        let colgroupBody = document.getElementsByClassName("data-table_colgroup-body") || [];
+        let colgroupBottomRow = document.getElementsByClassName("data-table_colgroup-bottom-row") || [];
+        //console.log("index _setColumnsSize", colgroupHeader);
+        //console.log("index _setColumnsSize", colgroupBody);
+        //console.log("index _setColumnsSize", colgroupBottomRow);
+
+        columns.forEach((column, index)=>{
+            colgroupHeader[index].style.width = column.width + "%";
+            colgroupBody[index].style.width = column.width + "%";
+            //colgroupBottomRow[index].style.width = column.width + "%";
+        })
+
+    }
+
+    _renderColumnsSync( columns, place ) {
         return (
             <colgroup>
                 {columns.map( ( col, index ) => {
-                    return <col key={index} style={col.width && { width: col.width + "%" || "auto" }}/>
-                } )}
+                    return <col className={"data-table_colgroup-"+place} data-index={index} key={index} />
+                })}
             </colgroup>
         )
     }
 
+    _renderHeader( columns ) {
+        return (
+            <thead>
+            <tr>
+                {columns.map( ( col, index ) => {
+                    return (
+                        <th className="flex-wrap" key={index}>
+                            <div className="box">{col.title}</div>
+                            <div className="flex-wrap-div" data-index={index}>
+                                <div
+                                    onMouseDown={this.handleMouseDown2.bind( this )}
+                                    style={{ cursor: "col-resize" }}
+                                    className="resize-handle-new"/>
+                            </div>
+                        </th>
+                    )
+                } )}
+            </tr>
+            </thead>
+        )
+    }
+
+
+    _renderRow( row, columns ){
+        return columns.map((column, cellIndex)=>{
+
+            let value = row[column.key];
+            //console.log("index value", value);
+            return (
+                <td key={cellIndex}>
+                    {value}
+                </td>
+            )
+        })
+    }
+
+    _renderBody( data, columns ) {
+        return (
+            <tbody>
+            {data.map( ( row, index ) => {
+
+                return (
+                    <tr key={index}>
+                        {this._renderRow(row, columns)}
+                    </tr>
+                )
+            } )}
+            </tbody>
+        )
+
+    }
+
+    _renderBottomRow( columns ) {
+        return (
+            <tfoot>
+            <tr>
+                {
+                    columns.map( ( col, index ) => {
+                        return (
+                            <td key={index}>
+                                50
+                            </td>
+                        )
+                    } )
+                }
+            </tr>
+            </tfoot>
+        )
+    }
 
     render() {
-        let columns = this.props.columns;
+        let columns   = this.props.columns;
+        let data      = this.props.data;
+        let bottomRow = this.props.bottomRow;
 
         return (
             <div id="table" ref={( ref ) => this.tableWrapper = ref} className="data-table">
@@ -91,44 +179,28 @@ class SimpleDataTable extends React.Component {
                     ref={( ref ) => this.header = ref}
                     className="data-table__header">
                     <table ref={( ref ) => this.table = ref}>
-                        {this._renderColumnsSync( columns )}
-                        <thead>
-                        <tr>
-                            {this.props.columns.map( ( col, index ) => {
-                                return (
-                                    <th className="flex-wrap" key={index}>
-                                        <div className="box">{col.title}</div>
-                                        <div className="flex-wrap-div" data-index={index}>
-                                            <div
-                                                onMouseDown={this.handleMouseDown2.bind( this )}
-                                                style={{ cursor: "col-resize" }}
-                                                className="resize-handle-new"/>
-                                        </div>
-                                    </th>
-                                )
-                            } )}
-                        </tr>
-                        </thead>
+                        {this._renderColumnsSync( columns, "header" )}
+                        {this._renderHeader( columns )}
                     </table>
                 </div>
                 <div className="data-table__content">
                     <table ref={( ref ) => this.tableBody = ref}>
-                        {this._renderColumnsSync( columns )}
-                        <tbody>
-                        {this.props.data.map( ( col, index ) => {
-                            return (
-                                <tr key={index}>
-                                    <td>{col.first_name}</td>
-                                    <td>{col.last_name}</td>
-                                    <td>{col.email}</td>
-                                    <td>{col.gender}</td>
-                                </tr>
-                            )
-                        } )}
-
-                        </tbody>
+                        {this._renderColumnsSync( columns , "body")}
+                        {this._renderBody( data, columns )}
                     </table>
                 </div>
+                {
+                    bottomRow ?
+                        <div className="data-table_bottom_row">
+                            <table ref={( ref ) => this.tableBottomRow = ref}>
+                                {this._renderColumnsSync( columns , "bottom-row")}
+                                {this._renderBottomRow( columns )}
+                            </table>
+                        </div>
+                        :
+                        null
+                }
+
             </div>
         )
 
@@ -137,15 +209,17 @@ class SimpleDataTable extends React.Component {
 }
 
 SimpleDataTable.propTypes = {
-    height:  PropTypes.number.isRequired,
-    columns: PropTypes.array.isRequired,
-    data:    PropTypes.array.isRequired
+    height:    PropTypes.number.isRequired,
+    columns:   PropTypes.array.isRequired,
+    data:      PropTypes.array.isRequired,
+    bottomRow: PropTypes.bool
 };
 
 SimpleDataTable.defaultProps = {
-    height:  500,
-    columns: [],
-    data:    []
+    height:    500,
+    columns:   [],
+    data:      [],
+    bottomRow: false
 };
 
 
@@ -154,17 +228,26 @@ ReactDOM.render( <SimpleDataTable
     columns={[
         {
             title: "First Name",
-            width: 25
+            width: 25,
+            key: "first_name"
         }, {
             title: "Last Name",
-            width: 25
+            width: 25,
+            key: "last_name"
         }, {
-            title: "Last Name",
-            width: 25
+            title: "Gender",
+            width: 25,
+            key: "gender"
         }, {
-            title: "E-mail",
-            width: 25
+            title: "IP-address",
+            width: 25,
+            key: "ip_address"
+        },{
+            title: "email",
+            width: 25,
+            key: "email"
         }
     ]}
+    bottomRow={false}
 />, document.getElementById( 'react-app' ) );
 
