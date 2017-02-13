@@ -33,11 +33,14 @@
 /*.table-simple__header{*/
     /*position: relative;*/
 /*}*/
+* {
+    box-sizing: border-box;
+}
 
 .data-table{
     position: relative;
     zoom: 1;
-
+    overflow: auto;
     border: 1px solid #E6E6E6;
 }
 
@@ -62,4 +65,40 @@
     width: 5px;
 
     display: none;
+}
+
+.flex-wrap-div{
+    /*display: flex;*/
+    /*flex-direction: row;*/
+    /*flex-wrap: nowrap;*/
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.flex-wrap{
+
+    position: relative;
+
+}
+.flex-wrap:last-child .resize-handle-new{
+    display: none;
+}
+
+.resize-handle-new{
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 20px;
+    width: 10px;
+    background: black;
+
+}
+
+.no-selection{
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
+    cursor: col-resize;
 }

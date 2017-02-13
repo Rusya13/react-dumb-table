@@ -217,16 +217,12 @@ class SimpleDataTable extends React.Component {
     constructor(props){
         super(props);
 
-        this.handleSizeColumns = this.handleSizeColumns.bind(this);
-        this.handleMouseMove = this.handleMouseMove.bind(this);
-        this.handleMouseDown = this.handleMouseDown.bind(this);
         this.getCoords = this.getCoords.bind(this);
 
         window.table = this;
 
         this.state = {
             mode:0,
-
             width: null,
             columns: props.columns,
             resizerPos:null,
@@ -234,186 +230,127 @@ class SimpleDataTable extends React.Component {
         };
     }
 
+
+
     componentDidMount(){
-        this.state.width = this.table.getBoundingClientRect().width;
-
-        let count = 0,
-            summ = 0;
-
-        this.state.columns.forEach((col) => {
-            if(col.width){
-                summ += col.width;
-                count++;
-            }
-        });
-
-        let colWidth = (this.state.width - summ) / count;
-
-        let s = 0;
-        this.state.columns.forEach((col, index) => {
-            if(!col.width){
-                col.width = colWidth;
-            }
-            s += col.width;
-            col.resizerPos = s
-        });
+        window.onresize = this.resizeTable.bind(this);
+        this.state.width = this.tableWrapper.getBoundingClientRect().width;
+        let arrayDivs = document.getElementsByClassName("flex-wrap-div");
     }
 
-    handleSizeColumns(){
-
-    }
-
-    handleMouseDown(e){
-        this.state.mode = 1;
-        const resizeCoords = this.getCoords(this.resizeHandle);
-        const headerCoords = this.getCoords(this.header);
-        const shiftX = e.pageX - resizeCoords.left;
-
-        let columns = this.state.columns;
-        let resIndex = this.state.resIndex;
-
-
-        document.onmousemove = function (e) {
-            let newLeft = e.pageX - shiftX - headerCoords.left;
-
-            if (newLeft < 0) {
-                newLeft = 0;
-            }
-
-            let rightEdge = this.header.offsetWidth - this.resizeHandle.offsetWidth;
-
-            if (newLeft > rightEdge) {
-                newLeft = rightEdge;
-            }
-
-            // определить сколько слева общая ширина колонок кроме изменяемой
-            let leftSumm = columns
-            .filter((column, i)=> i < resIndex)
-            .reduce((s, col)=>{
-                return s += col.width
-            }, 0);
-
-            //  определяем сколько остается справа ширины
-            let rightSumm = this.state.width - this.state.resizerPos;
-            console.log("index rightSumm", rightSumm);
-
-            // определяем сумму ширин до изменения
-            let summBefore = 0;
-            for (let jb=resIndex+1; jb < columns.length; jb++){
-                summBefore += columns[jb].width
-            }
-
-
-            // сколько колонок справа
-            let rightCount = columns.length - resIndex - 1;
-            console.log("index rightCount", rightCount);
-
-            // определяем доли у колонок
-            let pieces = [];
-
-            for (let j=resIndex+1; j < columns.length; j++){
-                pieces[j] = columns[j].width/summBefore
-            }
-            let check = pieces.reduce((sum, am)=> sum += am);
-            console.log("index check", check);
-
-            // проходим по всем колонкам справа и накапливаем ширины
-            let len = newLeft;
-
-            for (let ind = resIndex+1; ind < columns.length; ind++){
-                console.log("index columns[ind]", columns[ind]);
-                // меняем ширину
-
-                let newWidth = rightSumm * pieces[ind];
-                console.log("index new", newWidth);
-
-                let diff = newWidth - columns[ind].width;
-                console.log("index diff", diff);
-
-
-                columns[ind].width = newWidth;
-                // меняем позиции ресайзеров
-                if (ind < columns.length-1){
-                    len = len + newWidth;
-                    columns[ind].resizerPos = len
-
-                }
-
-            }
-
-            // изменяем ширину левой колонки
-            columns[resIndex].width = newLeft - leftSumm;
-
-            // изменяем позицию ресайзера для этой колонки
-            columns[resIndex].resizerPos = newLeft;
-            this.setState({ resizerPos: newLeft  });
-        }.bind(this);
-
-        document.onmouseup = function() {
-            document.onmousemove = document.onmouseup = null;
-            this.setState({mode:0})
-        }.bind(this);
-    }
-
-    handleMouseMove(event){
-        if (this.state.mode === 1){
-            return null
-        }
-        // global click
-        let pos = null;
-
-        let x = event.clientX;
-        let l = this.header.getBoundingClientRect().left;
-        //console.log(x-l);
-        let offsetX = x-l;
-        this.state.columns.forEach((col, index)=>{
-            //console.log("index pos", col);
-            if (offsetX < col.resizerPos+5 && offsetX > col.resizerPos-5){
-                pos = col.resizerPos;
-                this.state.resIndex = index
-            }
-            this.setState({resizerPos:pos})
-        })
-
-    }
 
     getCoords(e){
         var element = e.getBoundingClientRect();
 
         return {
             top: element.top + pageYOffset,
-            left: element.left + pageXOffset
+            left: element.left + pageXOffset,
+            width: element.width
         };
     }
+    resizeTable(e){
+
+        let arrayDivs = document.getElementsByClassName("flex-wrap-div");
+        console.log("index resizeTable", arrayDivs);
+        this.table.style.width = this.tableWrapper.getBoundingClientRect().width +"px";
+        console.log("index resizeTable",this.table.style.width );
+
+        //this.state.columns.forEach((col, index)=>{
+        //    console.log("index ", arrayDivs[index].offsetWidth);
+        //    //col.width = "auto"
+        //})
+        //this.forceUpdate();
+        //this.setState({width:this.tableWrapper.getBoundingClientRect().width})
+
+
+    }
+
+    handleMouseDown2 (e){
+        document.body.className += " no-selection";
+        let div = e.target.parentNode;
+        let index = Number(div.getAttribute("data-index"));
+        let originalOffset = e.clientX;
+        let originalWidth = div.offsetWidth;
+
+        let arrayDivs = document.getElementsByClassName("flex-wrap-div");
+
+        let summPx = arrayDivs[index].offsetWidth + arrayDivs[index+1].offsetWidth;
+
+        document.onmousemove = function (e) {
+            let newOffset = e.clientX;
+            //let newSize = e.pageX - divLeft;
+            let diff = newOffset - originalOffset; //50px
+            //console.log("index diff px", diff);
+            let newSize = originalWidth + diff;
+
+            let pieces = (this.state.columns[index].width + this.state.columns[index+1].width); // 8
+            let piecePx = summPx/pieces;  //100 px
+
+            //console.log("index piecePx", piecePx);
+            let newDiff = diff/piecePx; // 0.5
+            //console.log("index newDiff", newDiff);
+
+            this.state.columns[index].width += newDiff;
+            this.state.columns[index+1].width -= newDiff;
+
+            originalWidth = newSize;
+            originalOffset = newOffset;
+            this.forceUpdate()
+        }.bind(this);
+        document.onmouseup = function() {
+            document.body.className = document.body.className.replace(/(?:^|\s)no-selection(?!\S)/g , '');
+            document.onmousemove = document.onmouseup = null;
+        }.bind(this);
+    }
+
 
     render(){
         const { height } = this.props;
-        //console.log("index render", this.state.resizerPos);
 
         return (
-            <div className="data-table" style={{ height }}>
+            <div id="table" ref={(ref) => this.tableWrapper = ref} className="data-table" style={{ height }}>
                 <div
                     ref={(ref) => this.header = ref}
-                    id="header"
 
-                    onMouseMove={this.handleMouseMove}
+                    //onMouseMove={this.handleMouseMove}
                     className="data-table__header">
                     <table ref={(ref) => this.table = ref} style={this.state.width && { width: this.state.width }}>
                         <colgroup>
                             {this.state.columns.map((col, index) => {
-                                return <col data-resizerPosition={col.resizerPos} key={index} style={col.width && {width: col.width}}/>
+                                return <col key={index} style={col.width && {width: col.width +"%" || "auto"}}/>
                             })}
                         </colgroup>
-                        <TableHeaderColumns
-                            columns={this.state.columns}/>
-                    </table>
-                    <div
+                        <thead>
+                        <tr>
+                            {this.state.columns.map((col, index) => {
+                                return (
+                                    <th className="flex-wrap" key={index}>
+                                        <div className="box">{col.title}</div>
+                                        <div className="flex-wrap-div" data-index={index}>
+                                            <div
+                                                onMouseDown={this.handleMouseDown2.bind(this)}
+                                                style={{ cursor:"col-resize" }}
+                                                className="resize-handle-new"/>
+                                        </div>
 
-                        ref={(ref) => this.resizeHandle = ref}
-                        onMouseDown={this.handleMouseDown}
-                        style={{ left: this.state.resizerPos, display:(this.state.resizerPos)?"block":"none", cursor:"col-resize" }}
-                        className="resize-handle"/>
+                                    </th>
+                                )
+                            })}
+                        </tr>
+                        </thead>
+                    </table>
+
                 </div>
+                {/*<div className="flex-wrap">*/}
+                    {/*{this.state.columns.map((col, index) => {*/}
+                        {/*return <div data-index={index} className="flex-wrap-div" key={index} style={(col.width)?{flex:"1 0 "+ col.width+"px"}:{flex:1}}>*/}
+                            {/*<div*/}
+                                 {/*onMouseDown={this.handleMouseDown2.bind(this)}*/}
+                                 {/*style={{ cursor:"col-resize" }}*/}
+                                 {/*className="resize-handle-new"/>*/}
+                        {/*</div>*/}
+                    {/*})}*/}
+                {/*</div>*/}
             </div>
         )
 
@@ -445,14 +382,16 @@ ReactDOM.render(<SimpleDataTable
     columns={[
         {
             title: "First Name",
-            width: 100
+            width: 2500
         },{
-            title: "Last Name"
+            title: "Last Name",
+            width:2500
         }, {
-            title: "Last Name"
+            title: "Last Name",
+            width:2500
         },{
             title: "E-mail",
-            width: 100
+            width: 2500
         }
     ]}
     />, document.getElementById('react-app'));
@@ -486,3 +425,11 @@ ReactDOM.render(<SimpleDataTable
         // //         </div>
         // //    </div>
         // // )
+
+
+{/*<div*/}
+
+    {/*ref={(ref) => this.resizeHandle = ref}*/}
+    {/*onMouseDown={this.handleMouseDown}*/}
+    {/*style={{ left: this.state.resizerPos, display:(this.state.resizerPos)?"block":"none", cursor:"col-resize" }}*/}
+    {/*className="resize-handle"/>*/}
