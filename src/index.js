@@ -251,9 +251,9 @@ class SimpleDataTable extends React.Component {
     resizeTable(e){
 
         let arrayDivs = document.getElementsByClassName("flex-wrap-div");
-        console.log("index resizeTable", arrayDivs);
+        //console.log("index resizeTable", arrayDivs);
         this.table.style.width = this.tableWrapper.getBoundingClientRect().width +"px";
-        console.log("index resizeTable",this.table.style.width );
+        //console.log("index resizeTable",this.table.style.width );
 
         //this.state.columns.forEach((col, index)=>{
         //    console.log("index ", arrayDivs[index].offsetWidth);
@@ -289,6 +289,13 @@ class SimpleDataTable extends React.Component {
             //console.log("index piecePx", piecePx);
             let newDiff = diff/piecePx; // 0.5
             //console.log("index newDiff", newDiff);
+
+            let newLeftWidth = this.state.columns[index].width + newDiff;
+            let newRightWidth = this.state.columns[index+ 1].width - newDiff;
+
+            if (newLeftWidth * piecePx < 20 || newRightWidth * piecePx < 20){
+                return
+            }
 
             this.state.columns[index].width += newDiff;
             this.state.columns[index+1].width -= newDiff;
@@ -382,16 +389,16 @@ ReactDOM.render(<SimpleDataTable
     columns={[
         {
             title: "First Name",
-            width: 2500
+            width: 25
         },{
             title: "Last Name",
-            width:2500
+            width:25
         }, {
             title: "Last Name",
-            width:2500
+            width:25
         },{
             title: "E-mail",
-            width: 2500
+            width: 25
         }
     ]}
     />, document.getElementById('react-app'));

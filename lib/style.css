@@ -2,15 +2,15 @@
     /*position: relative;*/
     /*padding-right: 5px;*/
 /*}*/
-/*td{*/
-    /*overflow: hidden;*/
-    /*vertical-align: middle;*/
-    /*text-overflow: ellipsis;*/
-    /*border-collapse: separate;*/
-    /*border-spacing: 0;*/
-    /*empty-cells: show;*/
-    /*white-space: normal;*/
-/*}*/
+.box{
+    overflow: hidden;
+    vertical-align: middle;
+    text-overflow: ellipsis;
+    border-collapse: separate;
+    border-spacing: 0;
+    empty-cells: show;
+    white-space: nowrap;
+}
 /*table {*/
     /*width: 300px;*/
     /*table-layout: fixed;*/
