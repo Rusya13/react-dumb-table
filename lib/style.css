@@ -11,6 +11,16 @@
     empty-cells: show;
     white-space: nowrap;
 }
+
+td{
+    overflow: hidden;
+    vertical-align: middle;
+    text-overflow: ellipsis;
+    border-collapse: separate;
+    border-spacing: 0;
+    empty-cells: show;
+    white-space: normal;
+}
 /*table {*/
     /*width: 300px;*/
     /*table-layout: fixed;*/
@@ -53,6 +63,11 @@
     width: 100%;
     -webkit-border-horizontal-spacing: 0;
     -webkit-border-vertical-spacing: 0;
+}
+
+.data-table__content{
+    overflow: auto;
+    height: 500px;
 }
 
 .resize-handle{

@@ -253,6 +253,7 @@ class SimpleDataTable extends React.Component {
         let arrayDivs = document.getElementsByClassName("flex-wrap-div");
         //console.log("index resizeTable", arrayDivs);
         this.table.style.width = this.tableWrapper.getBoundingClientRect().width +"px";
+        this.tableBody.style.width = this.tableWrapper.getBoundingClientRect().width +"px";
         //console.log("index resizeTable",this.table.style.width );
 
         //this.state.columns.forEach((col, index)=>{
@@ -315,11 +316,9 @@ class SimpleDataTable extends React.Component {
         const { height } = this.props;
 
         return (
-            <div id="table" ref={(ref) => this.tableWrapper = ref} className="data-table" style={{ height }}>
+            <div id="table" ref={(ref) => this.tableWrapper = ref} className="data-table" >
                 <div
                     ref={(ref) => this.header = ref}
-
-                    //onMouseMove={this.handleMouseMove}
                     className="data-table__header">
                     <table ref={(ref) => this.table = ref} style={this.state.width && { width: this.state.width }}>
                         <colgroup>
@@ -346,18 +345,31 @@ class SimpleDataTable extends React.Component {
                         </tr>
                         </thead>
                     </table>
-
                 </div>
-                {/*<div className="flex-wrap">*/}
-                    {/*{this.state.columns.map((col, index) => {*/}
-                        {/*return <div data-index={index} className="flex-wrap-div" key={index} style={(col.width)?{flex:"1 0 "+ col.width+"px"}:{flex:1}}>*/}
-                            {/*<div*/}
-                                 {/*onMouseDown={this.handleMouseDown2.bind(this)}*/}
-                                 {/*style={{ cursor:"col-resize" }}*/}
-                                 {/*className="resize-handle-new"/>*/}
-                        {/*</div>*/}
-                    {/*})}*/}
-                {/*</div>*/}
+                <div className="data-table__content">
+                    <table ref={(ref) => this.tableBody = ref} style={this.state.width && { width: this.state.width }}>
+                        <colgroup>
+                            {this.state.columns.map((col, index) => {
+                                return <col key={index} style={col.width && {width: col.width +"%" || "auto"}}/>
+                            })}
+                        </colgroup>
+                        <tbody>
+
+
+                            {this.props.data.map((col, index) => {
+                                return (
+                                    <tr key={index}>
+                                        <td>{col.first_name}</td>
+                                        <td>{col.last_name}</td>
+                                        <td>{col.email}</td>
+                                        <td>{col.gender}</td>
+                                    </tr>
+                                )
+                            })}
+
+                        </tbody>
+                    </table>
+                </div>
             </div>
         )
 
@@ -403,40 +415,3 @@ ReactDOM.render(<SimpleDataTable
     ]}
     />, document.getElementById('react-app'));
 
-
-
-        // {/*return(*/}
-        //    {/*<div className="table-simple">*/}
-        //         {/*<div className="table-simple__header" ref="header">*/}
-        //             {/*<table>*/}
-        //                 {/*<colgroup>*/}
-        //                     {/*{columns.map((col, index) => {*/}
-        //                         {/*return (*/}
-        //                             {/*<col style={col.width && { width: col.width }} key={index}/>*/}
-        //                         {/*)*/}
-        //                     {/*})}*/}
-        //                 {/*</colgroup>*/}
-        //                 {/*<thead>*/}
-        //                     {/*<tr>*/}
-        //                         {/*{columns.map((col, index) => {*/}
-        //                             {/*return (*/}
-        //                                 {/*<th key={index}>*/}
-        //                                     {/*{col.title}*/}
-        //                                 {/*</th>*/}
-        // //                             )
-        // //                         })}
-        // //                     </tr>
-        // //                 </thead>
-        // //             </table>
-        // //             <ResizeHandle getHeader={this.getHeader} onChangePosition={this.handePosition}/>
-        // //         </div>
-        // //    </div>
-        // // )
-
-
-{/*<div*/}
-
-    {/*ref={(ref) => this.resizeHandle = ref}*/}
-    {/*onMouseDown={this.handleMouseDown}*/}
-    {/*style={{ left: this.state.resizerPos, display:(this.state.resizerPos)?"block":"none", cursor:"col-resize" }}*/}
-    {/*className="resize-handle"/>*/}
