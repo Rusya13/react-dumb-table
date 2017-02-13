@@ -1,18 +1,8 @@
-/*th{*/
-    /*position: relative;*/
-    /*padding-right: 5px;*/
-/*}*/
-.box{
-    overflow: hidden;
-    vertical-align: middle;
-    text-overflow: ellipsis;
-    border-collapse: separate;
+table{
     border-spacing: 0;
-    empty-cells: show;
-    white-space: nowrap;
 }
 
-td{
+td th{
     overflow: hidden;
     vertical-align: middle;
     text-overflow: ellipsis;
@@ -21,30 +11,12 @@ td{
     empty-cells: show;
     white-space: normal;
 }
-/*table {*/
-    /*width: 300px;*/
-    /*table-layout: fixed;*/
-/*}*/
-/*.resize-handle{*/
-    /*width: 5px;*/
-    /*background: red;*/
-    /*position: absolute;*/
-    /*top: 0;*/
-    /*bottom: 0;*/
-    /*cursor: col-resize;*/
-/*}*/
 
-/*.container{*/
-    /*width: 600px;*/
-    /*height: 600px;*/
-    /*background: rebeccapurple;*/
-/*}*/
 
-/*.table-simple__header{*/
-    /*position: relative;*/
-/*}*/
+
 * {
     box-sizing: border-box;
+    font-size: 13px;
 }
 
 .data-table{
@@ -52,10 +24,24 @@ td{
     zoom: 1;
     overflow: auto;
     border: 1px solid #E6E6E6;
+    border-radius: 3px;
 }
 
 .data-table__header{
     position: relative;
+    border-bottom: 1px solid #E9E3E6;
+}
+
+.data-table__header-box{
+    padding-left: 10px;
+    overflow: hidden;
+    vertical-align: middle;
+    text-overflow: ellipsis;
+    border-collapse: separate;
+    border-spacing: 0;
+    empty-cells: show;
+    white-space: nowrap;
+    text-align: left;
 }
 
 .data-table table{
@@ -68,6 +54,119 @@ td{
 .data-table__content{
     overflow: auto;
     height: 500px;
+}
+.data-table__content-row .data-table__content-row-selected{
+    background-color: #dee9fc;
+}
+
+
+.data-table__content-row:nth-child(2n){
+    background-color: #f6f7f8;
+}
+
+.data-table__content-cell{
+    padding-left: 10px;
+    overflow: hidden;
+    vertical-align: middle;
+    text-overflow: ellipsis;
+    border-collapse: separate;
+    border-spacing: 0;
+    empty-cells: show;
+    white-space: nowrap;
+    text-align: left;
+}
+
+
+.data-table__bottom_row{
+
+}
+
+.data-table__footer{
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    border-top: 1px solid #E9E3E6;
+
+}
+
+.data-table__footer > .data-table__footer-info{
+    flex-basis: 33.33333%;
+    max-width: 33.33333%;
+    padding-left: 10px;
+    padding-right: 10px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.data-table__footer > .data-table__footer-pagination{
+    flex-basis: 33.33333%;
+    max-width: 33.33333%;
+    padding-left: 10px;
+    padding-right: 10px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
+.data-table__footer > .data-table__footer-settings{
+    flex-basis: 33.33333%;
+    max-width: 33.33333%;
+    padding-left: 10px;
+    padding-right: 10px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+
+.data-table__footer-reload-button{
+    padding: 0;
+    margin: 0 0 0 5px;
+    border-radius: 3px;
+    background-color: white;
+    outline: none;
+    cursor: pointer;
+    text-align: center;
+    border: 1px solid #E3E3E3;
+    height: 26px;
+    min-width: 26px;
+}
+.data-table__footer-reload-button > svg{
+    fill: #7a7578;
+}
+
+
+.data-table__footer-limit-selector-wrapper{
+    background-color: white;
+    display: flex;
+    height: 26px;
+    border: 1px solid #E3E3E3;
+    border-radius: 2px;
+    margin-left: 5px;
+}
+
+.data-table__footer-select{
+    position: relative;
+    height: 100%;
+    padding-left: 10px;
+    padding-right: 24px;
+    background-color: transparent;
+    outline: none;
+    border: none;
+    -webkit-appearance: none;
+    z-index: 100;
+}
+
+.data-table__footer-limit-selector-wrapper >svg {
+    fill: #7a7578;
+    margin-left: -24px;
+    z-index: 99;
 }
 
 .resize-handle{
@@ -83,9 +182,6 @@ td{
 }
 
 .flex-wrap-div{
-    /*display: flex;*/
-    /*flex-direction: row;*/
-    /*flex-wrap: nowrap;*/
     position: absolute;
     top: 0;
     left: 0;
@@ -93,22 +189,36 @@ td{
 }
 
 .flex-wrap{
-
+    border-spacing: 0;
     position: relative;
-
+    border-right: 1px solid #E9E3E6;
 }
+.flex-wrap:last-child{
+    border-right: none;
+}
+
+
 .flex-wrap:last-child .resize-handle-new{
     display: none;
+
 }
 
 .resize-handle-new{
     position: absolute;
     right: 0;
     top: 0;
+    bottom: 0;
     height: 20px;
     width: 10px;
-    background: black;
+    margin-right: -5px;
+    background: transparent;
 
+}
+
+.resize-handle-new:hover{
+    background: #E3E3E3;
+    opacity: 0.5;
+    cursor: col-resize;
 }
 
 .no-selection{
