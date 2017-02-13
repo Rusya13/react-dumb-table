@@ -218,16 +218,19 @@ class SimpleDataTable extends React.Component {
         super(props);
 
         this.handleSizeColumns = this.handleSizeColumns.bind(this);
-        this.handleMouseOver = this.handleMouseOver.bind(this);
+        this.handleMouseMove = this.handleMouseMove.bind(this);
         this.handleMouseDown = this.handleMouseDown.bind(this);
         this.getCoords = this.getCoords.bind(this);
 
         window.table = this;
 
         this.state = {
-            left: 100,
+            mode:0,
+
             width: null,
-            columns: props.columns
+            columns: props.columns,
+            resizerPos:null,
+            resIndex:null
         };
     }
 
@@ -246,10 +249,13 @@ class SimpleDataTable extends React.Component {
 
         let colWidth = (this.state.width - summ) / count;
 
-        this.state.columns.forEach((col) => {
+        let s = 0;
+        this.state.columns.forEach((col, index) => {
             if(!col.width){
                 col.width = colWidth;
             }
+            s += col.width;
+            col.resizerPos = s
         });
     }
 
@@ -258,10 +264,14 @@ class SimpleDataTable extends React.Component {
     }
 
     handleMouseDown(e){
+        this.state.mode = 1;
         const resizeCoords = this.getCoords(this.resizeHandle);
         const headerCoords = this.getCoords(this.header);
-
         const shiftX = e.pageX - resizeCoords.left;
+
+        let columns = this.state.columns;
+        let resIndex = this.state.resIndex;
+
 
         document.onmousemove = function (e) {
             let newLeft = e.pageX - shiftX - headerCoords.left;
@@ -276,47 +286,95 @@ class SimpleDataTable extends React.Component {
                 newLeft = rightEdge;
             }
 
-            this.setState({ left: newLeft });
+            // определить сколько слева общая ширина колонок кроме изменяемой
+            let leftSumm = columns
+            .filter((column, i)=> i < resIndex)
+            .reduce((s, col)=>{
+                return s += col.width
+            }, 0);
+
+            //  определяем сколько остается справа ширины
+            let rightSumm = this.state.width - this.state.resizerPos;
+            console.log("index rightSumm", rightSumm);
+
+            // определяем сумму ширин до изменения
+            let summBefore = 0;
+            for (let jb=resIndex+1; jb < columns.length; jb++){
+                summBefore += columns[jb].width
+            }
+
+
+            // сколько колонок справа
+            let rightCount = columns.length - resIndex - 1;
+            console.log("index rightCount", rightCount);
+
+            // определяем доли у колонок
+            let pieces = [];
+
+            for (let j=resIndex+1; j < columns.length; j++){
+                pieces[j] = columns[j].width/summBefore
+            }
+            let check = pieces.reduce((sum, am)=> sum += am);
+            console.log("index check", check);
+
+            // проходим по всем колонкам справа и накапливаем ширины
+            let len = newLeft;
+
+            for (let ind = resIndex+1; ind < columns.length; ind++){
+                console.log("index columns[ind]", columns[ind]);
+                // меняем ширину
+
+                let newWidth = rightSumm * pieces[ind];
+                console.log("index new", newWidth);
+
+                let diff = newWidth - columns[ind].width;
+                console.log("index diff", diff);
+
+
+                columns[ind].width = newWidth;
+                // меняем позиции ресайзеров
+                if (ind < columns.length-1){
+                    len = len + newWidth;
+                    columns[ind].resizerPos = len
+
+                }
+
+            }
+
+            // изменяем ширину левой колонки
+            columns[resIndex].width = newLeft - leftSumm;
+
+            // изменяем позицию ресайзера для этой колонки
+            columns[resIndex].resizerPos = newLeft;
+            this.setState({ resizerPos: newLeft  });
         }.bind(this);
 
         document.onmouseup = function() {
             document.onmousemove = document.onmouseup = null;
-        };
+            this.setState({mode:0})
+        }.bind(this);
     }
 
-    handleMouseOver(event){
+    handleMouseMove(event){
+        if (this.state.mode === 1){
+            return null
+        }
         // global click
+        let pos = null;
+
         let x = event.clientX;
         let l = this.header.getBoundingClientRect().left;
+        //console.log(x-l);
+        let offsetX = x-l;
+        this.state.columns.forEach((col, index)=>{
+            //console.log("index pos", col);
+            if (offsetX < col.resizerPos+5 && offsetX > col.resizerPos-5){
+                pos = col.resizerPos;
+                this.state.resIndex = index
+            }
+            this.setState({resizerPos:pos})
+        })
 
-        console.log(x-l);
-
-
-
-        // let e = event.nativeEvent;
-        // // let target = e.target;
-        //
-        // console.log(x, e);
-
-        // console.log(event.nativeEvent);
-
-        //
-        // function checkElement(t){
-        //     console.log(t);
-        //
-        //     return t.id == 'header' ? t.offsetX : checkElement(t.parentElement);
-        // }
-        //
-        //
-        // console.log(checkElement(target));
-
-        // console.log(this);
-        // event.stopPropagation();
-        // console.log(event.relatedTarget);
-
-        // var x = event.nativeEvent.offsetX==undefined?event.nativeEvent.layerX:event.nativeEvent.offsetX;
-        // var y = event.nativeEvent.offsetY==undefined?event.nativeEvent.layerY:event.nativeEvent.offsetY;
-        // console.log(x +'x'+ y);
     }
 
     getCoords(e){
@@ -330,6 +388,7 @@ class SimpleDataTable extends React.Component {
 
     render(){
         const { height } = this.props;
+        //console.log("index render", this.state.resizerPos);
 
         return (
             <div className="data-table" style={{ height }}>
@@ -337,21 +396,22 @@ class SimpleDataTable extends React.Component {
                     ref={(ref) => this.header = ref}
                     id="header"
 
-                    onMouseOverCapture={this.handleMouseOver}
+                    onMouseMove={this.handleMouseMove}
                     className="data-table__header">
                     <table ref={(ref) => this.table = ref} style={this.state.width && { width: this.state.width }}>
                         <colgroup>
                             {this.state.columns.map((col, index) => {
-                                return <col key={index} style={col.width && {width: col.width}}/>
+                                return <col data-resizerPosition={col.resizerPos} key={index} style={col.width && {width: col.width}}/>
                             })}
                         </colgroup>
                         <TableHeaderColumns
                             columns={this.state.columns}/>
                     </table>
                     <div
+
                         ref={(ref) => this.resizeHandle = ref}
                         onMouseDown={this.handleMouseDown}
-                        style={{ left: this.state.left }}
+                        style={{ left: this.state.resizerPos, display:(this.state.resizerPos)?"block":"none", cursor:"col-resize" }}
                         className="resize-handle"/>
                 </div>
             </div>

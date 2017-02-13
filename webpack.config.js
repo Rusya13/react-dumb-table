@@ -12,7 +12,7 @@ module.exports = {
                 exclude: /node_modules/,
                 query: {
                     presets: ['es2015', 'react'],
-                    plugins: ['transform-decorators-legacy' ]
+                    //plugins: ['transform-decorators-legacy' ]
                 }
             }
         ]
