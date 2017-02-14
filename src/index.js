@@ -1,13 +1,18 @@
 import React, { PropTypes } from "react";
-import ReactDOM from "react-dom";
-import { fakeData } from "./fakeData";
 
-class SimpleDataTable extends React.Component {
+export class SimpleDataTable extends React.Component {
 
     constructor( props ) {
         super( props );
         window.table = this;
+        this.cachedColumnsSize=[];
+        this._saveCache(props.columns);
+    }
 
+    _saveCache(columns){
+        columns.map((col, i)=>{
+            this.cachedColumnsSize.push({width:col.width})
+        })
     }
 
     componentDidMount() {
@@ -19,6 +24,11 @@ class SimpleDataTable extends React.Component {
         window.removeEventListener( "resize", this.resizeTable.bind( this ) )
     }
 
+    componentWillReceivedProps(props){
+        console.log("index componentWillReceivedProps", props);
+
+    }
+
     resizeTable() {
         this.table.style.width     = this.tableWrapper.getBoundingClientRect().width + "px";
         this.tableBody.style.width = this.tableWrapper.getBoundingClientRect().width + "px";
@@ -28,7 +38,8 @@ class SimpleDataTable extends React.Component {
         document.body.className += " no-selection";
 
 
-        let columns        = this.props.columns;
+        //let columns        = this.props.columns;
+        let columns        = this.cachedColumnsSize;
         let div            = e.target.parentNode;
         let index          = Number( div.getAttribute( "data-index" ) );
         let originalOffset = e.clientX;
@@ -59,7 +70,10 @@ class SimpleDataTable extends React.Component {
 
             columns[ index ].width += newDiff;
             columns[ index + 1 ].width -= newDiff;
-            this._setColumnsSize( this.props.columns );
+
+
+
+            this._setColumnsSize( this.cachedColumnsSize );
             originalWidth  = newSize;
             originalOffset = newOffset;
 
@@ -291,6 +305,7 @@ class SimpleDataTable extends React.Component {
     render() {
         console.log( "index render" );
         let columns      = this.props.columns;
+        let cachedColumns = this.cachedColumnsSize;
         let data         = this.props.data;
         let rowHeight    = this.props.rowHeight;
         let bottomRow    = this.props.bottomRow;
@@ -323,13 +338,13 @@ class SimpleDataTable extends React.Component {
 
                     className="data-table__header">
                     <table ref={( ref ) => this.table = ref}>
-                        {this._renderColumnsSync( columns, "header" )}
+                        {this._renderColumnsSync( cachedColumns, "header" )}
                         {this._renderHeader( columns, headerHeight, orderBy, orderDirection )}
                     </table>
                 </div>
                 <div className="data-table__content">
                     <table ref={( ref ) => this.tableBody = ref}>
-                        {this._renderColumnsSync( columns, "body" )}
+                        {this._renderColumnsSync( cachedColumns, "body" )}
                         {this._renderBody( data, columns, rowHeight, selectedRowIndex )}
                     </table>
                 </div>
@@ -337,7 +352,7 @@ class SimpleDataTable extends React.Component {
                     bottomRow ?
                         <div className="data-table__bottom_row">
                             <table ref={( ref ) => this.tableBottomRow = ref}>
-                                {this._renderColumnsSync( columns, "bottom-row" )}
+                                {this._renderColumnsSync( cachedColumns, "bottom-row" )}
                                 {this._renderBottomRow( columns )}
                             </table>
                         </div>
@@ -422,43 +437,3 @@ SimpleDataTable.defaultProps = {
     orderDirection:     "ASC",
     orderChangeHandler: null
 };
-
-
-ReactDOM.render( <SimpleDataTable
-    data={fakeData}
-    reloadButtonHandler={() => console.log( "reload" )}
-    limitSelectorHandler={( limit ) => console.log( "new limit:", limit )}
-    rowSelectHandler={( row, index ) => console.log( "index rowSelectHandler", row, index )}
-    orderBy="name"
-    orderDirection="ASC"
-    orderChangeHandler={( key, order ) => {
-        console.log( "index orderChangeHandler", key, order )
-
-    }}
-    columns={[
-        {
-            title:   "First Name",
-            width:   25,
-            key:     "first_name",
-            sortKey: "name"
-        }, {
-            title: "Last Name",
-            width: 25,
-            key:   "last_name"
-        }, {
-            title: "Gender",
-            width: 25,
-            key:   "gender"
-        }, {
-            title: "IP-address",
-            width: 25,
-            key:   "ip_address"
-        }, {
-            title: "email",
-            width: 25,
-            key:   "email"
-        }
-    ]}
-    bottomRow={false}
-/>, document.getElementById( 'react-app' ) );
-
