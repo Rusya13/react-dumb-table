@@ -162,12 +162,15 @@ td th{
     max-width: 33.33333%;
     padding-left: 10px;
     padding-right: 10px;
-
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
+    align-items: center;
 }
 
+.data-table__footer-pagination-buttons{
+    display: flex;
+}
 
 .data-table__footer > .data-table__footer-settings{
     flex-basis: 33.33333%;
@@ -179,6 +182,56 @@ td th{
     flex-direction: row;
     justify-content: flex-end;
     align-items: center;
+}
+
+
+.data-table__buttons_group .data-table__button{
+    padding: 0;
+    margin: 0;
+    border-radius: 0;
+    background-color: white;
+    outline: none;
+    cursor: pointer;
+    text-align: center;
+    border-style: solid;
+    border-color: #E3E3E3;
+    border-width: 1px 1px 1px 0;
+    height: 26px;
+    min-width: 26px;
+}
+.data-table__buttons_group .data-table__button:first-child{
+    margin:0 0 0 5px;
+    border-radius: 3px 0 0 3px;
+    border-width: 1px;
+}
+.data-table__buttons_group .data-table__button:last-child{
+    border-radius: 0 3px 3px 0;
+}
+
+
+.data-table__button{
+    padding: 0;
+    margin: 0 0 0 5px;
+    border-radius: 3px;
+    background-color: white;
+    outline: none;
+    cursor: pointer;
+    text-align: center;
+    border: 1px solid #E3E3E3;
+    height: 26px;
+    min-width: 26px;
+}
+.data-table__button:disabled > svg{
+    fill-opacity: 0.5;
+}
+
+.data-table__button.active {
+    background-color: #3279fb;
+    color: #fff;
+}
+
+.data-table__button > svg {
+    fill: #7a7578;
 }
 
 

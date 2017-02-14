@@ -11,7 +11,7 @@ class SimpleDataTable extends React.Component {
     }
 
     componentDidMount() {
-        window.addEventListener( "resize", this.resizeTable.bind( this ) )
+        window.addEventListener( "resize", this.resizeTable.bind( this ) );
         this._setColumnsSize( this.props.columns )
     }
 
@@ -24,7 +24,7 @@ class SimpleDataTable extends React.Component {
         this.tableBody.style.width = this.tableWrapper.getBoundingClientRect().width + "px";
     }
 
-    handleMouseDown2( e ) {
+    handleMouseDown( e ) {
         document.body.className += " no-selection";
 
 
@@ -53,7 +53,7 @@ class SimpleDataTable extends React.Component {
             let newLeftWidth  = columns[ index ].width + newDiff;
             let newRightWidth = columns[ index + 1 ].width - newDiff;
 
-            if ( newLeftWidth * piecePx < 20 || newRightWidth * piecePx < 20 ) {
+            if ( newLeftWidth * piecePx < 20 || newRightWidth * piecePx < 20 ) { // min-width
                 return
             }
 
@@ -99,41 +99,45 @@ class SimpleDataTable extends React.Component {
     }
 
 
-    _orderChangeHandler(orderBy, key, orderDirection){
+    _orderChangeHandler( orderBy, key, orderDirection ) {
         let dir = orderDirection;
-        if (orderBy === key){
-            dir = (orderDirection === "ASC")?"DESC":"ASC"
+        if ( orderBy === key ) {
+            dir = (orderDirection === "ASC") ? "DESC" : "ASC"
         }
-        this.props.orderChangeHandler && this.props.orderChangeHandler(key, dir);
+        this.props.orderChangeHandler && this.props.orderChangeHandler( key, dir );
     }
 
     _renderHeader( columns, headerHeight, orderBy, orderDirection ) {
-        console.log("index _renderHeader", orderBy);
+        console.log( "index _renderHeader", orderBy );
         return (
             <thead>
             <tr >
                 {columns.map( ( col, index ) => {
-                    console.log("index col", col.key, col.sortKey);
+                    console.log( "index col", col.key, col.sortKey );
                     return (
                         <th style={{ height: headerHeight }} className="data-table__header-cell" key={index}
-                            onClick={this._orderChangeHandler.bind(this, orderBy, col.sortKey || col.key, orderDirection)}>
+                            onClick={this._orderChangeHandler.bind( this, orderBy, col.sortKey || col.key, orderDirection )}>
                             <div className="data-table__header-cell-content">{col.title}</div>
                             <div className="data-table__header-cell-resizer-container" data-index={index}>
                                 <div
                                     style={{ height: headerHeight }}
-                                    onMouseDown={this.handleMouseDown2.bind( this )}
+                                    onMouseDown={this.handleMouseDown.bind( this )}
 
                                     className="data-table__header-cell-resizer-container-resizer"/>
                             </div>
-                            {(orderBy === col.sortKey || orderBy === col.key)?
+                            {(orderBy === col.sortKey || orderBy === col.key) ?
                                 <div className="data-table__header-cell-order-container">
                                     {
-                                        (orderDirection === "ASC")?
-                                            <svg viewBox="0 0 24 24" width="20" height="20"><path d="M7 14l5-5 5 5z"></path></svg>:
-                                            <svg viewBox="0 0 24 24" width="20" height="20"><path d="M7 10l5 5 5-5z"></path></svg>
+                                        (orderDirection === "ASC") ?
+                                            <svg viewBox="0 0 24 24" width="20" height="20">
+                                                <path d="M7 14l5-5 5 5z"></path>
+                                            </svg> :
+                                            <svg viewBox="0 0 24 24" width="20" height="20">
+                                                <path d="M7 10l5 5 5-5z"></path>
+                                            </svg>
                                     }
 
-                                </div>:
+                                </div> :
                                 null
 
                             }
@@ -203,8 +207,56 @@ class SimpleDataTable extends React.Component {
         )
     }
 
-    _renderPagination( limit, offset, total ) {
 
+    _offsetChangeHandler(key, currentPage){
+
+        if (currentPage === key) return;
+        console.log(key);
+        this.props.offsetChangeHandler && this.props.offsetChangeHandler(key)
+    }
+
+    _renderPagination( offset, limit, total, pages, currentPage ) {
+
+        if ( pages <= 1 ) {
+            return null
+        }
+
+        let pagesRender = [];
+        let startPos    = currentPage > 3 ? ( (currentPage > pages - 3) ? pages - 4 : currentPage - 2) : 1;
+
+        let group = [];
+
+        for ( let i = startPos; i <= startPos + 4 && i <= pages; i++ ) {
+            let className="data-table__button";
+            if (i === currentPage) className += " active";
+            group.push( <button onClick={this._offsetChangeHandler.bind(this, i, currentPage)} className={className}  id={String( i )} key={i}>{String( i )}</button> )
+        }
+
+
+        pagesRender.push( <div className="data-table__buttons_group" key="btn-group">
+            {group}
+        </div> );
+
+        pagesRender.unshift( <button onClick={this._offsetChangeHandler.bind(this, "back")} className="data-table__button" disabled={currentPage === startPos}
+                                     id={currentPage - 1} key="back">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+                <path d="M15.41 16.09l-4.58-4.59 4.58-4.59L14 5.5l-6 6 6 6z">
+                </path>
+            </svg>
+        </button> );
+        pagesRender.push( <button onClick={this._offsetChangeHandler.bind(this, "forward")} className="data-table__button" disabled={currentPage === pages} id={currentPage + 1}
+                                  key="forward">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+                <path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z">
+                </path>
+            </svg>
+        </button> );
+
+        return (
+            <div className="data-table__footer-pagination-buttons">
+                {pagesRender}
+            </div>
+        )
     }
 
     _renderReloadButton() {
@@ -244,18 +296,25 @@ class SimpleDataTable extends React.Component {
         let bottomRow    = this.props.bottomRow;
         let showFooter   = this.props.showFooter;
         let footerHeight = this.props.footerHeight;
-        let first_num    = 1;
-        let last_num     = 10;
-        let total        = this.props.total;
-        let limit        = this.props.limit;
-        let offset       = this.props.offset;
-        let limitsList   = this.props.limitsList;
+
+
+        let total      = this.props.total;
+        let limit      = this.props.limit;
+        let offset     = this.props.offset;
+        let limitsList = this.props.limitsList;
 
         let headerHeight     = this.props.headerHeight;
         let selectedRowIndex = this.props.selectedRowIndex;
 
         let orderBy        = this.props.orderBy;
         let orderDirection = this.props.orderDirection;
+
+
+        let pages       = Math.ceil( total / limit );
+        let currentPage = (offset / limit) + 1;
+
+        let first_num = offset + 1;
+        let last_num  = (currentPage < pages) ? currentPage * limit : total;
 
         return (
             <div id="table" ref={( ref ) => this.tableWrapper = ref} className="data-table">
@@ -289,10 +348,10 @@ class SimpleDataTable extends React.Component {
                     showFooter ?
                         <div className="data-table__footer" style={{ height: footerHeight }}>
                             <div className="data-table__footer-info">
-                                <div>Показано c {first_num} по {last_num} из {total}</div>
+                                <div>{first_num} - {last_num} из {total} записей</div>
                             </div>
                             <div className="data-table__footer-pagination">
-                                {this._renderPagination( limit, offset, total )}
+                                {this._renderPagination( offset, limit, total, pages, currentPage )}
                             </div>
                             <div className="data-table__footer-settings">
                                 {this._renderReloadButton()}
@@ -327,13 +386,14 @@ SimpleDataTable.propTypes = {
     total:                PropTypes.number,
     reloadButtonHandler:  PropTypes.func,
     limitSelectorHandler: PropTypes.func,
+    offsetChangeHandler:  PropTypes.func,
     limitsList:           PropTypes.arrayOf( PropTypes.number ),
 
     headerHeight: PropTypes.number,
 
-    orderBy:        PropTypes.string,
-    orderDirection: PropTypes.oneOf( [ "ASC", "DESC" ] ),
-    orderChangeHandler:PropTypes.func
+    orderBy:            PropTypes.string,
+    orderDirection:     PropTypes.oneOf( [ "ASC", "DESC" ] ),
+    orderChangeHandler: PropTypes.func
 };
 
 SimpleDataTable.defaultProps = {
@@ -350,6 +410,7 @@ SimpleDataTable.defaultProps = {
     footerHeight:         40 + 'px',
     reloadButtonHandler:  null,
     limitSelectorHandler: null,
+    offsetChangeHandler:  null,
     limit:                10,
     offset:               0,
     total:                100,
@@ -357,8 +418,8 @@ SimpleDataTable.defaultProps = {
 
     headerHeight: 40,
 
-    orderBy:        "id",
-    orderDirection: "ASC",
+    orderBy:            "id",
+    orderDirection:     "ASC",
     orderChangeHandler: null
 };
 
@@ -370,15 +431,15 @@ ReactDOM.render( <SimpleDataTable
     rowSelectHandler={( row, index ) => console.log( "index rowSelectHandler", row, index )}
     orderBy="name"
     orderDirection="ASC"
-    orderChangeHandler={(key, order)=>{
-        console.log("index orderChangeHandler", key, order)
+    orderChangeHandler={( key, order ) => {
+        console.log( "index orderChangeHandler", key, order )
 
     }}
     columns={[
         {
-            title: "First Name",
-            width: 25,
-            key:   "first_name",
+            title:   "First Name",
+            width:   25,
+            key:     "first_name",
             sortKey: "name"
         }, {
             title: "Last Name",
