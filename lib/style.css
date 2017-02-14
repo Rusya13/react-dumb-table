@@ -210,7 +210,7 @@ td th{
 
 
 .data-table__button{
-    padding: 0;
+    padding: 0 5px;
     margin: 0 0 0 5px;
     border-radius: 3px;
     background-color: white;
@@ -221,6 +221,12 @@ td th{
     height: 26px;
     min-width: 26px;
 }
+
+.data-table__button.success{
+    border-color: darkgreen;
+    color: darkgreen;
+}
+
 .data-table__button:disabled > svg{
     fill-opacity: 0.5;
 }
@@ -230,8 +236,13 @@ td th{
     color: #fff;
 }
 
+.data-table__button.data-table__button-icon {
+    padding: 0;
+}
+
 .data-table__button > svg {
     fill: #7a7578;
+
 }
 
 

@@ -38,6 +38,9 @@ class TestApp extends React.Component{
                 key:   "email"
             }
         ];
+        let footerButtons=[
+            {title:"New row", onClickHandler:()=>{console.log("test onClickHandler");}, className:"success"}
+        ];
 
 
         return (
@@ -55,6 +58,7 @@ class TestApp extends React.Component{
                     }}
                     columns={columns}
                     bottomRow={false}
+                    footerButtons={footerButtons}
                 />
                 <br/>
                 <button onClick={this.reloadPage.bind(this)}>Reload</button>

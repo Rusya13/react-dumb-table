@@ -4,15 +4,15 @@ export class SimpleDataTable extends React.Component {
 
     constructor( props ) {
         super( props );
-        window.table = this;
-        this.cachedColumnsSize=[];
-        this._saveCache(props.columns);
+        window.table           = this;
+        this.cachedColumnsSize = [];
+        this._saveCache( props.columns );
     }
 
-    _saveCache(columns){
-        columns.map((col, i)=>{
-            this.cachedColumnsSize.push({width:col.width})
-        })
+    _saveCache( columns ) {
+        columns.map( ( col, i ) => {
+            this.cachedColumnsSize.push( { width: col.width } )
+        } )
     }
 
     componentDidMount() {
@@ -24,8 +24,8 @@ export class SimpleDataTable extends React.Component {
         window.removeEventListener( "resize", this.resizeTable.bind( this ) )
     }
 
-    componentWillReceivedProps(props){
-        console.log("index componentWillReceivedProps", props);
+    componentWillReceivedProps( props ) {
+        console.log( "index componentWillReceivedProps", props );
 
     }
 
@@ -70,7 +70,6 @@ export class SimpleDataTable extends React.Component {
 
             columns[ index ].width += newDiff;
             columns[ index + 1 ].width -= newDiff;
-
 
 
             this._setColumnsSize( this.cachedColumnsSize );
@@ -222,11 +221,11 @@ export class SimpleDataTable extends React.Component {
     }
 
 
-    _offsetChangeHandler(key, currentPage){
+    _offsetChangeHandler( key, currentPage ) {
 
-        if (currentPage === key) return;
-        console.log(key);
-        this.props.offsetChangeHandler && this.props.offsetChangeHandler(key)
+        if ( currentPage === key ) return;
+        console.log( key );
+        this.props.offsetChangeHandler && this.props.offsetChangeHandler( key )
     }
 
     _renderPagination( offset, limit, total, pages, currentPage ) {
@@ -241,9 +240,10 @@ export class SimpleDataTable extends React.Component {
         let group = [];
 
         for ( let i = startPos; i <= startPos + 4 && i <= pages; i++ ) {
-            let className="data-table__button";
-            if (i === currentPage) className += " active";
-            group.push( <button onClick={this._offsetChangeHandler.bind(this, i*limit, currentPage)} className={className}  id={String( i )} key={i}>{String( i )}</button> )
+            let className = "data-table__button";
+            if ( i === currentPage ) className += " active";
+            group.push( <button onClick={this._offsetChangeHandler.bind( this, i * limit, currentPage )}
+                                className={className} id={String( i )} key={i}>{String( i )}</button> )
         }
 
 
@@ -251,14 +251,16 @@ export class SimpleDataTable extends React.Component {
             {group}
         </div> );
 
-        pagesRender.unshift( <button onClick={this._offsetChangeHandler.bind(this, "back")} className="data-table__button" disabled={currentPage === startPos}
+        pagesRender.unshift( <button onClick={this._offsetChangeHandler.bind( this, "back" )}
+                                     className="data-table__button data-table__button-icon" disabled={currentPage === startPos}
                                      id={currentPage - 1} key="back">
             <svg viewBox="0 0 24 24" width="24" height="24">
                 <path d="M15.41 16.09l-4.58-4.59 4.58-4.59L14 5.5l-6 6 6 6z">
                 </path>
             </svg>
         </button> );
-        pagesRender.push( <button onClick={this._offsetChangeHandler.bind(this, "forward")} className="data-table__button" disabled={currentPage === pages} id={currentPage + 1}
+        pagesRender.push( <button onClick={this._offsetChangeHandler.bind( this, "forward" )}
+                                  className="data-table__button data-table__button-icon" disabled={currentPage === pages} id={currentPage + 1}
                                   key="forward">
             <svg viewBox="0 0 24 24" width="24" height="24">
                 <path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z">
@@ -302,15 +304,27 @@ export class SimpleDataTable extends React.Component {
         )
     }
 
+    _renderFooterButtons( buttons ) {
+        if (buttons.length === 0) return null;
+
+        return buttons.map( ( button, i ) => {
+            return <button onClick={button.onClickHandler} key={i}
+                           className={"data-table__button " + ((button.className) ? button.className : "")}>
+                {button.title}
+            </button>
+        } )
+
+    }
+
     render() {
         console.log( "index render" );
-        let columns      = this.props.columns;
+        let columns       = this.props.columns;
         let cachedColumns = this.cachedColumnsSize;
-        let data         = this.props.data;
-        let rowHeight    = this.props.rowHeight;
-        let bottomRow    = this.props.bottomRow;
-        let showFooter   = this.props.showFooter;
-        let footerHeight = this.props.footerHeight;
+        let data          = this.props.data;
+        let rowHeight     = this.props.rowHeight;
+        let bottomRow     = this.props.bottomRow;
+        let showFooter    = this.props.showFooter;
+        let footerHeight  = this.props.footerHeight;
 
 
         let total      = this.props.total;
@@ -323,6 +337,7 @@ export class SimpleDataTable extends React.Component {
 
         let orderBy        = this.props.orderBy;
         let orderDirection = this.props.orderDirection;
+        let footerButtons = this.props.footerButtons;
 
 
         let pages       = Math.ceil( total / limit );
@@ -369,6 +384,7 @@ export class SimpleDataTable extends React.Component {
                                 {this._renderPagination( offset, limit, total, pages, currentPage )}
                             </div>
                             <div className="data-table__footer-settings">
+                                {this._renderFooterButtons(footerButtons)}
                                 {this._renderReloadButton()}
                                 {this._renderLimitSelector( limit, limitsList )}
                             </div>
@@ -403,6 +419,7 @@ SimpleDataTable.propTypes = {
     limitSelectorHandler: PropTypes.func,
     offsetChangeHandler:  PropTypes.func,
     limitsList:           PropTypes.arrayOf( PropTypes.number ),
+    footerButtons:        PropTypes.array,
 
     headerHeight: PropTypes.number,
 
@@ -430,6 +447,7 @@ SimpleDataTable.defaultProps = {
     offset:               0,
     total:                100,
     limitsList:           [ 10, 25, 50 ],
+    footerButtons:        [],
 
     headerHeight: 40,
 
