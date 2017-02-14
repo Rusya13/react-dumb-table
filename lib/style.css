@@ -33,7 +33,7 @@ td th{
     border-bottom: 1px solid #E9E3E6;
 }
 
-.data-table__header-box{
+.data-table__header-cell-content{
     padding-left: 10px;
     overflow: hidden;
     vertical-align: middle;
@@ -44,6 +44,61 @@ td th{
     white-space: nowrap;
     text-align: left;
 }
+
+.data-table__header-cell-resizer-container{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.data-table__header-cell{
+    border-spacing: 0;
+    position: relative;
+    border-right: 1px solid #E9E3E6;
+}
+.data-table__header-cell:last-child{
+    border-right: none;
+}
+
+
+.data-table__header-cell:last-child .data-table__header-cell-resizer-container-resizer{
+    display: none;
+
+}
+
+.data-table__header-cell-resizer-container-resizer{
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    height: 20px;
+    width: 10px;
+    margin-right: -5px;
+    background: transparent;
+
+}
+
+.data-table__header-cell-resizer-container-resizer:hover{
+    background: #E3E3E3;
+    opacity: 0.5;
+    cursor: col-resize;
+}
+
+.data-table__header-cell-order-container{
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 24px;
+    /*background-color: #dee9fc;*/
+    margin-right: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 
 .data-table table{
     table-layout: fixed;
@@ -183,45 +238,7 @@ td th{
     display: none;
 }
 
-.flex-wrap-div{
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-}
 
-.flex-wrap{
-    border-spacing: 0;
-    position: relative;
-    border-right: 1px solid #E9E3E6;
-}
-.flex-wrap:last-child{
-    border-right: none;
-}
-
-
-.flex-wrap:last-child .resize-handle-new{
-    display: none;
-
-}
-
-.resize-handle-new{
-    position: absolute;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    height: 20px;
-    width: 10px;
-    margin-right: -5px;
-    background: transparent;
-
-}
-
-.resize-handle-new:hover{
-    background: #E3E3E3;
-    opacity: 0.5;
-    cursor: col-resize;
-}
 
 .no-selection{
     -moz-user-select: none;
