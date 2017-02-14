@@ -229,7 +229,7 @@ class SimpleDataTable extends React.Component {
         for ( let i = startPos; i <= startPos + 4 && i <= pages; i++ ) {
             let className="data-table__button";
             if (i === currentPage) className += " active";
-            group.push( <button onClick={this._offsetChangeHandler.bind(this, i, currentPage)} className={className}  id={String( i )} key={i}>{String( i )}</button> )
+            group.push( <button onClick={this._offsetChangeHandler.bind(this, i*limit, currentPage)} className={className}  id={String( i )} key={i}>{String( i )}</button> )
         }
 
 
