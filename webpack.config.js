@@ -2,7 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
-    entry: './src/test.js',
+    entry: './Examples/test.js',
     output: { path: __dirname + 'lib', filename: 'bundle.js' },
     module: {
         loaders: [

@@ -1,7 +1,7 @@
 import React, { PropTypes } from "react";
 import ReactDOM from "react-dom";
 import { fakeData } from "./fakeData";
-import {SimpleDataTable} from './index';
+import {SimpleDataTable} from '../src/index';
 
 
 
