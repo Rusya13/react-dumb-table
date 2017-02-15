@@ -5,8 +5,12 @@ export class SimpleTable extends React.Component {
     constructor(props) {
         super(props);
 
+        this.isContextMenuOpen = false;
         this.cachedColumnsSize = [];
-        this._saveCache(props.columns);
+
+        this._saveCache();
+
+        window.simpleTable = this;
     }
 
     componentDidMount() {
@@ -15,14 +19,9 @@ export class SimpleTable extends React.Component {
         this.table = table;
         this.cols = table.getElementsByTagName('col') || [];
         this.headerCells = table.getElementsByClassName('simpleTable__headerCell')
-        this.isContextMenuOpen = false;
-
-        this._saveCache( this.props.columns );
-
-        window.table = this;
     }
 
-    _saveCache(columns) {
+    _saveCache(columns = this.props.columns) {
         columns.map((col) => {
             this.cachedColumnsSize.push({ width: col.width });
         });
@@ -84,6 +83,9 @@ export class SimpleTable extends React.Component {
 
     _setColumnsSize(columns) {
         columns.reduce((secondIndex, column, index) => {
+            console.log(index);
+            console.log(secondIndex);
+
             this.cols[index].style.width = column.width + '%';
             this.cols[secondIndex].style.width = column.width + '%';
 
@@ -361,10 +363,6 @@ export class SimpleTable extends React.Component {
 
     _renderContextMenuItems( items ) {
         return items.map( ( item, index ) => {
-            console.log("index ",   item );
-
-            console.log(item);
-
             return <div onClick={item.onClickHandler}
                         className="simple-data-table__context-menu__item" key={index}>
                 {item.title}
