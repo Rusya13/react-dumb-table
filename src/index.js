@@ -83,9 +83,6 @@ export class SimpleTable extends React.Component {
 
     _setColumnsSize(columns) {
         columns.reduce((secondIndex, column, index) => {
-            console.log(index);
-            console.log(secondIndex);
-
             this.cols[index].style.width = column.width + '%';
             this.cols[secondIndex].style.width = column.width + '%';
 
@@ -252,7 +249,6 @@ export class SimpleTable extends React.Component {
                 })}
             </tbody>
         )
-
     }
 
     _offsetChangeHandler( key, currentPage, limit ) {
@@ -372,24 +368,7 @@ export class SimpleTable extends React.Component {
 
     render() {
 
-        // {
-        //     showFooter ?
-        //         <div className="simple-data-table__footer" style={{ height: footerHeight }}>
-        //             <div className="simple-data-table__footer-info">
-        //                 <div>{first_num} - {last_num} из {total} записей</div>
-        //             </div>
-        //             <div className="simple-data-table__footer-pagination">
-        //                 {this._renderPagination( offset, limit, total, pages, currentPage )}
-        //             </div>
-        //             <div className="simple-data-table__footer-settings">
-        //                 {this._renderFooterButtons( footerButtons )}
-        //                 {this._renderReloadButton()}
-        //                 {this._renderLimitSelector( limit, limitsList )}
-        //             </div>
-        //         </div>
-        //         :
-        //         null
-        // }
+
 
 
 
@@ -436,6 +415,24 @@ export class SimpleTable extends React.Component {
                         {this._renderBody( data, columns, rowHeight, selectedRowIndex )}
                     </table>
                 </div>
+                {
+                    showFooter ?
+                        <div className="simple-data-table__footer" style={{ height: footerHeight }}>
+                            <div className="simple-data-table__footer-info">
+                                <div>{first_num} - {last_num} из {total} записей</div>
+                            </div>
+                            <div className="simple-data-table__footer-pagination">
+                                {this._renderPagination( offset, limit, total, pages, currentPage )}
+                            </div>
+                            <div className="simple-data-table__footer-settings">
+                                {this._renderFooterButtons( footerButtons )}
+                                {this._renderReloadButton()}
+                                {this._renderLimitSelector( limit, limitsList )}
+                            </div>
+                        </div>
+                        :
+                        null
+                }
 
                 <div className={"simple-data-table__context-wrapper"}>
                     {this._renderContextMenuItems( contextMenuItems )}
