@@ -2,7 +2,7 @@ import React, { PropTypes } from "react";
 
 /**
  *
- * TODO при ресафйзе задеваются сортировки
+ * TODO unique table
  *
  *
  *
@@ -11,12 +11,24 @@ import React, { PropTypes } from "react";
 
 export class SimpleTable extends React.Component {
 
+    guid() {
+        function s4() {
+            return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+        }
+        return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+            s4() + '-' + s4() + s4() + s4();
+    }
+
     constructor( props ) {
         super( props );
         window.table           = this;
         this.cachedColumnsSize = [];
         this._saveCache( props.columns );
+        this.uuid = this.guid();
     }
+
 
     _saveCache( columns ) {
         columns.map( ( col, i ) => {
@@ -96,26 +108,26 @@ export class SimpleTable extends React.Component {
     _setColumnsSize( columns ) {
 
         //style={col.width && { width: col.width + "%" || "auto" }}
-        let colgroupHeader    = document.getElementsByClassName( "data-table_colgroup-header" ) || [];
-        let colgroupBody      = document.getElementsByClassName( "data-table_colgroup-body" ) || [];
-        let colgroupBottomRow = document.getElementsByClassName( "data-table_colgroup-bottom-row" ) || [];
+        let colgroupHeader    = document.getElementsByClassName( "data-table_colgroup-header"+"-"+this.uuid ) || [];
+        let colgroupBody      = document.getElementsByClassName( "data-table_colgroup-body"+"-"+this.uuid ) || [];
+
         //console.log("index _setColumnsSize", colgroupHeader);
         //console.log("index _setColumnsSize", colgroupBody);
-        //console.log("index _setColumnsSize", colgroupBottomRow);
+
 
         columns.forEach( ( column, index ) => {
             colgroupHeader[ index ].style.width = column.width + "%";
             colgroupBody[ index ].style.width   = column.width + "%";
-            //colgroupBottomRow[index].style.width = column.width + "%";
+
         } )
 
     }
 
-    _renderColumnsSync( columns, place ) {
+    _renderColumnsSync( columns, place, uuid ) {
         return (
             <colgroup>
                 {columns.map( ( col, index ) => {
-                    return <col className={"data-table_colgroup-" + place} data-index={index} key={index}/>
+                    return <col className={"data-table_colgroup-" + place+"-"+uuid} data-index={index} key={index}/>
                 } )}
             </colgroup>
         )
@@ -347,7 +359,6 @@ export class SimpleTable extends React.Component {
         let cachedColumns = this.cachedColumnsSize;
         let data          = this.props.data;
         let rowHeight     = this.props.rowHeight;
-        let bottomRow     = this.props.bottomRow;
         let showFooter    = this.props.showFooter;
         let footerHeight  = this.props.footerHeight;
 
@@ -378,27 +389,16 @@ export class SimpleTable extends React.Component {
 
                     className="data-table__header">
                     <table ref={( ref ) => this.table = ref}>
-                        {this._renderColumnsSync( cachedColumns, "header" )}
+                        {this._renderColumnsSync( cachedColumns, "header", this.uuid )}
                         {this._renderHeader( columns, headerHeight, orderBy, orderDirection )}
                     </table>
                 </div>
                 <div className="data-table__content">
                     <table ref={( ref ) => this.tableBody = ref}>
-                        {this._renderColumnsSync( cachedColumns, "body" )}
+                        {this._renderColumnsSync( cachedColumns, "body", this.uuid )}
                         {this._renderBody( data, columns, rowHeight, selectedRowIndex )}
                     </table>
                 </div>
-                {
-                    bottomRow ?
-                        <div className="data-table__bottom_row">
-                            <table ref={( ref ) => this.tableBottomRow = ref}>
-                                {this._renderColumnsSync( cachedColumns, "bottom-row" )}
-                                {this._renderBottomRow( columns )}
-                            </table>
-                        </div>
-                        :
-                        null
-                }
                 {
                     showFooter ?
                         <div className="data-table__footer" style={{ height: footerHeight }}>
@@ -430,7 +430,6 @@ SimpleTable.propTypes = {
     columns:   PropTypes.array.isRequired,
     data:      PropTypes.any.isRequired,
     rowHeight: PropTypes.number,
-    bottomRow: PropTypes.bool,
 
     rowSelectHandler: PropTypes.func,
     selectedRowIndex: PropTypes.number,
