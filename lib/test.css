@@ -68,6 +68,13 @@
     border-radius: 3px;
     position: relative;
 }
+
+.Resizer.horizontal, .Resizer.horizontal:before, .Resizer.horizontal:after{
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
 .Resizer.horizontal:after{
     content: "";
     width: 30px;
