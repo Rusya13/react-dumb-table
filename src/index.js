@@ -16,8 +16,10 @@ export class SimpleTable extends React.Component {
         this.cols = table.getElementsByTagName('col') || [];
         this.headerCells = table.getElementsByClassName('simpleTable__headerCell')
         this.isContextMenuOpen = false;
-        this._saveCache( props.columns );
-        this.uuid = this.guid();
+
+        this._saveCache( this.props.columns );
+
+        window.table = this;
     }
 
     _saveCache(columns) {
@@ -156,7 +158,8 @@ export class SimpleTable extends React.Component {
 
 
         //console.log("index _contextClick", row, index, key);
-        let contextMenu           = document.getElementById( "simple-data-table__context-wrapper" + this.uuid );
+        let contextMenu           = this.table.getElementsByClassName('simple-data-table__context-wrapper')[0];
+
         contextMenu.style.display = "block";
 
         //console.log("index _contextClick", e.clientX, e.clientY);
@@ -212,7 +215,9 @@ export class SimpleTable extends React.Component {
             let value = row[column.key] || row.get(column.key);
 
             return (
-                <td className="simpleTable__contentCell" key={cellIndex}>
+                <td className="simpleTable__contentCell"
+                    onContextMenu={( e ) => this._contextClick( e, row, index, column.key )}
+                    key={cellIndex}>
                     {value}
                 </td>
             )
@@ -239,7 +244,7 @@ export class SimpleTable extends React.Component {
                             className={className}
                             key={index}
                             onClick={() => {this._rowSelectHandler(row, index)}}>
-                            {this._renderRow( row, columns )}
+                            {this._renderRow( row, index, columns )}
                         </tr>
                     )
                 })}
@@ -357,6 +362,9 @@ export class SimpleTable extends React.Component {
     _renderContextMenuItems( items ) {
         return items.map( ( item, index ) => {
             console.log("index ",   item );
+
+            console.log(item);
+
             return <div onClick={item.onClickHandler}
                         className="simple-data-table__context-menu__item" key={index}>
                 {item.title}
@@ -424,32 +432,14 @@ export class SimpleTable extends React.Component {
                         {this._renderHeader(columns, headerHeight, orderBy, orderDirection)}
                     </table>
                 </div>
-                <div ref={( ref ) => this.tableBody = ref}className="simpleTable__content">
+                <div ref={( ref ) => this.tableBody = ref} className="simpleTable__content">
                     <table >
                         {this._renderColumnsSync( cachedColumns )}
                         {this._renderBody( data, columns, rowHeight, selectedRowIndex )}
                     </table>
                 </div>
-                {
-                    showFooter ?
-                        <div className="simple-data-table__footer" style={{ height: footerHeight }}>
-                            <div className="simple-data-table__footer-info">
-                                <div>{first_num} - {last_num} из {total} записей</div>
-                            </div>
-                            <div className="simple-data-table__footer-pagination">
-                                {this._renderPagination( offset, limit, total, pages, currentPage )}
-                            </div>
-                            <div className="simple-data-table__footer-settings">
-                                {this._renderFooterButtons( footerButtons )}
-                                {this._renderReloadButton()}
-                                {this._renderLimitSelector( limit, limitsList )}
-                            </div>
-                        </div>
-                        :
-                        null
-                }
-                <div className={"simple-data-table__context-wrapper"}
-                     id={"simple-data-table__context-wrapper" + this.uuid}>
+
+                <div className={"simple-data-table__context-wrapper"}>
                     {this._renderContextMenuItems( contextMenuItems )}
                 </div>
             </div>
