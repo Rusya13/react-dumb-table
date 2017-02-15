@@ -14,28 +14,37 @@ class TestApp extends React.Component{
          this.columns = [
              {
                  name:   "First Name",
-                 width:   25,
+                 width:   20,
                  key:     "first_name",
                  sortKey: "name"
              }, {
                  name: "Last Name",
-                 width: 25,
+                 width: 20,
                  key:   "last_name"
              }, {
                  name: "Gender",
-                 width: 25,
+                 width: 20,
                  key:   "gender"
              }, {
                  name: "IP-address",
-                 width: 25,
+                 width: 20,
                  key:   "ip_address"
              }, {
                  name: "email",
-                 width: 25,
+                 width: 20,
                  key:   "email"
              }
          ];
 
+
+
+    }
+
+    getContextMenu(){
+        return [
+            {title:"Edit", onClickHandler:()=>console.log("index action menu click edit")},
+            {title:"Delete", onClickHandler:()=>console.log("index action menu click delete")},
+            ]
     }
 
     reloadPage(){
@@ -52,25 +61,24 @@ class TestApp extends React.Component{
         ];
 
 
-        {/*return (*/}
-            {/*<div className="container">*/}
-               {/*<SimpleTable*/}
-                   {/*data={fakeData}*/}
-                   {/*reloadButtonHandler={() => console.log( "reload" )}*/}
-                   {/*limitSelectorHandler={( limit ) => console.log( "new limit:", limit )}*/}
-                   {/*rowSelectHandler={( row, index ) => console.log( "index rowSelectHandler", row, index )}*/}
-                   {/*orderBy="name"*/}
-                   {/*orderDirection="ASC"*/}
-                   {/*orderChangeHandler={( key, order ) => {*/}
-        //                console.log( "index orderChangeHandler", key, order )
+        //return (
+        //    <SimpleTable
+        //        data={fakeData}
+        //        reloadButtonHandler={() => console.log( "reload" )}
+        //        limitSelectorHandler={( limit ) => console.log( "new limit:", limit )}
+        //        rowSelectHandler={( row, index ) => console.log( "index rowSelectHandler", row, index )}
+        //        orderBy="name"
+        //        orderDirection="ASC"
+        //        orderChangeHandler={( key, order ) => {
+        //            console.log( "index orderChangeHandler", key, order )
         //
-        //            }}
-        //            columns={this.columns}
-        //            bottomRow={false}
-        //            footerButtons={footerButtons}
-        //        />
-        //     </div>
-        // )
+        //        }}
+        //        columns={this.columns}
+        //        bottomRow={false}
+        //        footerButtons={footerButtons}
+        //        contextMenuItems={this.getContextMenu()}
+        //    />
+        //)
 
 
         return (
