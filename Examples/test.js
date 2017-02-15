@@ -14,37 +14,28 @@ class TestApp extends React.Component{
          this.columns = [
              {
                  name:   "First Name",
-                 width:   20,
+                 width:   25,
                  key:     "first_name",
                  sortKey: "name"
              }, {
                  name: "Last Name",
-                 width: 20,
+                 width: 25,
                  key:   "last_name"
              }, {
                  name: "Gender",
-                 width: 20,
+                 width: 25,
                  key:   "gender"
              }, {
                  name: "IP-address",
-                 width: 20,
+                 width: 25,
                  key:   "ip_address"
              }, {
                  name: "email",
-                 width: 20,
+                 width: 25,
                  key:   "email"
              }
          ];
 
-
-
-    }
-
-    getContextMenu(){
-        return [
-            {title:"Edit", onClickHandler:()=>console.log("index action menu click edit")},
-            {title:"Delete", onClickHandler:()=>console.log("index action menu click delete")},
-            ]
     }
 
     reloadPage(){
@@ -76,7 +67,6 @@ class TestApp extends React.Component{
         //        columns={this.columns}
         //        bottomRow={false}
         //        footerButtons={footerButtons}
-        //        contextMenuItems={this.getContextMenu()}
         //    />
         //)
 
