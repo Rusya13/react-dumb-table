@@ -1,39 +1,26 @@
 import React, { PropTypes } from "react";
 
-/**
- *
- * TODO resize problem
- *
- *
- *
- *
- */
-
 export class SimpleTable extends React.Component {
 
-    guid() {
-        function s4() {
-            return Math.floor( (1 + Math.random()) * 0x10000 )
-            .toString( 16 )
-            .substring( 1 );
-        }
+    constructor(props) {
+        super(props);
 
-        return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-            s4() + '-' + s4() + s4() + s4();
-    }
-
-    constructor( props ) {
-        super( props );
-        window.table           = this;
         this.cachedColumnsSize = [];
-        this._saveCache( props.columns );
-        this.uuid = this.guid();
+        this._saveCache(props.columns);
     }
 
-    _saveCache( columns ) {
-        columns.map( ( col, i ) => {
-            this.cachedColumnsSize.push( { width: col.width } )
-        } )
+    componentDidMount() {
+        const { table } = this.refs;
+
+        this.table = table;
+        this.cols = table.getElementsByTagName('col') || [];
+        this.headerCells = table.getElementsByClassName('simpleTable__headerCell')
+    }
+
+    _saveCache(columns) {
+        columns.map((col) => {
+            this.cachedColumnsSize.push({ width: col.width });
+        });
     }
 
     handleMouseDown( e ) {
@@ -42,16 +29,13 @@ export class SimpleTable extends React.Component {
 
         let minColWidth = this.props.minColWidth;
 
-        //let columns        = this.props.columns;
         let columns        = this.cachedColumnsSize;
         let div            = e.target.parentNode;
-        let index          = Number( div.getAttribute( "data-index" ) );
+        let index          = Number(div.getAttribute('data-index'));
         let originalOffset = e.clientX;
         let originalWidth  = div.offsetWidth;
 
-        let arrayDivs = document.getElementsByClassName( "simple-data-table__header-cell-resizer-container" );
-
-        let summPx = arrayDivs[ index ].offsetWidth + arrayDivs[ index + 1 ].offsetWidth;
+        let summPx = this.headerCells[ index ].offsetWidth + this.headerCells[ index + 1 ].offsetWidth;
 
         document.onmousemove = function ( e ) {
             let newOffset = e.clientX;
@@ -87,30 +71,21 @@ export class SimpleTable extends React.Component {
         }.bind( this );
     }
 
-    _setColumnsSize( columns ) {
+    _setColumnsSize(columns) {
+        columns.reduce((secondIndex, column, index) => {
+            this.cols[index].style.width = column.width + '%';
+            this.cols[secondIndex].style.width = column.width + '%';
 
-        //style={col.width && { width: col.width + "%" || "auto" }}
-        let colgroupHeader = document.getElementsByClassName( "data-table_colgroup-header" + "-" + this.uuid ) || [];
-        let colgroupBody   = document.getElementsByClassName( "data-table_colgroup-body" + "-" + this.uuid ) || [];
-
-        //console.log("index _setColumnsSize", colgroupHeader);
-        //console.log("index _setColumnsSize", colgroupBody);
-
-
-        columns.forEach( ( column, index ) => {
-            colgroupHeader[ index ].style.width = column.width + "%";
-            colgroupBody[ index ].style.width   = column.width + "%";
-
-        } )
-
+            return secondIndex + 1;
+        }, this.cols.length / 2);
     }
 
-    _renderColumnsSync( columns, place, uuid ) {
+    _renderColumnsSync(columns) {
         return (
             <colgroup>
-                {columns.map( ( col, index ) => {
-                    return <col className={"data-table_colgroup-" + place + "-" + uuid} data-index={index} key={index}/>
-                } )}
+                {columns.map(( ol, index) => {
+                    return <col data-index={index} key={index}/>
+                })}
             </colgroup>
         )
     }
@@ -126,43 +101,35 @@ export class SimpleTable extends React.Component {
     }
 
     _renderHeader( columns, headerHeight, orderBy, orderDirection ) {
-        //console.log( "index _renderHeader", orderBy );
+        // {(orderBy === col.sortKey || orderBy === col.key) ?
+        //     <div className="simple-data-table__header-cell-order-container">
+        //         {
+        //             (orderDirection === "ASC") ?
+        //                 <svg viewBox="0 0 24 24" width="20" height="20">
+        //                     <path d="M7 14l5-5 5 5z"></path>
+        //                 </svg> :
+        //                 <svg viewBox="0 0 24 24" width="20" height="20">
+        //                     <path d="M7 10l5 5 5-5z"></path>
+        //                 </svg>
+        //         }
+        //
+        //     </div> :
+        //     null
+        // }
+
         return (
             <thead>
             <tr>
                 {columns.map( ( col, index ) => {
 
                     return (
-                        <th style={{ height: headerHeight }} className="simple-data-table__header-cell" key={index}
-                        >
-                            <div className="simple-data-table__header-cell-content"
-
-                            >{col.name}</div>
-                            <div className="simple-data-table__header-cell-resizer-container" data-index={index}>
-                                <div
-                                    style={{ height: headerHeight }}
-                                    onMouseDown={this.handleMouseDown.bind( this )}
-
-                                    className="simple-data-table__header-cell-resizer-container-resizer"/>
+                        <th style={{ height: headerHeight }} data-index={index} key={index}>
+                            <div onClick={this._orderChangeHandler.bind( this, orderBy, col.sortKey || col.key, orderDirection )}
+                                 className="simpleTable__headerCell">
+                                {col.name}
                             </div>
-                            {(orderBy === col.sortKey || orderBy === col.key) ?
-                                <div className="simple-data-table__header-cell-order-container">
-                                    {
-                                        (orderDirection === "ASC") ?
-                                            <svg viewBox="0 0 24 24" width="20" height="20">
-                                                <path d="M7 14l5-5 5 5z"></path>
-                                            </svg> :
-                                            <svg viewBox="0 0 24 24" width="20" height="20">
-                                                <path d="M7 10l5 5 5-5z"></path>
-                                            </svg>
-                                    }
-
-                                </div> :
-                                null
-                            }
-                            <div className="simple-data-table__header-listener"
-                                 onClick={this._orderChangeHandler.bind( this, orderBy, col.sortKey || col.key, orderDirection )}></div>
-
+                            <div onMouseDown={this.handleMouseDown.bind(this)}
+                                 className="simpleTable__headerCellResize"/>
                         </th>
                     )
                 } )}
@@ -174,61 +141,43 @@ export class SimpleTable extends React.Component {
 
     _renderRow( row, columns ) {
         return columns.map( ( column, cellIndex ) => {
-
-            //let value = row[ column.key ] || row.get(column.key);
-            let value = row[ column.key ] || row.get( column.key )
+            let value = row[column.key] || row.get(column.key);
 
             return (
-                <td className="simple-data-table__content-cell" key={cellIndex}>
+                <td className="simpleTable__contentCell" key={cellIndex}>
                     {value}
                 </td>
             )
-        } )
+        })
     }
 
     _rowSelectHandler( row, index ) {
         this.props.rowSelectHandler && this.props.rowSelectHandler( row, index )
-
     }
 
     _renderBody( data, columns, rowHeight, selectedRowIndex ) {
         return (
             <tbody>
-            {data.map( ( row, index ) => {
-                let className = "data-table__content-row";
-                if ( selectedRowIndex ) className += "data-table__content-row-selected";
-                return (
-                    <tr style={{ height: rowHeight }}
-                        className={className}
-                        key={index}
-                        onClick={() => {this._rowSelectHandler( row, index )}}>
-                        {this._renderRow( row, columns )}
-                    </tr>
-                )
-            } )}
+                {data.map( ( row, index ) => {
+                    let className = 'simpleTable__contentRow';
+
+                    if(selectedRowIndex){
+                        className += 'simpleTable__contentRow--selected';
+                    }
+
+                    return (
+                        <tr style={{ height: rowHeight }}
+                            className={className}
+                            key={index}
+                            onClick={() => {this._rowSelectHandler(row, index)}}>
+                            {this._renderRow( row, columns )}
+                        </tr>
+                    )
+                })}
             </tbody>
         )
 
     }
-
-    _renderBottomRow( columns ) {
-        return (
-            <tfoot>
-            <tr>
-                {
-                    columns.map( ( col, index ) => {
-                        return (
-                            <td key={index}>
-                                50
-                            </td>
-                        )
-                    } )
-                }
-            </tr>
-            </tfoot>
-        )
-    }
-
 
     _offsetChangeHandler( key, currentPage, limit ) {
 
@@ -337,7 +286,28 @@ export class SimpleTable extends React.Component {
     }
 
     render() {
-        console.log( "index render" );
+
+        // {
+        //     showFooter ?
+        //         <div className="simple-data-table__footer" style={{ height: footerHeight }}>
+        //             <div className="simple-data-table__footer-info">
+        //                 <div>{first_num} - {last_num} из {total} записей</div>
+        //             </div>
+        //             <div className="simple-data-table__footer-pagination">
+        //                 {this._renderPagination( offset, limit, total, pages, currentPage )}
+        //             </div>
+        //             <div className="simple-data-table__footer-settings">
+        //                 {this._renderFooterButtons( footerButtons )}
+        //                 {this._renderReloadButton()}
+        //                 {this._renderLimitSelector( limit, limitsList )}
+        //             </div>
+        //         </div>
+        //         :
+        //         null
+        // }
+
+
+
         let columns       = this.props.columns;
         let cachedColumns = this.cachedColumnsSize;
         let data          = this.props.data;
@@ -366,41 +336,19 @@ export class SimpleTable extends React.Component {
         let last_num  = (currentPage < pages) ? currentPage * limit : total;
 
         return (
-            <div id="table" ref={( ref ) => this.tableWrapper = ref} className="simple-data-table">
-                <div
-                    ref={( ref ) => this.header = ref}
-
-                    className="simple-data-table__header">
-                    <table ref={( ref ) => this.table = ref}>
-                        {this._renderColumnsSync( cachedColumns, "header", this.uuid )}
-                        {this._renderHeader( columns, headerHeight, orderBy, orderDirection )}
+            <div ref="table" className="simpleTable">
+                <div className="simpleTable__header">
+                    <table>
+                        {this._renderColumnsSync(cachedColumns)}
+                        {this._renderHeader(columns, headerHeight, orderBy, orderDirection)}
                     </table>
                 </div>
-                <div className="simple-data-table__content">
-                    <table ref={( ref ) => this.tableBody = ref}>
-                        {this._renderColumnsSync( cachedColumns, "body", this.uuid )}
-                        {this._renderBody( data, columns, rowHeight, selectedRowIndex )}
+                <div className="simpleTable__content">
+                    <table>
+                        {this._renderColumnsSync(cachedColumns)}
+                        {this._renderBody(data, columns, rowHeight, selectedRowIndex)}
                     </table>
                 </div>
-                {
-                    showFooter ?
-                        <div className="simple-data-table__footer" style={{ height: footerHeight }}>
-                            <div className="simple-data-table__footer-info">
-                                <div>{first_num} - {last_num} из {total} записей</div>
-                            </div>
-                            <div className="simple-data-table__footer-pagination">
-                                {this._renderPagination( offset, limit, total, pages, currentPage )}
-                            </div>
-                            <div className="simple-data-table__footer-settings">
-                                {this._renderFooterButtons( footerButtons )}
-                                {this._renderReloadButton()}
-                                {this._renderLimitSelector( limit, limitsList )}
-                            </div>
-                        </div>
-                        :
-                        null
-                }
-
             </div>
         )
 

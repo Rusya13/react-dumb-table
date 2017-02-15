@@ -52,23 +52,25 @@ class TestApp extends React.Component{
         ];
 
 
-        //return (
-        //    <SimpleTable
-        //        data={fakeData}
-        //        reloadButtonHandler={() => console.log( "reload" )}
-        //        limitSelectorHandler={( limit ) => console.log( "new limit:", limit )}
-        //        rowSelectHandler={( row, index ) => console.log( "index rowSelectHandler", row, index )}
-        //        orderBy="name"
-        //        orderDirection="ASC"
-        //        orderChangeHandler={( key, order ) => {
-        //            console.log( "index orderChangeHandler", key, order )
+        {/*return (*/}
+            {/*<div className="container">*/}
+               {/*<SimpleTable*/}
+                   {/*data={fakeData}*/}
+                   {/*reloadButtonHandler={() => console.log( "reload" )}*/}
+                   {/*limitSelectorHandler={( limit ) => console.log( "new limit:", limit )}*/}
+                   {/*rowSelectHandler={( row, index ) => console.log( "index rowSelectHandler", row, index )}*/}
+                   {/*orderBy="name"*/}
+                   {/*orderDirection="ASC"*/}
+                   {/*orderChangeHandler={( key, order ) => {*/}
+        //                console.log( "index orderChangeHandler", key, order )
         //
-        //        }}
-        //        columns={this.columns}
-        //        bottomRow={false}
-        //        footerButtons={footerButtons}
-        //    />
-        //)
+        //            }}
+        //            columns={this.columns}
+        //            bottomRow={false}
+        //            footerButtons={footerButtons}
+        //        />
+        //     </div>
+        // )
 
 
         return (
