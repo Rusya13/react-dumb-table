@@ -52,12 +52,30 @@ class TestApp extends React.Component{
         ];
 
 
+        //return (
+        //    <SimpleTable
+        //        data={fakeData}
+        //        reloadButtonHandler={() => console.log( "reload" )}
+        //        limitSelectorHandler={( limit ) => console.log( "new limit:", limit )}
+        //        rowSelectHandler={( row, index ) => console.log( "index rowSelectHandler", row, index )}
+        //        orderBy="name"
+        //        orderDirection="ASC"
+        //        orderChangeHandler={( key, order ) => {
+        //            console.log( "index orderChangeHandler", key, order )
+        //
+        //        }}
+        //        columns={this.columns}
+        //        bottomRow={false}
+        //        footerButtons={footerButtons}
+        //    />
+        //)
+
+
         return (
             <div className="parent">
                 <div className="header">Header</div>
                 <div className="wrapper">
-                    <SplitPane split="horizontal" minSize={50} defaultSize={100} primary="second">
-
+                    <SplitPane split="horizontal" minSize={50} defaultSize={400} primary="second">
                             <SimpleTable
                                 data={fakeData}
                                 reloadButtonHandler={() => console.log( "reload" )}
@@ -88,11 +106,7 @@ class TestApp extends React.Component{
                             bottomRow={false}
                             footerButtons={footerButtons}
                         />
-
-
-
                     </SplitPane>
-
                 </div>
             </div>
 

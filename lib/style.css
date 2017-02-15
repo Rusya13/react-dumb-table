@@ -28,46 +28,9 @@ td th{
 }
 
 
-#react-app{
-    height: 100vh;
-    width: 100vw;
-}
 
-.parent{
-    width: 100%;
-    height: 100%;
-    -webkit-box-flex: 1;
-    -webkit-flex: 1;
-    -ms-flex: 1;
-    flex: 1;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -webkit-flex-direction: column;
-    -ms-flex-direction: column;
-    flex-direction: column;
-}
 
-.header{
-    background: #aaa;
-    height: 3rem;
-    line-height: 3rem;
-}
-
-.wrapper{
-    background: #ffa;
-    margin: 5rem;
-    -webkit-box-flex: 1;
-    -webkit-flex: 1;
-    -ms-flex: 1;
-    flex: 1;
-
-}
-
-.data-table{
+.simple-data-table{
     position: absolute;
     zoom: 1;
     /* overflow: auto; */
@@ -81,14 +44,14 @@ td th{
     height: 100%;
 }
 
-.data-table__header{
+.simple-data-table__header{
     position: relative;
     border-bottom: 1px solid #E9E3E6;
 }
 
 
 
-.data-table__header-listener{
+.simple-data-table__header-listener{
     position: absolute;
     top: 0;
     left: 0;
@@ -96,8 +59,8 @@ td th{
     right: 10px;
 }
 
-.data-table__header-cell-content{
-    padding-left: 10px;
+.simple-data-table__header-cell-content{
+    padding: 0 30px 0 10px;
     overflow: hidden;
     vertical-align: middle;
     text-overflow: ellipsis;
@@ -108,29 +71,29 @@ td th{
     text-align: left;
 }
 
-.data-table__header-cell-resizer-container{
+.simple-data-table__header-cell-resizer-container{
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
 }
 
-.data-table__header-cell{
+.simple-data-table__header-cell{
     border-spacing: 0;
     position: relative;
     border-right: 1px solid #E9E3E6;
 }
-.data-table__header-cell:last-child{
+.simple-data-table__header-cell:last-child{
     border-right: none;
 }
 
 
-.data-table__header-cell:last-child .data-table__header-cell-resizer-container-resizer{
+.simple-data-table__header-cell:last-child .simple-data-table__header-cell-resizer-container-resizer{
     display: none;
 
 }
 
-.data-table__header-cell-resizer-container-resizer{
+.simple-data-table__header-cell-resizer-container-resizer{
     position: absolute;
     right: 0;
     top: 0;
@@ -142,13 +105,13 @@ td th{
 
 }
 
-.data-table__header-cell-resizer-container-resizer:hover{
+.simple-data-table__header-cell-resizer-container-resizer:hover{
     background: #E3E3E3;
     opacity: 0.5;
     cursor: col-resize;
 }
 
-.data-table__header-cell-order-container{
+.simple-data-table__header-cell-order-container{
     position: absolute;
     right: 0;
     top: 0;
@@ -163,14 +126,14 @@ td th{
 }
 
 
-.data-table table{
+.simple-data-table table{
     table-layout: fixed;
     width: 100%;
     -webkit-border-horizontal-spacing: 0;
     -webkit-border-vertical-spacing: 0;
 }
 
-.data-table__content{
+.simple-data-table__content{
     overflow-y: auto;
     overflow-x: hidden;
     /* height: 500px; */
@@ -179,17 +142,17 @@ td th{
     top: 40px;
     bottom: 40px;
 }
-.data-table__content-row .data-table__content-row-selected{
+.simple-data-table__content-row .simple-data-table__content-row-selected{
     background-color: #dee9fc;
 }
 
 
-.data-table__content-row:nth-child(2n){
+.simple-data-table__content-row:nth-child(2n){
     background-color: #f6f7f8;
 }
 
-.data-table__content-cell{
-    padding-left: 10px;
+.simple-data-table__content-cell{
+    padding:0 10px;
     overflow: hidden;
     vertical-align: middle;
     text-overflow: ellipsis;
@@ -201,11 +164,11 @@ td th{
 }
 
 
-.data-table__bottom_row{
+.simple-data-table__bottom_row{
 
 }
 
-.data-table__footer{
+.simple-data-table__footer{
     display: flex;
     flex-direction: row;
     align-items: stretch;
@@ -218,7 +181,7 @@ td th{
 
 }
 
-.data-table__footer > .data-table__footer-info{
+.simple-data-table__footer > .simple-data-table__footer-info{
     flex-basis: 33.33333%;
     max-width: 33.33333%;
     padding-left: 10px;
@@ -229,7 +192,7 @@ td th{
     justify-content: center;
 }
 
-.data-table__footer > .data-table__footer-pagination{
+.simple-data-table__footer > .simple-data-table__footer-pagination{
     flex-basis: 33.33333%;
     max-width: 33.33333%;
     padding-left: 10px;
@@ -240,11 +203,11 @@ td th{
     align-items: center;
 }
 
-.data-table__footer-pagination-buttons{
+.simple-data-table__footer-pagination-buttons{
     display: flex;
 }
 
-.data-table__footer > .data-table__footer-settings{
+.simple-data-table__footer > .simple-data-table__footer-settings{
     flex-basis: 33.33333%;
     max-width: 33.33333%;
     padding-left: 10px;
@@ -257,7 +220,7 @@ td th{
 }
 
 
-.data-table__buttons_group .data-table__button{
+.simple-data-table__buttons_group .simple-data-table__button{
     padding: 0;
     margin: 0;
     border-radius: 0;
@@ -271,17 +234,17 @@ td th{
     height: 26px;
     min-width: 26px;
 }
-.data-table__buttons_group .data-table__button:first-child{
+.simple-data-table__buttons_group .simple-data-table__button:first-child{
     margin:0 0 0 5px;
     border-radius: 3px 0 0 3px;
     border-width: 1px;
 }
-.data-table__buttons_group .data-table__button:last-child{
+.simple-data-table__buttons_group .simple-data-table__button:last-child{
     border-radius: 0 3px 3px 0;
 }
 
 
-.data-table__button{
+.simple-data-table__button{
     padding: 0 5px;
     margin: 0 0 0 5px;
     border-radius: 3px;
@@ -294,31 +257,31 @@ td th{
     min-width: 26px;
 }
 
-.data-table__button.success{
+.simple-data-table__button.success{
     border-color: darkgreen;
     color: darkgreen;
 }
 
-.data-table__button:disabled > svg{
+.simple-data-table__button:disabled > svg{
     fill-opacity: 0.5;
 }
 
-.data-table__button.active {
+.simple-data-table__button.active {
     background-color: #3279fb;
     color: #fff;
 }
 
-.data-table__button.data-table__button-icon {
+.simple-data-table__button.simple-data-table__button-icon {
     padding: 0;
 }
 
-.data-table__button > svg {
+.simple-data-table__button > svg {
     fill: #7a7578;
 
 }
 
 
-.data-table__footer-reload-button{
+.simple-data-table__footer-reload-button{
     padding: 0;
     margin: 0 0 0 5px;
     border-radius: 3px;
@@ -330,12 +293,12 @@ td th{
     height: 26px;
     min-width: 26px;
 }
-.data-table__footer-reload-button > svg{
+.simple-data-table__footer-reload-button > svg{
     fill: #7a7578;
 }
 
 
-.data-table__footer-limit-selector-wrapper{
+.simple-data-table__footer-limit-selector-wrapper{
     background-color: white;
     display: flex;
     height: 26px;
@@ -344,7 +307,7 @@ td th{
     margin-left: 5px;
 }
 
-.data-table__footer-select{
+.simple-data-table__footer-select{
     position: relative;
     height: 100%;
     padding-left: 10px;
@@ -356,13 +319,13 @@ td th{
     z-index: 100;
 }
 
-.data-table__footer-limit-selector-wrapper >svg {
+.simple-data-table__footer-limit-selector-wrapper >svg {
     fill: #7a7578;
     margin-left: -24px;
     z-index: 99;
 }
 
-.resize-handle{
+.simple-data-table__resize-handle{
     position: absolute;
     bottom: 0;
     left: 0;
@@ -376,59 +339,10 @@ td th{
 
 
 
-.no-selection{
+.simple-data-table__no-selection{
     -moz-user-select: none;
     -khtml-user-select: none;
     user-select: none;
     cursor: col-resize;
 }
 
-.Resizer {
-    background: #000;
-    opacity: .2;
-    z-index: 1;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    -moz-background-clip: padding;
-    -webkit-background-clip: padding;
-    background-clip: padding-box;
-}
-
-.Resizer:hover {
-    -webkit-transition: all 2s ease;
-    transition: all 2s ease;
-}
-
-.Resizer.horizontal {
-    height: 11px;
-    margin: -5px 0;
-    border-top: 5px solid rgba(255, 255, 255, 0);
-    border-bottom: 5px solid rgba(255, 255, 255, 0);
-    cursor: row-resize;
-    width: 100%;
-}
-
-.Resizer.horizontal:hover {
-    border-top: 5px solid rgba(0, 0, 0, 0.5);
-    border-bottom: 5px solid rgba(0, 0, 0, 0.5);
-}
-
-.Resizer.vertical {
-    width: 11px;
-    margin: 0 -5px;
-    border-left: 5px solid rgba(255, 255, 255, 0);
-    border-right: 5px solid rgba(255, 255, 255, 0);
-    cursor: col-resize;
-}
-
-.Resizer.vertical:hover {
-    border-left: 5px solid rgba(0, 0, 0, 0.5);
-    border-right: 5px solid rgba(0, 0, 0, 0.5);
-}
-Resizer.disabled {
-    cursor: not-allowed;
-}
-Resizer.disabled:hover {
-    border-color: transparent;
-}
