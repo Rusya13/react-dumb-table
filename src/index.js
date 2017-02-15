@@ -24,21 +24,27 @@ export class SimpleTable extends React.Component {
 
     constructor( props ) {
         super( props );
-        window.table           = this;
+        window.table = this;
+
         this.cachedColumnsSize = [];
+        this.isContextMenuOpen = false;
         this._saveCache( props.columns );
         this.uuid = this.guid();
     }
 
+    componentDidMount() {
+        this._setColumnsSize( this.props.columns )
+    }
+
     _saveCache( columns ) {
-        columns.map( ( col, i ) => {
+        columns.forEach( ( col, i ) => {
             this.cachedColumnsSize.push( { width: col.width } )
         } )
     }
 
     handleMouseDown( e ) {
         e.preventDefault();
-        document.body.className += " no-selection";
+        document.body.className += " simple-data-table__no-selection";
 
         let minColWidth = this.props.minColWidth;
 
@@ -60,20 +66,35 @@ export class SimpleTable extends React.Component {
 
             let newSize = originalWidth + diff;
 
-            let pieces  = (columns[ index ].width + columns[ index + 1 ].width);
+            let pieces = (columns[ index ].width + columns[ index + 1 ].width);
+            //console.log("index pieces", pieces);
+
             let piecePx = summPx / pieces;
 
             let newDiff = diff / piecePx;
+            //console.log("index diff", newDiff);
 
-            let newLeftWidth  = columns[ index ].width + newDiff;
-            let newRightWidth = columns[ index + 1 ].width - newDiff;
+            let newLeftWidth  = Math.round( columns[ index ].width + newDiff );
+            let newRightWidth = Math.round( columns[ index + 1 ].width - newDiff );
 
-            if ( newLeftWidth * piecePx < minColWidth || newRightWidth * piecePx < minColWidth ) { // min-width and max-width for each col
+            //console.log("index left", newLeftWidth);
+            //console.log("index right", newRightWidth);
+            //console.log("index summ", Number(newLeftWidth) + Number(newRightWidth));
+
+
+            if ( Number( newLeftWidth ) * piecePx < minColWidth || Number( newRightWidth ) * piecePx < minColWidth ) { // min-width and max-width for each col
                 return
             }
 
+
             columns[ index ].width += newDiff;
             columns[ index + 1 ].width -= newDiff;
+
+            let summ = this.cachedColumnsSize.reduce( ( sum, col ) => {
+                //console.log("index col", col.width);
+                return sum += col.width
+            }, 0 );
+            //console.log("index all", summ);
 
 
             this._setColumnsSize( this.cachedColumnsSize );
@@ -82,7 +103,7 @@ export class SimpleTable extends React.Component {
 
         }.bind( this );
         document.onmouseup   = function () {
-            document.body.className = document.body.className.replace( /(?:^|\s)no-selection(?!\S)/g, '' );
+            document.body.className = document.body.className.replace( /(?:^|\s)simple-data-table__no-selection(?!\S)/g, '' );
             document.onmousemove    = document.onmouseup = null;
         }.bind( this );
     }
@@ -90,8 +111,8 @@ export class SimpleTable extends React.Component {
     _setColumnsSize( columns ) {
 
         //style={col.width && { width: col.width + "%" || "auto" }}
-        let colgroupHeader = document.getElementsByClassName( "data-table_colgroup-header" + "-" + this.uuid ) || [];
-        let colgroupBody   = document.getElementsByClassName( "data-table_colgroup-body" + "-" + this.uuid ) || [];
+        let colgroupHeader = document.getElementsByClassName( "simple-data-table_colgroup-header" + "-" + this.uuid ) || [];
+        let colgroupBody   = document.getElementsByClassName( "simple-data-table_colgroup-body" + "-" + this.uuid ) || [];
 
         //console.log("index _setColumnsSize", colgroupHeader);
         //console.log("index _setColumnsSize", colgroupBody);
@@ -109,7 +130,8 @@ export class SimpleTable extends React.Component {
         return (
             <colgroup>
                 {columns.map( ( col, index ) => {
-                    return <col className={"data-table_colgroup-" + place + "-" + uuid} data-index={index} key={index}/>
+                    return <col className={"simple-data-table_colgroup-" + place + "-" + uuid} data-index={index}
+                                key={index}/>
                 } )}
             </colgroup>
         )
@@ -171,15 +193,75 @@ export class SimpleTable extends React.Component {
         )
     }
 
+    _contextClick( e, row, index, key ) {
+        e.preventDefault();
+        let contextMenuWidth = this.props.contextMenuWidth;
+        let contextMenuItems = this.props.contextMenuItems;
 
-    _renderRow( row, columns ) {
+        if ( contextMenuItems.length < 1 ) return
+
+
+        //console.log("index _contextClick", row, index, key);
+        let contextMenu           = document.getElementById( "simple-data-table__context-wrapper" + this.uuid );
+        contextMenu.style.display = "block";
+
+        //console.log("index _contextClick", e.clientX, e.clientY);
+
+
+        let contextMenuHeight = contextMenuItems.length * 30 + 10;
+
+        let windowHeight = window.innerHeight;
+        let windowWidth  = window.innerWidth;
+
+        //console.log("index _contextClick windowHeight", windowHeight);
+
+        let top  = e.clientY;
+        let left = e.clientX;
+
+        let rightDist  = windowWidth - left;
+        let bottomDist = windowHeight - top;
+
+        //console.log("index _contextClick bottomDist", bottomDist);
+
+        if ( (rightDist - 15) < contextMenuWidth ) {
+            left = left - contextMenuWidth - 25 + rightDist;
+        }
+
+        if ( (bottomDist - 25) < contextMenuHeight ) {
+            top = top - contextMenuHeight - 25 + bottomDist;
+        }
+        contextMenu.style.top  = top + "px";
+        contextMenu.style.left = left + "px";
+        //contextMenu.style.height = contextMenuHeight + "px";
+
+        this.tableBody.style.overflowY = "hidden";
+
+        if ( this.isContextMenuOpen ) {
+            return
+        }
+
+        this.isContextMenuOpen = true;
+        document.addEventListener( "mousedown", this.nextClickHandler.bind( this, contextMenu ) )
+
+    }
+
+    nextClickHandler( contextMenu ) {
+        contextMenu.style.display      = "none";
+        this.isContextMenuOpen         = false;
+        this.tableBody.style.overflowY = "auto";
+        document.removeEventListener( "mousedown", this.nextClickHandler )
+    }
+
+
+    _renderRow( row, index, columns ) {
         return columns.map( ( column, cellIndex ) => {
 
             //let value = row[ column.key ] || row.get(column.key);
             let value = row[ column.key ] || row.get( column.key )
 
             return (
-                <td className="simple-data-table__content-cell" key={cellIndex}>
+                <td className="simple-data-table__content-cell" key={cellIndex}
+                    onContextMenu={( e ) => this._contextClick( e, row, index, column.key )}>
                     {value}
                 </td>
             )
@@ -195,14 +277,14 @@ export class SimpleTable extends React.Component {
         return (
             <tbody>
             {data.map( ( row, index ) => {
-                let className = "data-table__content-row";
-                if ( selectedRowIndex ) className += "data-table__content-row-selected";
+                let className = "simple-data-table__content-row";
+                if ( selectedRowIndex ) className += "simple-data-table__content-row-selected";
                 return (
                     <tr style={{ height: rowHeight }}
                         className={className}
                         key={index}
                         onClick={() => {this._rowSelectHandler( row, index )}}>
-                        {this._renderRow( row, columns )}
+                        {this._renderRow( row, index, columns )}
                     </tr>
                 )
             } )}
@@ -336,8 +418,18 @@ export class SimpleTable extends React.Component {
 
     }
 
+    _renderContextMenuItems( items ) {
+        return items.map( ( item, index ) => {
+            console.log("index ",   item );
+            return <div onClick={item.onClickHandler}
+                        className="simple-data-table__context-menu__item" key={index}>
+                {item.title}
+            </div>
+        } )
+    }
+
     render() {
-        console.log( "index render" );
+        console.log( "index render", this.uuid );
         let columns       = this.props.columns;
         let cachedColumns = this.cachedColumnsSize;
         let data          = this.props.data;
@@ -365,6 +457,8 @@ export class SimpleTable extends React.Component {
         let first_num = offset + 1;
         let last_num  = (currentPage < pages) ? currentPage * limit : total;
 
+        let contextMenuItems = this.props.contextMenuItems;
+
         return (
             <div id="table" ref={( ref ) => this.tableWrapper = ref} className="simple-data-table">
                 <div
@@ -376,8 +470,8 @@ export class SimpleTable extends React.Component {
                         {this._renderHeader( columns, headerHeight, orderBy, orderDirection )}
                     </table>
                 </div>
-                <div className="simple-data-table__content">
-                    <table ref={( ref ) => this.tableBody = ref}>
+                <div ref={( ref ) => this.tableBody = ref} className="simple-data-table__content">
+                    <table >
                         {this._renderColumnsSync( cachedColumns, "body", this.uuid )}
                         {this._renderBody( data, columns, rowHeight, selectedRowIndex )}
                     </table>
@@ -400,7 +494,10 @@ export class SimpleTable extends React.Component {
                         :
                         null
                 }
-
+                <div className={"simple-data-table__context-wrapper"}
+                     id={"simple-data-table__context-wrapper" + this.uuid}>
+                    {this._renderContextMenuItems( contextMenuItems )}
+                </div>
             </div>
         )
 
@@ -432,7 +529,10 @@ SimpleTable.propTypes = {
 
     orderBy:            PropTypes.string,
     orderDirection:     PropTypes.oneOf( [ "ASC", "DESC" ] ),
-    orderChangeHandler: PropTypes.func
+    orderChangeHandler: PropTypes.func,
+
+    contextMenuWidth: PropTypes.number,
+    contextMenuItems: PropTypes.array
 };
 
 SimpleTable.defaultProps = {
@@ -459,5 +559,8 @@ SimpleTable.defaultProps = {
 
     orderBy:            "id",
     orderDirection:     "ASC",
-    orderChangeHandler: null
+    orderChangeHandler: null,
+
+    contextMenuWidth: 150,
+    contextMenuItems: [ { title: "Edit row", onClickHandler: () => console.log( "index action menu click" ) } ]
 };
