@@ -21,6 +21,7 @@
   "devDependencies": {
     "react": "16.0.0-alpha.2",
     "react-dom": "16.0.0-alpha.2",
+    "react-split-pane": "^0.1.57",
     "webpack-dev-server": "^2.3.0"
   }
 }
