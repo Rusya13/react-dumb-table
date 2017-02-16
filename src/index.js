@@ -1,4 +1,5 @@
 import React, { PropTypes } from "react";
+import ReactDom from 'react-dom';
 
 export class SimpleTable extends React.Component {
 
@@ -8,6 +9,10 @@ export class SimpleTable extends React.Component {
         this.isContextMenuOpen = false;
         this.cachedColumnsSize = [];
         this._saveCache();
+
+        this.state={
+            isContextMenuOpen:false
+        }
     }
 
     componentDidMount() {
@@ -151,11 +156,21 @@ export class SimpleTable extends React.Component {
         let contextMenuWidth = this.props.contextMenuWidth;
         let contextMenuItems = this.props.contextMenuItems;
 
-        if ( contextMenuItems.length < 1 ) return
+        //if ( contextMenuItems.length < 1 ) return
 
 
         //console.log("index _contextClick", row, index, key);
         let contextMenu           = this.table.getElementsByClassName('simple-data-table__context-wrapper')[0];
+
+        let list = contextMenuItems(row, index, key);
+
+        console.log("index _contextClick", list);
+
+        let renderList = this._renderContextMenuItems(list);
+
+        ReactDom.render(<div>{renderList}</div>, contextMenu);
+
+
 
         contextMenu.style.display = "block";
 
@@ -210,8 +225,8 @@ export class SimpleTable extends React.Component {
 
     _onCellClickHandler(e, row, index, column){
 
-        if (this.props.sellClickHandler){
-            this.props.sellClickHandler(row, index, column, {altKey:e.altKey, ctrlKey:e.ctrlKey, shiftKey:e.shiftKey})
+        if (this.props.cellClickHandler){
+            this.props.cellClickHandler(row, index, column, {altKey: e.altKey, ctrlKey: e.ctrlKey, shiftKey: e.shiftKey})
         }
     }
 
@@ -442,8 +457,9 @@ export class SimpleTable extends React.Component {
                 }
 
                 <div className={"simple-data-table__context-wrapper"}>
-                    {this._renderContextMenuItems( contextMenuItems )}
+
                 </div>
+
             </div>
         )
 
@@ -451,14 +467,16 @@ export class SimpleTable extends React.Component {
 
 }
 
+
+
 SimpleTable.propTypes = {
     columns:     PropTypes.array.isRequired,
     data:        PropTypes.any.isRequired,
     rowHeight:   PropTypes.number,
     minColWidth: PropTypes.number,
 
-    sellClickHandler: PropTypes.func,
-    selectedRowIndexes: PropTypes.arrayOf( PropTypes.number ),
+    cellClickHandler:   PropTypes.func,
+    selectedRowIndexes: PropTypes.any,
 
     showFooter:           PropTypes.bool,
     footerHeight:         PropTypes.any,
@@ -478,7 +496,7 @@ SimpleTable.propTypes = {
     orderChangeHandler: PropTypes.func,
 
     contextMenuWidth: PropTypes.number,
-    contextMenuItems: PropTypes.array
+    contextMenuItems: PropTypes.func
 };
 
 SimpleTable.defaultProps = {
@@ -487,8 +505,8 @@ SimpleTable.defaultProps = {
     rowHeight:        30,
     bottomRow:        false,
     minColWidth:      60,
-    sellClickHandler: null,
-    selectedRowIndexes: [1],
+    cellClickHandler: null,
+    selectedRowIndexes: [],
 
     showFooter:           true,
     footerHeight:         40 + 'px',
@@ -508,7 +526,14 @@ SimpleTable.defaultProps = {
     orderChangeHandler: null,
 
     contextMenuWidth: 150,
-    contextMenuItems: [ { title: "Edit row", onClickHandler: () => console.log( "index action menu click" ) } ]
+    contextMenuItems: (row, index, key)=>{
+        return [
+            { title: "Edit row", onClickHandler: () => console.log( "index action menu click" ) },
+            { title: "Delete row", onClickHandler: () => console.log( "index action menu click" ) },
+            { type:"divider" },
+            { title: "Create new", onClickHandler: () => console.log( "index action menu click" ) },
+        ];
+    }
 
 
 };
