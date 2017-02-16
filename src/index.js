@@ -210,12 +210,20 @@ export class SimpleTable extends React.Component {
     }
 
 
+    _onCellClickHandler(e, row, index, column){
+
+        if (this.props.sellClickHandler){
+            this.props.sellClickHandler(row, index, column, {altKey:e.altKey, ctrlKey:e.ctrlKey, shiftKey:e.shiftKey})
+        }
+    }
+
     _renderRow( row, index, columns ) {
         return columns.map( ( column, cellIndex ) => {
             let value = row[column.key] || row.get(column.key);
 
             return (
                 <td className="simpleTable__contentCell"
+                    onClick={(e)=> this._onCellClickHandler(e, row, index, column)}
                     onContextMenu={( e ) => this._contextClick( e, row, index, column.key )}
                     key={cellIndex}>
                     {value}
@@ -224,26 +232,22 @@ export class SimpleTable extends React.Component {
         })
     }
 
-    _rowSelectHandler( row, index ) {
-        this.props.rowSelectHandler && this.props.rowSelectHandler( row, index )
 
-    }
 
-    _renderBody( data, columns, rowHeight, selectedRowIndex ) {
+    _renderBody( data, columns, rowHeight, selectedRowIndexes ) {
         return (
             <tbody>
                 {data.map( ( row, index ) => {
-                    let className = 'simpleTable__contentRow';
+                    let className = 'simpleTable__contentRow ';
 
-                    if(selectedRowIndex){
+                    if(selectedRowIndexes.some(selRow=>selRow === index)){
                         className += 'simpleTable__contentRow--selected';
                     }
 
                     return (
                         <tr style={{ height: rowHeight }}
                             className={className}
-                            key={index}
-                            onClick={() => {this._rowSelectHandler(row, index)}}>
+                            key={index}>
                             {this._renderRow( row, index, columns )}
                         </tr>
                     )
@@ -360,6 +364,10 @@ export class SimpleTable extends React.Component {
 
     _renderContextMenuItems( items ) {
         return items.map( ( item, index ) => {
+            if (item.type === "divider"){
+                return <div className="simple-data-table__context-menu__item__divider" key={index}></div>
+            }
+
             return <div onMouseDown={item.onClickHandler}
                         className="simple-data-table__context-menu__item" key={index}>
                 {item.title}
@@ -387,7 +395,7 @@ export class SimpleTable extends React.Component {
         let limitsList = this.props.limitsList;
 
         let headerHeight     = this.props.headerHeight;
-        let selectedRowIndex = this.props.selectedRowIndex;
+        let selectedRowIndexes = this.props.selectedRowIndexes;
 
         let orderBy        = this.props.orderBy;
         let orderDirection = this.props.orderDirection;
@@ -413,7 +421,7 @@ export class SimpleTable extends React.Component {
                 <div ref={( ref ) => this.tableBody = ref} className="simpleTable__content">
                     <table >
                         {this._renderColumnsSync( cachedColumns )}
-                        {this._renderBody( data, columns, rowHeight, selectedRowIndex )}
+                        {this._renderBody( data, columns, rowHeight, selectedRowIndexes )}
                     </table>
                 </div>
                 {
@@ -451,8 +459,8 @@ SimpleTable.propTypes = {
     rowHeight:   PropTypes.number,
     minColWidth: PropTypes.number,
 
-    rowSelectHandler: PropTypes.func,
-    selectedRowIndex: PropTypes.number,
+    sellClickHandler: PropTypes.func,
+    selectedRowIndexes: PropTypes.arrayOf( PropTypes.number ),
 
     showFooter:           PropTypes.bool,
     footerHeight:         PropTypes.any,
@@ -481,8 +489,8 @@ SimpleTable.defaultProps = {
     rowHeight:        30,
     bottomRow:        false,
     minColWidth:      60,
-    rowSelectHandler: null,
-    selectedRowIndex: null,
+    sellClickHandler: null,
+    selectedRowIndexes: [1],
 
     showFooter:           true,
     footerHeight:         40 + 'px',
@@ -503,4 +511,6 @@ SimpleTable.defaultProps = {
 
     contextMenuWidth: 150,
     contextMenuItems: [ { title: "Edit row", onClickHandler: () => console.log( "index action menu click" ) } ]
+
+
 };

@@ -36,6 +36,21 @@ class TestApp extends React.Component{
              }
          ];
 
+        this.contextMenu = [
+            { title: "Edit row", onClickHandler: () => console.log( "index action menu click" ) },
+
+            { title: "Delete row", onClickHandler: () => console.log( "index action menu click" ) },
+            { type:"divider" },
+            { title: "Create new", onClickHandler: () => console.log( "index action menu click" ) },
+        ]
+
+         this.state={selected : [0]};
+    }
+
+    sellClickHandler(row, index, column, buttons){
+
+        console.log("test sellClickHandler", index, column.key, buttons);
+        this.setState({selected:[index]})
     }
 
     reloadPage(){
@@ -52,23 +67,25 @@ class TestApp extends React.Component{
         ];
 
 
-        //return (
-        //    <SimpleTable
-        //        data={fakeData}
-        //        reloadButtonHandler={() => console.log( "reload" )}
-        //        limitSelectorHandler={( limit ) => console.log( "new limit:", limit )}
-        //        rowSelectHandler={( row, index ) => console.log( "index rowSelectHandler", row, index )}
-        //        orderBy="name"
-        //        orderDirection="ASC"
-        //        orderChangeHandler={( key, order ) => {
-        //            console.log( "index orderChangeHandler", key, order )
-        //
-        //        }}
-        //        columns={this.columns}
-        //        bottomRow={false}
-        //        footerButtons={footerButtons}
-        //    />
-        //)
+        return (
+            <SimpleTable
+                data={fakeData}
+                reloadButtonHandler={() => console.log( "reload" )}
+                limitSelectorHandler={( limit ) => console.log( "new limit:", limit )}
+                orderBy="name"
+                orderDirection="ASC"
+                orderChangeHandler={( key, order ) => {
+                    console.log( "index orderChangeHandler", key, order )
+
+                }}
+                columns={this.columns}
+                bottomRow={false}
+                footerButtons={footerButtons}
+                sellClickHandler={this.sellClickHandler.bind(this)}
+                selectedRowIndexes={this.state.selected}
+                contextMenuItems={this.contextMenu}
+            />
+        )
 
 
         return (
@@ -80,13 +97,13 @@ class TestApp extends React.Component{
                                 data={fakeData}
                                 reloadButtonHandler={() => console.log( "reload" )}
                                 limitSelectorHandler={( limit ) => console.log( "new limit:", limit )}
-                                rowSelectHandler={( row, index ) => console.log( "index rowSelectHandler", row, index )}
                                 orderBy="name"
                                 orderDirection="ASC"
                                 orderChangeHandler={( key, order ) => {
                                     console.log( "index orderChangeHandler", key, order )
 
                                 }}
+                                sellClickHandler={this.sellClickHandler.bind(this)}
                                 columns={this.columns}
                                 bottomRow={false}
                                 footerButtons={footerButtons}
@@ -95,7 +112,6 @@ class TestApp extends React.Component{
                             data={fakeData}
                             reloadButtonHandler={() => console.log( "reload" )}
                             limitSelectorHandler={( limit ) => console.log( "new limit:", limit )}
-                            rowSelectHandler={( row, index ) => console.log( "index rowSelectHandler", row, index )}
                             orderBy="name"
                             orderDirection="ASC"
                             orderChangeHandler={( key, order ) => {
