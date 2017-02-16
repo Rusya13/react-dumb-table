@@ -1,8 +1,9 @@
 import React, { PropTypes } from "react";
 import ReactDOM from "react-dom";
 import { fakeData } from "./fakeData";
-import {SimpleTable} from '../src/index';
+import {SimpleTable} from '../src/index.js';
 import SplitPane from "react-split-pane";
+
 
 
 

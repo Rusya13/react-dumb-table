@@ -7,10 +7,7 @@ export class SimpleTable extends React.Component {
 
         this.isContextMenuOpen = false;
         this.cachedColumnsSize = [];
-
         this._saveCache();
-
-        window.simpleTable = this;
     }
 
     componentDidMount() {
