@@ -15,7 +15,8 @@ export class SimpleTable extends React.Component {
 
         this.table = table;
         this.cols = table.getElementsByTagName('col') || [];
-        this.headerCells = table.getElementsByClassName('simpleTable__headerCell')
+        this.headerCells = table.getElementsByClassName('simpleTable__headerCell');
+        this._setColumnsSize(this.cachedColumnsSize);
     }
 
     _saveCache(columns = this.props.columns) {
