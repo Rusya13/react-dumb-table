@@ -1,6 +1,11 @@
 import React from 'react';
 import { storiesOf, action } from '@kadira/storybook';
+import { host } from 'storybook-host';
 import { withKnobs, text, boolean, number } from '@kadira/storybook-addon-knobs';
+import withReadme from 'storybook-readme/with-readme';
+import TableReadme from '../README.md';
+
+
 import { SimpleTable } from '../src/index.js';
 import {fakeData} from '../Examples/fakeData';
 import '../lib/style.css';
@@ -10,8 +15,15 @@ import '../lib/style.css';
 const stories = storiesOf('React-dumb-table', module);
 
 stories.addDecorator(withKnobs);
+stories.addDecorator(host({
+    title: 'React-dumb-table in the container',
+    align: 'center',
+    height: '90%',
+    width: '90%',
+    mobXDevTools:false
+}));
 
-stories.add('Simple Table', () => {
+stories.add('Simple Table', withReadme(TableReadme, () => {
 
     let columns = [
         {
@@ -38,12 +50,18 @@ stories.add('Simple Table', () => {
         }
     ];
 
-    let contextMenu = [
-        { title: "Edit row", onClickHandler: () => console.log( "index action menu click" ) },
-        { title: "Delete row", onClickHandler: () => console.log( "index action menu click" ) },
-        { type:"divider" },
-        { title: "Create new", onClickHandler: () => console.log( "index action menu click" ) },
-    ];
+    function setContextMenu(){
+        return(
+            [
+                { title: "Edit row", onClickHandler: action('edit row') },
+                { title: "Delete row", onClickHandler: action(('delete row')) },
+                { type:"divider" },
+                { title: "Create new", onClickHandler: action('create new row') },
+            ]
+        )
+    }
+
+
 
     return (
 
@@ -55,8 +73,10 @@ stories.add('Simple Table', () => {
             cellClickHandler={action("cell-click")}
             offset={number("offset", 10)}
             limit={number("limit", 25)}
+            contextMenuItems={setContextMenu}
         />
 
 
     )
-})
+
+}))
