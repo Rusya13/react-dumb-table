@@ -174,6 +174,7 @@ export class SimpleTable extends React.Component {
         let top  = e.clientY;
         let left = e.clientX;
 
+        console.log("index _contextClick", top, left);
         let rightDist  = windowWidth - left;
         let bottomDist = windowHeight - top;
 
@@ -359,7 +360,7 @@ export class SimpleTable extends React.Component {
 
     _renderContextMenuItems( items ) {
         return items.map( ( item, index ) => {
-            return <div onClick={item.onClickHandler}
+            return <div onMouseDown={item.onClickHandler}
                         className="simple-data-table__context-menu__item" key={index}>
                 {item.title}
             </div>

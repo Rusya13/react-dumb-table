@@ -78,7 +78,7 @@
 .Resizer.horizontal:after{
     content: "";
     width: 30px;
-    height: 3px;
+    height: 2px;
     border: solid #9fa5ab;
     border-width: 2px;
     border-radius: 2px;
@@ -86,6 +86,7 @@
     position: absolute;
     left:50%;
     top:4px;
+    background-color: #9fa5ab;
 }
 
 .Resizer.horizontal:hover {
