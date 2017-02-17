@@ -538,7 +538,7 @@ SimpleTable.defaultProps = {
     offsetChangeHandler:  null,
     limit:                10,
     offset:               0,
-    total:                100,
+    total:                0,
     limitsList:           [ 10, 25, 50 ],
     footerButtons:        [],
 
