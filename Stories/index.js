@@ -17,8 +17,8 @@ stories.addDecorator( withKnobs );
 stories.addDecorator( host( {
     title:        'React-dumb-table in the container',
     align:        'top',
-    height:       '50%',
-    width:        '90%',
+    height:       '60%',
+    width:        '100%',
     mobXDevTools: false
 } ) );
 
@@ -27,26 +27,41 @@ stories.add( 'Simple Table', withReadme( TableReadme, () => {
     let columns = [
         {
             name:  "First Name",
-            width: 25,
+            width: 15,
             key:   "first_name",
             //sortKey: "name"
         }, {
             name:  "Last Name",
-            width: 25,
+            width: 15,
             key:   "last_name"
         }, {
             name:  "Gender",
-            width: 25,
+            width: 10,
             key:   "gender"
         }, {
             name:  "IP-address",
-            width: 25,
+            width: 15,
             key:   "ip_address"
         }, {
-            name:  "email",
+            name:  "Email",
             width: 25,
             key:   "email",
             type:  "email"
+        }, {
+            name: "Birthday",
+            width: 15,
+            key:"birthday",
+            type: "date",
+            render: (row, index, columns)=>{
+                return <div className="simpleTable__contentCell">{ new Date(row.birthday).toLocaleDateString("ru-RU") }</div>
+            }
+        }, {
+            name:"Url",
+            width:25,
+            key: "link",
+            type: "link",
+            link:"link",
+            target:"_blank"
         }
     ];
 

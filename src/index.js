@@ -236,11 +236,24 @@ export class SimpleTable extends React.Component {
 
     _renderRow( row, index, columns ) {
         return columns.map( ( column, cellIndex ) => {
+            // get value by key from object or by Getter from class object
             let value = row[ column.key ] || row.get( column.key );
-            if ( column.type === "email" ) {
-                value = <a href={"mailto:" + value}>{value}</a>
 
+            if (column.render){
+                value = column.render(row, index, column)
+            } else {
+                // parse type email
+                if ( column.type === "email" ) {
+                    value = <a href={"mailto:" + value}>{value}</a>
+                }
+                // parse type link
+                if (column.type === "link") {
+                    console.log("index link", column.link, row);
+                    value = <a target={column.target || "_self"} href={row[column.link] || row.get(column.link)}>{value}</a>
+                }
             }
+
+
 
             return (
                 <td className="simpleTable__contentCell"
