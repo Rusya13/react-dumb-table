@@ -218,7 +218,7 @@ export class SimpleTable extends React.Component {
     nextClickHandler( contextMenu ) {
         contextMenu.style.display      = "none";
         this.isContextMenuOpen         = false;
-        this.tableBody.style.overflowY = "auto";
+        if (this.tableBody && this.tableBody.style) this.tableBody.style.overflowY = "auto";
         document.removeEventListener( "mousedown", this.nextClickHandler )
     }
 
