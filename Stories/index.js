@@ -30,7 +30,8 @@ class TableController extends React.Component {
         super( props )
 
         this.state = {
-            limit: 10
+            limit: 10,
+            selected:[]
         }
 
     }
@@ -79,7 +80,8 @@ class TableController extends React.Component {
         ]
     }
 
-    getContextMenu() {
+    getContextMenu(row, index, key) {
+        this.setState({selected:[index]})
         return (
             [
                 { title: "Edit row", onClickHandler: action( 'edit row' ) },
@@ -95,6 +97,10 @@ class TableController extends React.Component {
         this.setState( { limit: newLimit } )
     }
 
+    cellClickHandler(row, index, column){
+        this.setState({selected:[index]})
+    }
+
     render() {
         return (
             <SimpleTable
@@ -102,11 +108,12 @@ class TableController extends React.Component {
                 columns={this.getColumns()}
                 limitSelectorHandler={this.changeLimit.bind(this)}
                 offsetChangeHandler={action( "offset-change" )}
-                cellClickHandler={action( "cell-click" )}
+                cellClickHandler={this.cellClickHandler.bind(this)}
                 offset={0}
+                selectedRowIndexes={this.state.selected}
                 limit={this.state.limit}
                 limitsList={[ 10, 25, 50, 100 ]}
-                contextMenuItems={this.getContextMenu}
+                contextMenuItems={this.getContextMenu.bind(this)}
             />
         )
     }

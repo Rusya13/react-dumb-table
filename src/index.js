@@ -153,17 +153,22 @@ export class SimpleTable extends React.Component {
     }
 
     _contextClick( e, row, index, key ) {
+        if ( this.props.rightClickHandler ) {
+            this.props.rightClickHandler( e, row, index, key );
+            return
+        }
         e.preventDefault();
+
         let contextMenuWidth = this.props.contextMenuWidth;
         let contextMenuItems = this.props.contextMenuItems;
-
-        //if ( contextMenuItems.length < 1 ) return
 
 
         //console.log("index _contextClick", row, index, key);
         let contextMenu = this.table.getElementsByClassName( 'simple-data-table__context-wrapper' )[ 0 ];
 
         let list = contextMenuItems( row, index, key );
+
+        if ( !list || list.length < 1 ) return
 
         console.log( "index _contextClick", list );
 
@@ -216,9 +221,9 @@ export class SimpleTable extends React.Component {
     }
 
     nextClickHandler( contextMenu ) {
-        contextMenu.style.display      = "none";
-        this.isContextMenuOpen         = false;
-        if (this.tableBody && this.tableBody.style) this.tableBody.style.overflowY = "auto";
+        contextMenu.style.display = "none";
+        this.isContextMenuOpen    = false;
+        if ( this.tableBody && this.tableBody.style ) this.tableBody.style.overflowY = "auto";
         document.removeEventListener( "mousedown", this.nextClickHandler )
     }
 
@@ -239,19 +244,19 @@ export class SimpleTable extends React.Component {
             // get value by key from object or by Getter from class object
             let value = row[ column.key ] || row.get( column.key );
 
-            if (column.render){
-                value = column.render(row, index, column)
+            if ( column.render ) {
+                value = column.render( row, index, column )
             } else {
                 // parse type email
                 if ( column.type === "email" ) {
                     value = <a href={"mailto:" + value}>{value}</a>
                 }
                 // parse type link
-                if (column.type === "link") {
-                    value = <a target={column.target || "_self"} href={row[column.link] || row.get(column.link)}>{value}</a>
+                if ( column.type === "link" ) {
+                    value = <a target={column.target || "_self"}
+                               href={row[ column.link ] || row.get( column.link )}>{value}</a>
                 }
             }
-
 
 
             return (
@@ -370,7 +375,7 @@ export class SimpleTable extends React.Component {
             <div className="simple-data-table__footer-limit-selector-wrapper">
                 <select
                     className="simple-data-table__footer-select"
-                    onChange={( e ) => this.props.limitSelectorHandler && this.props.limitSelectorHandler( Number(e.target.value) )}>
+                    onChange={( e ) => this.props.limitSelectorHandler && this.props.limitSelectorHandler( Number( e.target.value ) )}>
                     {limitsList.map( limit => {
                         return <option key={limit} value={limit}>{limit}</option>
                     } )}
@@ -383,7 +388,7 @@ export class SimpleTable extends React.Component {
     }
 
     _renderFooterButtons( buttons ) {
-        if ( buttons.length === 0 ) return null;
+        if (!buttons || buttons && buttons.length === 0) return null;
 
         return buttons.map( ( button, i ) => {
             return <button onClick={button.onClickHandler} key={i}
@@ -395,6 +400,7 @@ export class SimpleTable extends React.Component {
     }
 
     _renderContextMenuItems( items ) {
+        if ( !items || items && items.length < 1 ) return null
         return items.map( ( item, index ) => {
             if ( item.type === "divider" ) {
                 return <div className="simple-data-table__context-menu__item__divider" key={index}></div>
@@ -510,6 +516,8 @@ SimpleTable.propTypes = {
     orderDirection:     PropTypes.oneOf( [ "ASC", "DESC" ] ),
     orderChangeHandler: PropTypes.func,
 
+    rightClickHandler: PropTypes.func,
+
     contextMenuWidth: PropTypes.number,
     contextMenuItems: PropTypes.func
 };
@@ -539,9 +547,9 @@ SimpleTable.defaultProps = {
     orderBy:            "id",
     orderDirection:     "ASC",
     orderChangeHandler: null,
-
-    contextMenuWidth: 150,
-    contextMenuItems: ( row, index, key ) => {
+    rightClickHandler:  null,
+    contextMenuWidth:   150,
+    contextMenuItems:   ( row, index, key ) => {
         return [
             { title: "Edit row", onClickHandler: () => console.log( "index action menu click" ) },
             { title: "Delete row", onClickHandler: () => console.log( "index action menu click" ) },
