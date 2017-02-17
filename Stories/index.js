@@ -66,7 +66,7 @@ class TableController extends React.Component {
                 type:   "date",
                 render: ( row, index, columns ) => {
                     return <div
-                        className="simpleTable__contentCell">{ new Date( row.birthday ).toLocaleDateString( "ru-RU" ) }</div>
+                        className="simpleTable__contentCell">{ new Date( Number(row.birthday)*1000 ).toLocaleDateString( "ru-RU" ) }</div>
                 }
             }, {
                 name:   "Url",
