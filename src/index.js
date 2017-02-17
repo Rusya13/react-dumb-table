@@ -248,7 +248,6 @@ export class SimpleTable extends React.Component {
                 }
                 // parse type link
                 if (column.type === "link") {
-                    console.log("index link", column.link, row);
                     value = <a target={column.target || "_self"} href={row[column.link] || row.get(column.link)}>{value}</a>
                 }
             }
@@ -371,7 +370,7 @@ export class SimpleTable extends React.Component {
             <div className="simple-data-table__footer-limit-selector-wrapper">
                 <select
                     className="simple-data-table__footer-select"
-                    onChange={( e ) => this.props.limitSelectorHandler && this.props.limitSelectorHandler( e.target.value )}>
+                    onChange={( e ) => this.props.limitSelectorHandler && this.props.limitSelectorHandler( Number(e.target.value) )}>
                     {limitsList.map( limit => {
                         return <option key={limit} value={limit}>{limit}</option>
                     } )}
@@ -458,7 +457,7 @@ export class SimpleTable extends React.Component {
                     showFooter ?
                         <div className="simple-data-table__footer" style={{ height: footerHeight }}>
                             <div className="simple-data-table__footer-info">
-                                <div>{first_num} - {last_num} из {total} записей</div>
+                                <div>{first_num} - {last_num} of {total} </div>
                             </div>
                             <div className="simple-data-table__footer-pagination">
                                 {this._renderPagination( offset, limit, total, pages, currentPage )}
