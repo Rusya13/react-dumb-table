@@ -1,7 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans');
-
 .simpleTable{
-    font-family: 'Open Sans', sans-serif;
     font-size: 14px;
 
     overflow-x: hidden;
@@ -120,7 +117,7 @@
 
 .simpleTable__contentCell{
     text-overflow: ellipsis;
-    white-space: normal;
+    white-space: nowrap;
     font-size: 13px;
     color: #43516C;
 
@@ -128,6 +125,10 @@
 
     padding-left: 10px;
     padding-right: 10px;
+}
+
+.simpleTable__contentCell a{
+    color: #54b4f7;
 }
 
 

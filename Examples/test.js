@@ -1,12 +1,13 @@
 import React, { PropTypes } from "react";
 import ReactDOM from "react-dom";
 import { fakeData } from "./fakeData";
-import {SimpleTable} from '../src/index';
+import {SimpleTable} from '../src/index.js';
 import SplitPane from "react-split-pane";
 
 
 
-class TestApp extends React.Component{
+
+export class TestApp extends React.Component{
 
 
     constructor(props){
@@ -48,7 +49,7 @@ class TestApp extends React.Component{
 
     sellClickHandler(row, index, column, buttons){
 
-        //console.log("test sellClickHandler", index, column.key, buttons);
+        //console.log("test cellClickHandler", index, column.key, buttons);
         this.setState({selected:[index]})
     }
 
