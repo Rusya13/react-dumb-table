@@ -7,4 +7,8 @@
 .babelrc
 .eslintrc
 npm-debug.log
-Examples
+.storybook
+stories
+src
+gulpfile.js
+README.md
