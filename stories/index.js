@@ -1,7 +1,7 @@
 import React from "react";
 import { action, storiesOf } from "@kadira/storybook";
 
-import { host } from "storybook-host";
+//import { host } from "storybook-host";
 //import { number, withKnobs } from "@kadira/storybook-addon-knobs";
 import withReadme from "storybook-readme/with-readme";
 import TableReadme from "../README.md";
@@ -31,6 +31,7 @@ stories.add('DumbTable', withReadme(TableReadme, () => {
 
 
 
+
 class TableController extends React.Component {
 
     constructor( props ) {
@@ -38,9 +39,10 @@ class TableController extends React.Component {
 
         this.state = {
             limit: 10,
+            offset: 0,
             selected:[],
-            orderBy: null,
-            orderDirection: null,
+            orderBy: "first_name",
+            orderDirection: "ASC",
         }
 
     }
@@ -114,22 +116,50 @@ class TableController extends React.Component {
         this.setState({selected:[index]})
     }
 
+    sort=(a, b)=> {
+        let f = a[ this.state.orderBy ];
+        let s = b[ this.state.orderBy ];
+
+        if ( this.state.orderDirection === "ASC" ) {
+            if (f > s){
+                return 1
+            } else {
+                return -1
+            }
+        } else {
+            if (f < s){
+                return 1
+            } else {
+                return -1
+            }
+        }
+    };
+
+    offsetChangeHandler=(offset)=>{
+        this.setState({offset})
+    };
+
+
     render() {
+        let data = fakeData.sort(this.sort).slice(this.state.offset, this.state.offset + this.state.limit);
+
         return (
             <DumbTable
-                data={fakeData}
+                data={data}
                 columns={this.getColumns()}
                 selectedRowIndexes={this.state.selected}
                 cellClickHandler={this.cellClickHandler.bind(this)}
+
 
                 orderBy={this.state.orderBy}
                 orderDirection={this.state.orderDirection}
                 orderChangeHandler={this.orderChangeHandler.bind(this)}
 
-                offsetChangeHandler={action( "offset-change" )}
-                offset={0}
+                offsetChangeHandler={this.offsetChangeHandler}
+                offset={this.state.offset}
                 limit={this.state.limit}
                 limitsList={[ 10, 25, 50, 100 ]}
+                total={fakeData.length}
                 limitSelectorHandler={this.changeLimit.bind(this)}
 
                 contextMenuItems={this.getContextMenu.bind(this)}
