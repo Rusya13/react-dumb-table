@@ -7,31 +7,40 @@ import withReadme from "storybook-readme/with-readme";
 import TableReadme from "../README.md";
 
 
-import { SimpleTable } from "../src/index.js";
-import { fakeData } from "../Examples/fakeData";
-import "../lib/style.css";
+import { DumbTable } from '../dist';
+import { fakeData } from './fakeData';
+import '../dist/style.css';
 
 
-const stories = storiesOf( 'React-dumb-table', module );
+const stories = storiesOf('React-dumb-table', module);
 
-//stories.addDecorator( withKnobs );
-stories.addDecorator( host( {
-    title:        'React-dumb-table in the container',
-    align:        'top',
-    height:       '60%',
-    width:        '100%',
-    mobXDevTools: false
-} ) );
+// stories.addDecorator( withKnobs );
+// stories.addDecorator( host( {
+//     title:        'React-dumb-table in the container',
+//     align:        'top',
+//     height:       '60%',
+//     width:        '100%',
+//     mobXDevTools: false
+// } ) );
+
+stories.add('DumbTable', withReadme(TableReadme, () => {
+    return (
+        <TableController/>
+    )
+}));
+
 
 
 class TableController extends React.Component {
 
     constructor( props ) {
-        super( props )
+        super( props );
 
         this.state = {
             limit: 10,
-            selected:[]
+            selected:[],
+            orderBy: null,
+            orderDirection: null,
         }
 
     }
@@ -67,7 +76,7 @@ class TableController extends React.Component {
                 type:   "date",
                 render: ( row, index, columns ) => {
                     return <div
-                        className="simpleTable__contentCell">{ new Date( Number(row.birthday)*1000 ).toLocaleDateString( "ru-RU" ) }</div>
+                        className="dumbTable__contentCell">{ new Date( Number(row.birthday)*1000 ).toLocaleDateString( "ru-RU" ) }</div>
                 }
             }, {
                 name:   "Url",
@@ -97,22 +106,32 @@ class TableController extends React.Component {
         this.setState( { limit: newLimit } )
     }
 
+    orderChangeHandler(orderBy, orderDirection){
+        this.setState({ orderBy, orderDirection });
+    }
+
     cellClickHandler(row, index, column){
         this.setState({selected:[index]})
     }
 
     render() {
         return (
-            <SimpleTable
+            <DumbTable
                 data={fakeData}
                 columns={this.getColumns()}
-                limitSelectorHandler={this.changeLimit.bind(this)}
-                offsetChangeHandler={action( "offset-change" )}
-                cellClickHandler={this.cellClickHandler.bind(this)}
-                offset={0}
                 selectedRowIndexes={this.state.selected}
+                cellClickHandler={this.cellClickHandler.bind(this)}
+
+                orderBy={this.state.orderBy}
+                orderDirection={this.state.orderDirection}
+                orderChangeHandler={this.orderChangeHandler.bind(this)}
+
+                offsetChangeHandler={action( "offset-change" )}
+                offset={0}
                 limit={this.state.limit}
                 limitsList={[ 10, 25, 50, 100 ]}
+                limitSelectorHandler={this.changeLimit.bind(this)}
+
                 contextMenuItems={this.getContextMenu.bind(this)}
             />
         )
@@ -120,10 +139,3 @@ class TableController extends React.Component {
 
 
 }
-
-
-stories.add( 'Simple Table', withReadme( TableReadme, () => {
-    return (
-        <TableController/>
-    )
-} ) );

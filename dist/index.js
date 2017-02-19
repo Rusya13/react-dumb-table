@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.SimpleTable = undefined;
+exports.DumbTable = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -23,13 +23,13 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var SimpleTable = exports.SimpleTable = function (_React$Component) {
-    _inherits(SimpleTable, _React$Component);
+var DumbTable = exports.DumbTable = function (_React$Component) {
+    _inherits(DumbTable, _React$Component);
 
-    function SimpleTable(props) {
-        _classCallCheck(this, SimpleTable);
+    function DumbTable(props) {
+        _classCallCheck(this, DumbTable);
 
-        var _this = _possibleConstructorReturn(this, (SimpleTable.__proto__ || Object.getPrototypeOf(SimpleTable)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (DumbTable.__proto__ || Object.getPrototypeOf(DumbTable)).call(this, props));
 
         _this.isContextMenuOpen = false;
         _this.cachedColumnsSize = [];
@@ -41,7 +41,7 @@ var SimpleTable = exports.SimpleTable = function (_React$Component) {
         return _this;
     }
 
-    _createClass(SimpleTable, [{
+    _createClass(DumbTable, [{
         key: "componentDidMount",
         value: function componentDidMount() {
             var table = this.refs.table;
@@ -49,7 +49,7 @@ var SimpleTable = exports.SimpleTable = function (_React$Component) {
 
             this.table = table;
             this.cols = table.getElementsByTagName('col') || [];
-            this.headerCells = table.getElementsByClassName('simpleTable__headerCell');
+            this.headerCells = table.getElementsByClassName('dumbTable__headerCell');
             this._setColumnsSize(this.cachedColumnsSize);
         }
     }, {
@@ -156,22 +156,6 @@ var SimpleTable = exports.SimpleTable = function (_React$Component) {
         value: function _renderHeader(columns, headerHeight, orderBy, orderDirection) {
             var _this4 = this;
 
-            // {(orderBy === col.sortKey || orderBy === col.key) ?
-            //     <div className="simple-data-table__header-cell-order-container">
-            //         {
-            //             (orderDirection === "ASC") ?
-            //                 <svg viewBox="0 0 24 24" width="20" height="20">
-            //                     <path d="M7 14l5-5 5 5z"></path>
-            //                 </svg> :
-            //                 <svg viewBox="0 0 24 24" width="20" height="20">
-            //                     <path d="M7 10l5 5 5-5z"></path>
-            //                 </svg>
-            //         }
-            //
-            //     </div> :
-            //     null
-            // }
-
             return _react2.default.createElement(
                 "thead",
                 null,
@@ -187,11 +171,24 @@ var SimpleTable = exports.SimpleTable = function (_React$Component) {
                                 "div",
                                 {
                                     onClick: _this4._orderChangeHandler.bind(_this4, orderBy, col.sortKey || col.key, orderDirection),
-                                    className: "simpleTable__headerCell" },
+                                    className: "dumbTable__headerCell" },
                                 col.name
                             ),
-                            _react2.default.createElement("div", { onMouseDown: _this4.handleMouseDown.bind(_this4),
-                                className: "simpleTable__headerCellResize" })
+                            (orderBy === col.sortKey || orderBy === col.key) && _react2.default.createElement(
+                                "div",
+                                { className: "dumbTable__headerSort" },
+                                orderDirection === "ASC" ? _react2.default.createElement(
+                                    "svg",
+                                    { viewBox: "0 0 24 24", width: "20", height: "20" },
+                                    _react2.default.createElement("path", { d: "M7 14l5-5 5 5z" })
+                                ) : _react2.default.createElement(
+                                    "svg",
+                                    { viewBox: "0 0 24 24", width: "20", height: "20" },
+                                    _react2.default.createElement("path", { d: "M7 10l5 5 5-5z" })
+                                )
+                            ),
+                            index != columns.length - 1 && _react2.default.createElement("div", { onMouseDown: _this4.handleMouseDown.bind(_this4),
+                                className: "dumbTable__headerCellResize" })
                         );
                     })
                 )
@@ -320,7 +317,7 @@ var SimpleTable = exports.SimpleTable = function (_React$Component) {
 
                 return _react2.default.createElement(
                     "td",
-                    { className: "simpleTable__contentCell",
+                    { className: "dumbTable__contentCell",
                         onClick: function onClick(e) {
                             return _this5._onCellClickHandler(e, row, index, column);
                         },
@@ -341,12 +338,12 @@ var SimpleTable = exports.SimpleTable = function (_React$Component) {
                 "tbody",
                 null,
                 data.map(function (row, index) {
-                    var className = 'simpleTable__contentRow ';
+                    var className = 'dumbTable__contentRow ';
 
                     if (selectedRowIndexes.some(function (selRow) {
                         return selRow === index;
                     })) {
-                        className += 'simpleTable__contentRow--selected';
+                        className += 'dumbTable__contentRow--selected';
                     }
 
                     return _react2.default.createElement(
@@ -378,62 +375,60 @@ var SimpleTable = exports.SimpleTable = function (_React$Component) {
     }, {
         key: "_renderPagination",
         value: function _renderPagination(offset, limit, total, pages, currentPage) {
-
             if (pages <= 1) {
                 return null;
             }
 
-            var pagesRender = [];
             var startPos = currentPage > 3 ? currentPage > pages - 3 ? pages - 4 : currentPage - 2 : 1;
-
             var group = [];
 
             for (var i = startPos; i <= startPos + 4 && i <= pages; i++) {
-                var className = "simple-data-table__button";
-                if (i === currentPage) className += " active";
+                var className = "dumbTablePagination__page";
+
+                if (i === currentPage) {
+                    className += " " + className + "--active";
+                }
+
                 group.push(_react2.default.createElement(
-                    "button",
+                    "li",
                     { onClick: this._offsetChangeHandler.bind(this, i, currentPage, limit),
-                        className: className, id: String(i), key: i },
-                    String(i)
+                        className: className,
+                        id: i,
+                        key: i },
+                    i
                 ));
             }
 
-            pagesRender.push(_react2.default.createElement(
-                "div",
-                { className: "simple-data-table__buttons_group", key: "btn-group" },
-                group
-            ));
-
-            pagesRender.unshift(_react2.default.createElement(
-                "button",
-                { onClick: this._offsetChangeHandler.bind(this, "back", currentPage, limit),
-                    className: "simple-data-table__button simple-data-table__button-icon",
-                    disabled: currentPage === startPos,
-                    id: currentPage - 1, key: "back" },
-                _react2.default.createElement(
-                    "svg",
-                    { viewBox: "0 0 24 24", width: "24", height: "24" },
-                    _react2.default.createElement("path", { d: "M15.41 16.09l-4.58-4.59 4.58-4.59L14 5.5l-6 6 6 6z" })
-                )
-            ));
-            pagesRender.push(_react2.default.createElement(
-                "button",
-                { onClick: this._offsetChangeHandler.bind(this, "forward", currentPage, limit),
-                    className: "simple-data-table__button simple-data-table__button-icon",
-                    disabled: currentPage === pages, id: currentPage + 1,
-                    key: "forward" },
-                _react2.default.createElement(
-                    "svg",
-                    { viewBox: "0 0 24 24", width: "24", height: "24" },
-                    _react2.default.createElement("path", { d: "M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z" })
-                )
-            ));
-
             return _react2.default.createElement(
                 "div",
-                { className: "simple-data-table__footer-pagination-buttons" },
-                pagesRender
+                { className: "dumbTablePagination" },
+                _react2.default.createElement(
+                    "button",
+                    { onClick: this._offsetChangeHandler.bind(this, "back", currentPage, limit),
+                        className: "dumbTablePagination__btn",
+                        disabled: currentPage === startPos },
+                    _react2.default.createElement(
+                        "svg",
+                        { xmlns: "http://www.w3.org/2000/svg", width: "7", height: "12", viewBox: "0 0 7 12" },
+                        _react2.default.createElement("path", { d: "M6.5 0.2C6.8 0.5 6.8 1 6.5 1.3L1.8 6 6.5 10.7C6.8 11 6.8 11.5 6.5 11.8 6.2 12.1 5.8 12.1 5.5 11.8L0.2 6.5C-0.1 6.2-0.1 5.8 0.2 5.5L5.5 0.2C5.6 0.1 5.8 0 6 0 6.2 0 6.4 0.1 6.5 0.2Z", fillRule: "evenodd" })
+                    )
+                ),
+                _react2.default.createElement(
+                    "ul",
+                    { className: "dumbTablePagination__pages" },
+                    group
+                ),
+                _react2.default.createElement(
+                    "button",
+                    { onClick: this._offsetChangeHandler.bind(this, "forward", currentPage, limit),
+                        className: "dumbTablePagination__btn",
+                        disabled: currentPage === pages },
+                    _react2.default.createElement(
+                        "svg",
+                        { xmlns: "http://www.w3.org/2000/svg", width: "7", height: "12", viewBox: "0 0 7 12" },
+                        _react2.default.createElement("path", { d: "M0.2 11.8C-0.1 11.5-0.1 11 0.2 10.7L4.9 6 0.2 1.3C-0.1 1-0.1 0.5 0.2 0.2 0.5-0.1 1-0.1 1.3 0.2L6.5 5.5C6.8 5.8 6.8 6.2 6.5 6.5L1.3 11.8C1.1 11.9 0.9 12 0.7 12 0.6 12 0.4 11.9 0.2 11.8Z", fillRule: "evenodd" })
+                    )
+                )
             );
         }
     }, {
@@ -441,12 +436,11 @@ var SimpleTable = exports.SimpleTable = function (_React$Component) {
         value: function _renderReloadButton() {
             return _react2.default.createElement(
                 "button",
-                { className: "simple-data-table__footer-reload-button", onClick: this.props.reloadButtonHandler },
+                { className: "dumbTable__btn", onClick: this.props.reloadButtonHandler },
                 _react2.default.createElement(
                     "svg",
-                    { viewBox: "0 0 24 24", width: "24", height: "24" },
-                    _react2.default.createElement("path", {
-                        d: "M12 6v3l4-4-4-4v3c-4.42 0-8 3.58-8 8 0 1.57.46 3.03 1.24 4.26L6.7 14.8c-.45-.83-.7-1.79-.7-2.8 0-3.31 2.69-6 6-6zm6.76 1.74L17.3 9.2c.44.84.7 1.79.7 2.8 0 3.31-2.69 6-6 6v-3l-4 4 4 4v-3c4.42 0 8-3.58 8-8 0-1.57-.46-3.03-1.24-4.26z" })
+                    { xmlns: "http://www.w3.org/2000/svg", width: "14", height: "12", viewBox: "0 0 14 12", className: "dumbTable__icon" },
+                    _react2.default.createElement("path", { d: "M13.2 1.2L13.2 4.8C13.2 5.1 12.9 5.4 12.6 5.4L9 5.4C8.7 5.4 8.4 5.1 8.4 4.8 8.4 4.5 8.7 4.2 9 4.2L11 4.2C10.2 3.4 9.6 2.8 9.4 2.6 8.9 2.1 8.4 1.8 7.8 1.6 7.2 1.3 6.6 1.2 6 1.2 5.4 1.2 4.8 1.3 4.2 1.6 3.6 1.8 3.1 2.1 2.6 2.6 2.1 3.1 1.8 3.6 1.6 4.2 1.3 4.8 1.2 5.4 1.2 6 1.2 6.6 1.3 7.2 1.6 7.8 1.8 8.4 2.1 8.9 2.6 9.4 3.1 9.9 3.6 10.2 4.2 10.4 4.8 10.7 5.4 10.8 6 10.8 6.6 10.8 7.2 10.7 7.8 10.4 8.4 10.2 8.9 9.9 9.4 9.4 9.7 9.1 9.9 8.9 10.1 8.5 10.3 8.2 10.4 7.9 10.5 7.6 10.6 7.3 11 7.1 11.3 7.2 11.6 7.3 11.8 7.7 11.7 8 11.5 8.4 11.3 8.8 11.1 9.2 10.8 9.6 10.6 9.9 10.2 10.2 9.7 10.8 9 11.3 8.3 11.6 7.9 11.7 7.5 11.8 7.1 11.9 6.8 12 6.4 12 6 12 5.6 12 5.2 12 4.9 11.9 4.5 11.8 4.1 11.7 3.7 11.6 3 11.3 2.3 10.8 1.8 10.2 1.2 9.7 0.7 9 0.4 8.3 0.3 7.9 0.2 7.5 0.1 7.1 0 6.8 0 6.4 0 6 0 5.6 0 5.2 0.1 4.9 0.2 4.5 0.3 4.1 0.4 3.7 0.7 3 1.2 2.3 1.8 1.8 2.3 1.2 3 0.7 3.7 0.4 4.1 0.3 4.5 0.2 4.9 0.1 5.2 0 5.6 0 6 0 6.4 0 6.8 0 7.1 0.1 7.5 0.2 7.9 0.3 8.3 0.4 9 0.7 9.7 1.2 10.2 1.8 10.4 1.9 11.1 2.6 12 3.5L12 1.2C12 0.9 12.3 0.6 12.6 0.6 12.9 0.6 13.2 0.9 13.2 1.2Z", "fill-rule": "nonzero" })
                 )
             );
         }
@@ -457,11 +451,11 @@ var SimpleTable = exports.SimpleTable = function (_React$Component) {
 
             return _react2.default.createElement(
                 "div",
-                { className: "simple-data-table__footer-limit-selector-wrapper" },
+                { className: "dumbTableSelect" },
                 _react2.default.createElement(
                     "select",
                     {
-                        className: "simple-data-table__footer-select",
+                        className: "dumbTableSelect__select",
                         onChange: function onChange(e) {
                             return _this7.props.limitSelectorHandler && _this7.props.limitSelectorHandler(Number(e.target.value));
                         } },
@@ -475,8 +469,8 @@ var SimpleTable = exports.SimpleTable = function (_React$Component) {
                 ),
                 _react2.default.createElement(
                     "svg",
-                    { viewBox: "0 0 24 24", width: "24", height: "24" },
-                    _react2.default.createElement("path", { d: "M7 10l5 5 5-5z" })
+                    { className: "dumbTableSelect__icon", xmlns: "http://www.w3.org/2000/svg", width: "10", height: "5", viewBox: "0 0 10 5" },
+                    _react2.default.createElement("polygon", { "fill-rule": "nonzero", points: "0 0 5 5 10 0" })
                 )
             );
         }
@@ -545,10 +539,10 @@ var SimpleTable = exports.SimpleTable = function (_React$Component) {
 
             return _react2.default.createElement(
                 "div",
-                { ref: "table", className: "simpleTable" },
+                { ref: "table", className: "dumbTable" },
                 _react2.default.createElement(
                     "div",
-                    { className: "simpleTable__header" },
+                    { className: "dumbTable__header" },
                     _react2.default.createElement(
                         "table",
                         null,
@@ -560,7 +554,7 @@ var SimpleTable = exports.SimpleTable = function (_React$Component) {
                     "div",
                     { ref: function ref(_ref) {
                             return _this8.tableBody = _ref;
-                        }, className: "simpleTable__content" },
+                        }, className: "dumbTable__content" },
                     _react2.default.createElement(
                         "table",
                         null,
@@ -568,7 +562,7 @@ var SimpleTable = exports.SimpleTable = function (_React$Component) {
                         this._renderBody(data, columns, rowHeight, selectedRowIndexes)
                     )
                 ),
-                showFooter ? _react2.default.createElement(
+                showFooter && _react2.default.createElement(
                     "div",
                     { className: "simple-data-table__footer", style: { height: footerHeight } },
                     _react2.default.createElement(
@@ -576,13 +570,24 @@ var SimpleTable = exports.SimpleTable = function (_React$Component) {
                         { className: "simple-data-table__footer-info" },
                         _react2.default.createElement(
                             "div",
-                            null,
-                            first_num,
+                            { className: "dumbTableInfo" },
+                            _react2.default.createElement(
+                                "span",
+                                null,
+                                first_num
+                            ),
                             " - ",
-                            last_num,
+                            _react2.default.createElement(
+                                "span",
+                                null,
+                                last_num
+                            ),
                             " of ",
-                            total,
-                            " "
+                            _react2.default.createElement(
+                                "span",
+                                null,
+                                total
+                            )
                         )
                     ),
                     _react2.default.createElement(
@@ -597,16 +602,16 @@ var SimpleTable = exports.SimpleTable = function (_React$Component) {
                         this._renderReloadButton(),
                         this._renderLimitSelector(limit, limitsList)
                     )
-                ) : null,
+                ),
                 _react2.default.createElement("div", { className: "simple-data-table__context-wrapper" })
             );
         }
     }]);
 
-    return SimpleTable;
+    return DumbTable;
 }(_react2.default.Component);
 
-SimpleTable.propTypes = {
+DumbTable.propTypes = {
     columns: _react.PropTypes.array.isRequired,
     data: _react.PropTypes.any.isRequired,
     rowHeight: _react.PropTypes.number,
@@ -638,7 +643,7 @@ SimpleTable.propTypes = {
     contextMenuItems: _react.PropTypes.func
 };
 
-SimpleTable.defaultProps = {
+DumbTable.defaultProps = {
     columns: [],
     data: [],
     rowHeight: 30,

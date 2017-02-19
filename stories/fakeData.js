@@ -1,14 +1,15 @@
-export const fakeData = [ {
-    "id":         "4266c993-528c-4625-8198-c66f7799e555",
-    "first_name": "Sean",
-    "last_name":  "Simmons",
-    "email":      "ssimmons0@census.gov",
-    "gender":     "Male",
-    "ip_address": "216.90.124.242",
-    "link":       "https://mozilla.org/sollicitudin/ut.png?adipiscing=magna&lorem=bibendum&vitae=imperdiet&mattis=nullam&nibh=orci&ligula=pede&nec=venenatis&sem=non",
-    "birthday":   "657772679",
-    "avatar":     "https://robohash.org/aperiampraesentiumsit.bmp?size=50x50&set=set1"
-},
+export const fakeData = [
+    {
+        "id":         "4266c993-528c-4625-8198-c66f7799e555",
+        "first_name": "Sean",
+        "last_name":  "Simmons",
+        "email":      "ssimmons0@census.gov",
+        "gender":     "Male",
+        "ip_address": "216.90.124.242",
+        "link":       "https://mozilla.org/sollicitudin/ut.png?adipiscing=magna&lorem=bibendum&vitae=imperdiet&mattis=nullam&nibh=orci&ligula=pede&nec=venenatis&sem=non",
+        "birthday":   "657772679",
+        "avatar":     "https://robohash.org/aperiampraesentiumsit.bmp?size=50x50&set=set1"
+    },
     {
         "id":         "11539a26-92cd-415e-9c29-01a725381839",
         "first_name": "Christine",
@@ -1097,4 +1098,4 @@ export const fakeData = [ {
         "link":       "https://epa.gov/ligula.js?nunc=luctus&nisl=cum&duis=sociis&bibendum=natoque&felis=penatibus&sed=et&interdum=magnis&venenatis=dis&turpis=parturient&enim=montes&blandit=nascetur&mi=ridiculus&in=mus&porttitor=vivamus&pede=vestibulum&justo=sagittis&eu=sapien&massa=cum&donec=sociis&dapibus=natoque&duis=penatibus&at=et&velit=magnis&eu=dis&est=parturient&congue=montes&elementum=nascetur&in=ridiculus&hac=mus&habitasse=etiam&platea=vel&dictumst=augue&morbi=vestibulum&vestibulum=rutrum&velit=rutrum&id=neque&pretium=aenean&iaculis=auctor&diam=gravida&erat=sem&fermentum=praesent&justo=id&nec=massa",
         "birthday":   "515787552",
         "avatar":     "https://robohash.org/debitishicet.png?size=50x50&set=set1"
-    } ];
+}];
