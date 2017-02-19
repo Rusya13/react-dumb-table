@@ -1,6 +1,7 @@
 const gulp = require('gulp');
-const babel = require('gulp-babel');
 const sass = require('gulp-sass');
+const watch = require('gulp-watch');
+const babel = require('gulp-babel');
 const autoprefixer = require('gulp-autoprefixer');
 
 // production
@@ -19,7 +20,12 @@ gulp.task('js', () => {
 
 gulp.task('scss', () => {
     return gulp.src('./src/style.scss')
-        .pipe(sass())
+        .pipe(sass().on('error', sass.logError))
         .pipe(autoprefixer())
         .pipe(gulp.dest('./dist'));
+});
+
+gulp.task('dev', () => {
+    gulp.watch('./src/**/*.scss', ['scss']);
+    gulp.watch('./src/**/*.js', ['js']);
 });

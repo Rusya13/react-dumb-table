@@ -1,7 +1,7 @@
 import React, { PropTypes } from "react";
 import ReactDom from "react-dom";
 
-export class SimpleTable extends React.Component {
+export class DumbTable extends React.Component {
 
     constructor( props ) {
         super( props );
@@ -20,7 +20,7 @@ export class SimpleTable extends React.Component {
 
         this.table       = table;
         this.cols        = table.getElementsByTagName( 'col' ) || [];
-        this.headerCells = table.getElementsByClassName( 'simpleTable__headerCell' );
+        this.headerCells = table.getElementsByClassName( 'dumbTable__headerCell' );
         this._setColumnsSize( this.cachedColumnsSize );
     }
 
@@ -103,7 +103,6 @@ export class SimpleTable extends React.Component {
         )
     }
 
-
     _orderChangeHandler( orderBy, key, orderDirection ) {
         let dir = orderDirection;
         if ( orderBy === key ) {
@@ -114,22 +113,6 @@ export class SimpleTable extends React.Component {
     }
 
     _renderHeader( columns, headerHeight, orderBy, orderDirection ) {
-        // {(orderBy === col.sortKey || orderBy === col.key) ?
-        //     <div className="simple-data-table__header-cell-order-container">
-        //         {
-        //             (orderDirection === "ASC") ?
-        //                 <svg viewBox="0 0 24 24" width="20" height="20">
-        //                     <path d="M7 14l5-5 5 5z"></path>
-        //                 </svg> :
-        //                 <svg viewBox="0 0 24 24" width="20" height="20">
-        //                     <path d="M7 10l5 5 5-5z"></path>
-        //                 </svg>
-        //         }
-        //
-        //     </div> :
-        //     null
-        // }
-
         return (
             <thead>
             <tr>
@@ -139,11 +122,26 @@ export class SimpleTable extends React.Component {
                         <th style={{ height: headerHeight }} data-index={index} key={index}>
                             <div
                                 onClick={this._orderChangeHandler.bind( this, orderBy, col.sortKey || col.key, orderDirection )}
-                                className="simpleTable__headerCell">
+                                className="dumbTable__headerCell">
                                 {col.name}
                             </div>
-                            <div onMouseDown={this.handleMouseDown.bind( this )}
-                                 className="simpleTable__headerCellResize"/>
+                            {(orderBy === col.sortKey || orderBy === col.key) &&
+                                <div className="dumbTable__headerSort">
+                                    {
+                                        (orderDirection === "ASC") ?
+                                            <svg viewBox="0 0 24 24" width="20" height="20">
+                                                <path d="M7 14l5-5 5 5z"></path>
+                                            </svg> :
+                                            <svg viewBox="0 0 24 24" width="20" height="20">
+                                                <path d="M7 10l5 5 5-5z"></path>
+                                            </svg>
+                                    }
+                                </div>
+                            }
+                            { index != columns.length - 1 &&
+                                <div onMouseDown={this.handleMouseDown.bind( this )}
+                                     className="dumbTable__headerCellResize"/>
+                            }
                         </th>
                     )
                 } )}
@@ -260,7 +258,7 @@ export class SimpleTable extends React.Component {
 
 
             return (
-                <td className="simpleTable__contentCell"
+                <td className="dumbTable__contentCell"
                     onClick={( e ) => this._onCellClickHandler( e, row, index, column )}
                     onContextMenu={( e ) => this._contextClick( e, row, index, column.key )}
                     key={cellIndex}>
@@ -275,10 +273,10 @@ export class SimpleTable extends React.Component {
         return (
             <tbody>
             {data.map( ( row, index ) => {
-                let className = 'simpleTable__contentRow ';
+                let className = 'dumbTable__contentRow ';
 
                 if ( selectedRowIndexes.some( selRow => selRow === index ) ) {
-                    className += 'simpleTable__contentRow--selected';
+                    className += 'dumbTable__contentRow--selected';
                 }
 
                 return (
@@ -310,50 +308,50 @@ export class SimpleTable extends React.Component {
     }
 
     _renderPagination( offset, limit, total, pages, currentPage ) {
-
-        if ( pages <= 1 ) {
-            return null
+        if(pages <= 1){
+            return null;
         }
 
-        let pagesRender = [];
-        let startPos    = currentPage > 3 ? ( (currentPage > pages - 3) ? pages - 4 : currentPage - 2) : 1;
-
+        const startPos = currentPage > 3 ? ((currentPage > pages - 3) ? pages - 4 : currentPage - 2) : 1;
         let group = [];
 
         for ( let i = startPos; i <= startPos + 4 && i <= pages; i++ ) {
-            let className = "simple-data-table__button";
-            if ( i === currentPage ) className += " active";
-            group.push( <button onClick={this._offsetChangeHandler.bind( this, i, currentPage, limit )}
-                                className={className} id={String( i )} key={i}>{String( i )}</button> )
+            let className = "dumbTablePagination__page";
+
+            if (i === currentPage){
+                className += ` ${className}--active`;
+            }
+
+            group.push(
+                <li onClick={this._offsetChangeHandler.bind( this, i, currentPage, limit )}
+                    className={className}
+                    id={i}
+                    key={i}>
+                    {i}
+                </li>
+            );
         }
 
 
-        pagesRender.push( <div className="simple-data-table__buttons_group" key="btn-group">
-            {group}
-        </div> );
-
-        pagesRender.unshift( <button onClick={this._offsetChangeHandler.bind( this, "back", currentPage, limit )}
-                                     className="simple-data-table__button simple-data-table__button-icon"
-                                     disabled={currentPage === startPos}
-                                     id={currentPage - 1} key="back">
-            <svg viewBox="0 0 24 24" width="24" height="24">
-                <path d="M15.41 16.09l-4.58-4.59 4.58-4.59L14 5.5l-6 6 6 6z">
-                </path>
-            </svg>
-        </button> );
-        pagesRender.push( <button onClick={this._offsetChangeHandler.bind( this, "forward", currentPage, limit )}
-                                  className="simple-data-table__button simple-data-table__button-icon"
-                                  disabled={currentPage === pages} id={currentPage + 1}
-                                  key="forward">
-            <svg viewBox="0 0 24 24" width="24" height="24">
-                <path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z">
-                </path>
-            </svg>
-        </button> );
-
         return (
-            <div className="simple-data-table__footer-pagination-buttons">
-                {pagesRender}
+            <div className="dumbTablePagination">
+                <button onClick={this._offsetChangeHandler.bind( this, "back", currentPage, limit )}
+                        className="dumbTablePagination__btn"
+                        disabled={currentPage === startPos}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="7" height="12" viewBox="0 0 7 12">
+                        <path d="M6.5 0.2C6.8 0.5 6.8 1 6.5 1.3L1.8 6 6.5 10.7C6.8 11 6.8 11.5 6.5 11.8 6.2 12.1 5.8 12.1 5.5 11.8L0.2 6.5C-0.1 6.2-0.1 5.8 0.2 5.5L5.5 0.2C5.6 0.1 5.8 0 6 0 6.2 0 6.4 0.1 6.5 0.2Z" fillRule="evenodd"/>
+                    </svg>
+                </button>
+                <ul className="dumbTablePagination__pages">
+                    {group}
+                </ul>
+                <button onClick={this._offsetChangeHandler.bind( this, "forward", currentPage, limit )}
+                        className="dumbTablePagination__btn"
+                        disabled={currentPage === pages}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="7" height="12" viewBox="0 0 7 12">
+                        <path d="M0.2 11.8C-0.1 11.5-0.1 11 0.2 10.7L4.9 6 0.2 1.3C-0.1 1-0.1 0.5 0.2 0.2 0.5-0.1 1-0.1 1.3 0.2L6.5 5.5C6.8 5.8 6.8 6.2 6.5 6.5L1.3 11.8C1.1 11.9 0.9 12 0.7 12 0.6 12 0.4 11.9 0.2 11.8Z" fillRule="evenodd"/>
+                    </svg>
+                </button>
             </div>
         )
     }
@@ -414,8 +412,6 @@ export class SimpleTable extends React.Component {
     }
 
     render() {
-
-
         let columns       = this.props.columns;
         let cachedColumns = this.cachedColumnsSize;
         let data          = this.props.data;
@@ -446,14 +442,14 @@ export class SimpleTable extends React.Component {
         let contextMenuItems = this.props.contextMenuItems;
 
         return (
-            <div ref="table" className="simpleTable">
-                <div className="simpleTable__header">
+            <div ref="table" className="dumbTable">
+                <div className="dumbTable__header">
                     <table>
                         {this._renderColumnsSync( cachedColumns )}
                         {this._renderHeader( columns, headerHeight, orderBy, orderDirection )}
                     </table>
                 </div>
-                <div ref={( ref ) => this.tableBody = ref} className="simpleTable__content">
+                <div ref={( ref ) => this.tableBody = ref} className="dumbTable__content">
                     <table >
                         {this._renderColumnsSync( cachedColumns )}
                         {this._renderBody( data, columns, rowHeight, selectedRowIndexes )}
@@ -477,7 +473,6 @@ export class SimpleTable extends React.Component {
                         :
                         null
                 }
-
                 <div className={"simple-data-table__context-wrapper"}>
 
                 </div>
@@ -490,7 +485,7 @@ export class SimpleTable extends React.Component {
 }
 
 
-SimpleTable.propTypes = {
+DumbTable.propTypes = {
     columns:     PropTypes.array.isRequired,
     data:        PropTypes.any.isRequired,
     rowHeight:   PropTypes.number,
@@ -522,7 +517,7 @@ SimpleTable.propTypes = {
     contextMenuItems: PropTypes.func
 };
 
-SimpleTable.defaultProps = {
+DumbTable.defaultProps = {
     columns:            [],
     data:               [],
     rowHeight:          30,
