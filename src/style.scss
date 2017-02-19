@@ -1,4 +1,12 @@
 .simpleTable{
+    display: none;
+
+    &--fixed{
+        display: block;
+    }
+}
+
+.simpleTable{
     font-size: 14px;
 
     overflow-x: hidden;

@@ -7,21 +7,28 @@ import withReadme from "storybook-readme/with-readme";
 import TableReadme from "../README.md";
 
 
-import { SimpleTable } from "../src/index.js";
-import { fakeData } from "../Examples/fakeData";
-import "../lib/style.css";
+import { SimpleTable } from "../dist/index.js";
+import { fakeData } from "./fakeData";
+import "../dist/style.css";
 
 
 const stories = storiesOf( 'React-dumb-table', module );
 
 //stories.addDecorator( withKnobs );
-stories.addDecorator( host( {
-    title:        'React-dumb-table in the container',
-    align:        'top',
-    height:       '60%',
-    width:        '100%',
-    mobXDevTools: false
-} ) );
+// stories.addDecorator( host( {
+//     title:        'React-dumb-table in the container',
+//     align:        'top',
+//     height:       '60%',
+//     width:        '100%',
+//     mobXDevTools: false
+// } ) );
+
+stories.add('Simple Table', withReadme(TableReadme, () => {
+    return (
+        <TableController/>
+    )
+}));
+
 
 
 class TableController extends React.Component {
@@ -120,10 +127,3 @@ class TableController extends React.Component {
 
 
 }
-
-
-stories.add( 'Simple Table', withReadme( TableReadme, () => {
-    return (
-        <TableController/>
-    )
-} ) );
