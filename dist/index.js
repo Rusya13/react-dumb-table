@@ -436,12 +436,11 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
         value: function _renderReloadButton() {
             return _react2.default.createElement(
                 "button",
-                { className: "simple-data-table__footer-reload-button", onClick: this.props.reloadButtonHandler },
+                { className: "dumbTable__btn", onClick: this.props.reloadButtonHandler },
                 _react2.default.createElement(
                     "svg",
-                    { viewBox: "0 0 24 24", width: "24", height: "24" },
-                    _react2.default.createElement("path", {
-                        d: "M12 6v3l4-4-4-4v3c-4.42 0-8 3.58-8 8 0 1.57.46 3.03 1.24 4.26L6.7 14.8c-.45-.83-.7-1.79-.7-2.8 0-3.31 2.69-6 6-6zm6.76 1.74L17.3 9.2c.44.84.7 1.79.7 2.8 0 3.31-2.69 6-6 6v-3l-4 4 4 4v-3c4.42 0 8-3.58 8-8 0-1.57-.46-3.03-1.24-4.26z" })
+                    { xmlns: "http://www.w3.org/2000/svg", width: "14", height: "12", viewBox: "0 0 14 12", className: "dumbTable__icon" },
+                    _react2.default.createElement("path", { d: "M13.2 1.2L13.2 4.8C13.2 5.1 12.9 5.4 12.6 5.4L9 5.4C8.7 5.4 8.4 5.1 8.4 4.8 8.4 4.5 8.7 4.2 9 4.2L11 4.2C10.2 3.4 9.6 2.8 9.4 2.6 8.9 2.1 8.4 1.8 7.8 1.6 7.2 1.3 6.6 1.2 6 1.2 5.4 1.2 4.8 1.3 4.2 1.6 3.6 1.8 3.1 2.1 2.6 2.6 2.1 3.1 1.8 3.6 1.6 4.2 1.3 4.8 1.2 5.4 1.2 6 1.2 6.6 1.3 7.2 1.6 7.8 1.8 8.4 2.1 8.9 2.6 9.4 3.1 9.9 3.6 10.2 4.2 10.4 4.8 10.7 5.4 10.8 6 10.8 6.6 10.8 7.2 10.7 7.8 10.4 8.4 10.2 8.9 9.9 9.4 9.4 9.7 9.1 9.9 8.9 10.1 8.5 10.3 8.2 10.4 7.9 10.5 7.6 10.6 7.3 11 7.1 11.3 7.2 11.6 7.3 11.8 7.7 11.7 8 11.5 8.4 11.3 8.8 11.1 9.2 10.8 9.6 10.6 9.9 10.2 10.2 9.7 10.8 9 11.3 8.3 11.6 7.9 11.7 7.5 11.8 7.1 11.9 6.8 12 6.4 12 6 12 5.6 12 5.2 12 4.9 11.9 4.5 11.8 4.1 11.7 3.7 11.6 3 11.3 2.3 10.8 1.8 10.2 1.2 9.7 0.7 9 0.4 8.3 0.3 7.9 0.2 7.5 0.1 7.1 0 6.8 0 6.4 0 6 0 5.6 0 5.2 0.1 4.9 0.2 4.5 0.3 4.1 0.4 3.7 0.7 3 1.2 2.3 1.8 1.8 2.3 1.2 3 0.7 3.7 0.4 4.1 0.3 4.5 0.2 4.9 0.1 5.2 0 5.6 0 6 0 6.4 0 6.8 0 7.1 0.1 7.5 0.2 7.9 0.3 8.3 0.4 9 0.7 9.7 1.2 10.2 1.8 10.4 1.9 11.1 2.6 12 3.5L12 1.2C12 0.9 12.3 0.6 12.6 0.6 12.9 0.6 13.2 0.9 13.2 1.2Z", "fill-rule": "nonzero" })
                 )
             );
         }
@@ -452,11 +451,11 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
 
             return _react2.default.createElement(
                 "div",
-                { className: "simple-data-table__footer-limit-selector-wrapper" },
+                { className: "dumbTableSelect" },
                 _react2.default.createElement(
                     "select",
                     {
-                        className: "simple-data-table__footer-select",
+                        className: "dumbTableSelect__select",
                         onChange: function onChange(e) {
                             return _this7.props.limitSelectorHandler && _this7.props.limitSelectorHandler(Number(e.target.value));
                         } },
@@ -470,8 +469,8 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
                 ),
                 _react2.default.createElement(
                     "svg",
-                    { viewBox: "0 0 24 24", width: "24", height: "24" },
-                    _react2.default.createElement("path", { d: "M7 10l5 5 5-5z" })
+                    { className: "dumbTableSelect__icon", xmlns: "http://www.w3.org/2000/svg", width: "10", height: "5", viewBox: "0 0 10 5" },
+                    _react2.default.createElement("polygon", { "fill-rule": "nonzero", points: "0 0 5 5 10 0" })
                 )
             );
         }
@@ -563,7 +562,7 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
                         this._renderBody(data, columns, rowHeight, selectedRowIndexes)
                     )
                 ),
-                showFooter ? _react2.default.createElement(
+                showFooter && _react2.default.createElement(
                     "div",
                     { className: "simple-data-table__footer", style: { height: footerHeight } },
                     _react2.default.createElement(
@@ -571,13 +570,24 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
                         { className: "simple-data-table__footer-info" },
                         _react2.default.createElement(
                             "div",
-                            null,
-                            first_num,
+                            { className: "dumbTableInfo" },
+                            _react2.default.createElement(
+                                "span",
+                                null,
+                                first_num
+                            ),
                             " - ",
-                            last_num,
+                            _react2.default.createElement(
+                                "span",
+                                null,
+                                last_num
+                            ),
                             " of ",
-                            total,
-                            " "
+                            _react2.default.createElement(
+                                "span",
+                                null,
+                                total
+                            )
                         )
                     ),
                     _react2.default.createElement(
@@ -592,7 +602,7 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
                         this._renderReloadButton(),
                         this._renderLimitSelector(limit, limitsList)
                     )
-                ) : null,
+                ),
                 _react2.default.createElement("div", { className: "simple-data-table__context-wrapper" })
             );
         }

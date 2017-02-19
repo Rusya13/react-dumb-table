@@ -50,6 +50,20 @@ $cell-font-size: 13px;
         color: #54b4f7;
     }
 
+    &__btn{
+        vertical-align: top;
+        background: #fff;
+        cursor: pointer;
+        min-width: 22px;
+        padding: 0 4px;
+        height: 24px;
+        border: 0;
+    }
+
+    &__icon{
+        fill: #818B9E;
+    }
+
     &__header{
         border-bottom: 1px solid $border-color;
     }
@@ -374,6 +388,44 @@ $cell-font-size: 13px;
     overflow: hidden;
     background-color: #e5e5e5;
 }
+
+// Select
+.dumbTableSelect{
+    position: relative;
+    border: 1px solid $border-color;
+    border-radius: 2px;
+    cursor: pointer;
+
+    &__select{
+        height: 100%;
+        padding-left: 8px;
+        padding-right: 18px;
+        background-color: transparent;
+        text-align: center;
+        outline: none;
+        min-height: 24px;
+        border: none;
+        -webkit-appearance: none;
+        color: $cell-font-color;
+        font-size: 13px;
+    }
+
+    &__icon{
+        position: absolute;
+        top: 50%;
+        margin-top: -2px;
+        right: 5px;
+        fill: #818B9E;
+    }
+}
+
+// Info
+
+.dumbTableInfo{
+    color: $cell-font-color;
+    font-size: 13px;
+}
+
 
 // Pagination
 

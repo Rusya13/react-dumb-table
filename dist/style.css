@@ -31,6 +31,16 @@
     empty-cells: show; }
   .dumbTable a {
     color: #54b4f7; }
+  .dumbTable__btn {
+    vertical-align: top;
+    background: #fff;
+    cursor: pointer;
+    min-width: 22px;
+    padding: 0 4px;
+    height: 24px;
+    border: 0; }
+  .dumbTable__icon {
+    fill: #818B9E; }
   .dumbTable__header {
     border-bottom: 1px solid #E7EBED; }
   .dumbTable__headerCell {
@@ -322,6 +332,34 @@
   margin: 9px 0;
   overflow: hidden;
   background-color: #e5e5e5; }
+
+.dumbTableSelect {
+  position: relative;
+  border: 1px solid #E7EBED;
+  border-radius: 2px;
+  cursor: pointer; }
+  .dumbTableSelect__select {
+    height: 100%;
+    padding-left: 8px;
+    padding-right: 18px;
+    background-color: transparent;
+    text-align: center;
+    outline: none;
+    min-height: 24px;
+    border: none;
+    -webkit-appearance: none;
+    color: #43516C;
+    font-size: 13px; }
+  .dumbTableSelect__icon {
+    position: absolute;
+    top: 50%;
+    margin-top: -2px;
+    right: 5px;
+    fill: #818B9E; }
+
+.dumbTableInfo {
+  color: #43516C;
+  font-size: 13px; }
 
 .dumbTablePagination__pages {
   display: inline-block;
