@@ -15,7 +15,7 @@ setOptions({
 
 
 function loadStories() {
-    require('../stories');
+    require('../Stories');
     // You can require as many stories as you need.
 }
 
