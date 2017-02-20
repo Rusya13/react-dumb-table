@@ -456,6 +456,7 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
                     "select",
                     {
                         className: "dumbTableSelect__select",
+                        value: limit,
                         onChange: function onChange(e) {
                             return _this7.props.limitSelectorHandler && _this7.props.limitSelectorHandler(Number(e.target.value));
                         } },

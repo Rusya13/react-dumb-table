@@ -38,7 +38,7 @@ class TableController extends React.Component {
         super( props );
 
         this.state = {
-            limit: 10,
+            limit: 25,
             offset: 0,
             selected:[],
             orderBy: "first_name",

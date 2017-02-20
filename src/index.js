@@ -371,6 +371,7 @@ export class DumbTable extends React.Component {
             <div className="dumbTableSelect">
                 <select
                     className="dumbTableSelect__select"
+                    value={limit}
                     onChange={( e ) => this.props.limitSelectorHandler && this.props.limitSelectorHandler( Number( e.target.value ) )}>
                     {limitsList.map( limit => {
                         return <option key={limit} value={limit}>{limit}</option>
