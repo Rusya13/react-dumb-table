@@ -40,6 +40,8 @@
     height: 24px;
     border: 0;
     outline: none; }
+    .dumbTable__btn.reload-btn {
+      margin-right: 5px; }
   .dumbTable__icon {
     fill: #818B9E; }
   .dumbTable__header {
@@ -337,8 +339,7 @@
 .dumbTableSelect {
   position: relative;
   border: 1px solid #E7EBED;
-  border-radius: 2px;
-  cursor: pointer; }
+  border-radius: 2px; }
   .dumbTableSelect__select {
     height: 100%;
     padding-left: 8px;
@@ -350,13 +351,15 @@
     border: none;
     -webkit-appearance: none;
     color: #43516C;
-    font-size: 13px; }
+    font-size: 13px;
+    z-index: 25; }
   .dumbTableSelect__icon {
     position: absolute;
     top: 50%;
     margin-top: -2px;
     right: 5px;
-    fill: #818B9E; }
+    fill: #818B9E;
+    z-index: 1; }
 
 .dumbTableInfo {
   color: #43516C;

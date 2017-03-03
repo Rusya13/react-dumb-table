@@ -59,7 +59,11 @@ $cell-font-size: 13px;
         height: 24px;
         border: 0;
         outline: none;
+        &.reload-btn{
+            margin-right: 5px;
+        }
     }
+
 
     &__icon{
         fill: #818B9E;
@@ -395,7 +399,7 @@ $cell-font-size: 13px;
     position: relative;
     border: 1px solid $border-color;
     border-radius: 2px;
-    cursor: pointer;
+
 
     &__select{
         height: 100%;
@@ -409,6 +413,8 @@ $cell-font-size: 13px;
         -webkit-appearance: none;
         color: $cell-font-color;
         font-size: 13px;
+        z-index: 25;
+
     }
 
     &__icon{
@@ -417,6 +423,7 @@ $cell-font-size: 13px;
         margin-top: -2px;
         right: 5px;
         fill: #818B9E;
+        z-index: 1;
     }
 }
 
@@ -450,7 +457,6 @@ $cell-font-size: 13px;
         border: 0;
         outline: none;
     }
-
     &__btn{
         svg{
             fill: #818B9E;

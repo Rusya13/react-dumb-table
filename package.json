@@ -1,6 +1,6 @@
 {
   "name": "react-dumb-table",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "React table component with pagination, columns resize, fixed header and footer.",
   "repository": {
     "type": "git",
@@ -16,8 +16,10 @@
   "license": "ISC",
   "scripts": {
     "build": "gulp build",
+    "dev": "gulp dev; ",
+    "dev_story": "npm run build && (npm run storybook & npm run dev)",
     "storybook": "start-storybook -p 9001 -c .storybook",
-    "ghp": "build-storybook -c .storybook -o gh-pages"
+    "ghp": "build-storybook -c .storybook -o docs"
   },
   "dependencies": {
     "react": "^15.0.0",

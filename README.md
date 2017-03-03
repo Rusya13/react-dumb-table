@@ -1,6 +1,22 @@
 # React-dumb-table
 
 
+## Lates releases
+
+## v0.0.15
+
+### Fixes
+
+- reload button styles
+- padination zero page error
+- limit select icon fix
+- footer of fix
+
+
+
+
+
+
 ## TODO
 
 ### Callbacks:
