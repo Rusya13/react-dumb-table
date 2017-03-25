@@ -36,7 +36,7 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
         _this._saveCache();
 
         _this.state = {
-            isContextMenuOpen: false
+            isLimitSelectOpen: false
         };
         return _this;
     }
@@ -46,11 +46,16 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
         value: function componentDidMount() {
             var table = this.refs.table;
 
-
+            window.addEventListener("mousedown", this.nextClickHandler.bind(this));
             this.table = table;
             this.cols = table.getElementsByTagName('col') || [];
             this.headerCells = table.getElementsByClassName('dumbTable__headerCell');
             this._setColumnsSize(this.cachedColumnsSize);
+        }
+    }, {
+        key: "componentWillUnmount",
+        value: function componentWillUnmount() {
+            window.removeEventListener("mousedown", this.nextClickHandler.bind(this));
         }
     }, {
         key: "_saveCache",
@@ -235,23 +240,33 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
             }
             contextMenu.style.top = top + "px";
             contextMenu.style.left = left + "px";
-
-            this.tableBody.style.overflowY = "hidden";
+            // block scroll
+            document.onmousewheel = document.onwheel = function () {
+                return false;
+            };
 
             if (this.isContextMenuOpen) {
                 return;
             }
 
             this.isContextMenuOpen = true;
-            document.addEventListener("mousedown", this.nextClickHandler.bind(this, contextMenu));
+            // window.addEventListener( "mousedown", this.nextClickHandler.bind( this, contextMenu ) )
         }
     }, {
         key: "nextClickHandler",
-        value: function nextClickHandler(contextMenu) {
-            contextMenu.style.display = "none";
-            this.isContextMenuOpen = false;
-            if (this.tableBody && this.tableBody.style) this.tableBody.style.overflowY = "auto";
-            document.removeEventListener("mousedown", this.nextClickHandler);
+        value: function nextClickHandler() {
+            var contextMenu = this.table.getElementsByClassName('simple-data-table__context-wrapper')[0];
+            if (contextMenu.style.display === "block") {
+                contextMenu.style.display = "none";
+                this.isContextMenuOpen = false;
+                // unblock scroll
+                document.onmousewheel = document.onwheel = function () {
+                    return true;
+                };
+            }
+            if (this.state.isLimitSelectOpen) {
+                this._onClickAfterSelectOpen();
+            }
         }
     }, {
         key: "_onCellClickHandler",
@@ -435,29 +450,54 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
         }
     }, {
         key: "_onLimitChangeHandler",
-        value: function _onLimitChangeHandler(e) {
-            console.log("index _onLimitChangeHandler", e);
-            this.props.limitSelectorHandler && this.props.limitSelectorHandler(Number(e.target.value));
+        value: function _onLimitChangeHandler(item) {
+            this.setState({ isLimitSelectOpen: false });
+            this.props.limitSelectorHandler && this.props.limitSelectorHandler(item);
+        }
+    }, {
+        key: "_openSelect",
+        value: function _openSelect() {
+            this.setState({ isLimitSelectOpen: true });
+        }
+    }, {
+        key: "_onClickAfterSelectOpen",
+        value: function _onClickAfterSelectOpen() {
+            this.setState({ isLimitSelectOpen: false });
+        }
+    }, {
+        key: "_renderSelectItems",
+        value: function _renderSelectItems(items) {
+            var _this7 = this;
+
+            if (!items || items && items.length < 1) return null;
+            return items.map(function (item, index) {
+                return _react2.default.createElement(
+                    "div",
+                    { onMouseDown: _this7._onLimitChangeHandler.bind(_this7, item),
+                        className: "dumbTableSelect__listItem", key: index },
+                    item
+                );
+            });
         }
     }, {
         key: "_renderLimitSelector",
         value: function _renderLimitSelector(limit, limitsList) {
+            var _this8 = this;
+
             return _react2.default.createElement(
                 "div",
-                { className: "dumbTableSelect" },
+                { className: "dumbTableSelect", id: "dumbTableSelect", onClick: this._openSelect.bind(this), ref: function ref(limitSelect) {
+                        return _this8.limitSelect = limitSelect;
+                    } },
+                this.state.isLimitSelectOpen && _react2.default.createElement(
+                    "div",
+                    { className: "dumbTableSelect__list" },
+                    this._renderSelectItems(limitsList)
+                ),
                 _react2.default.createElement(
-                    "select",
-                    {
-                        className: "dumbTableSelect__select",
-                        value: limit,
-                        onChange: this._onLimitChangeHandler.bind(this) },
-                    limitsList.map(function (limit) {
-                        return _react2.default.createElement(
-                            "option",
-                            { key: limit, value: limit },
-                            limit
-                        );
-                    })
+                    "div",
+                    null,
+                    limit
                 ),
                 _react2.default.createElement(
                     "svg",
@@ -501,7 +541,7 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
     }, {
         key: "render",
         value: function render() {
-            var _this7 = this;
+            var _this9 = this;
 
             var columns = this.props.columns;
             var cachedColumns = this.cachedColumnsSize;
@@ -546,7 +586,7 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
                 _react2.default.createElement(
                     "div",
                     { ref: function ref(_ref) {
-                            return _this7.tableBody = _ref;
+                            return _this9.tableBody = _ref;
                         }, className: "dumbTable__content" },
                     _react2.default.createElement(
                         "table",
@@ -664,14 +704,5 @@ DumbTable.defaultProps = {
     orderChangeHandler: null,
     rightClickHandler: null,
     contextMenuWidth: 150,
-    contextMenuItems: function contextMenuItems(row, index, key) {
-        return [{ title: "Edit row", onClickHandler: function onClickHandler() {
-                return console.log("index action menu click");
-            } }, { title: "Delete row", onClickHandler: function onClickHandler() {
-                return console.log("index action menu click");
-            } }, { type: "divider" }, { title: "Create new", onClickHandler: function onClickHandler() {
-                return console.log("index action menu click");
-            } }];
-    }
-
+    contextMenuItems: null
 };

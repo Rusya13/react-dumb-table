@@ -11,17 +11,21 @@ export class DumbTable extends React.Component {
         this._saveCache();
 
         this.state = {
-            isContextMenuOpen: false
+            isLimitSelectOpen: false
         }
     }
 
     componentDidMount() {
         const { table } = this.refs;
-
+        window.addEventListener( "mousedown", this.nextClickHandler.bind( this ) )
         this.table       = table;
         this.cols        = table.getElementsByTagName( 'col' ) || [];
         this.headerCells = table.getElementsByClassName( 'dumbTable__headerCell' );
         this._setColumnsSize( this.cachedColumnsSize );
+    }
+
+    componentWillUnmount(){
+        window.removeEventListener( "mousedown", this.nextClickHandler.bind( this ) )
     }
 
     _saveCache( columns = this.props.columns ) {
@@ -187,23 +191,33 @@ export class DumbTable extends React.Component {
         }
         contextMenu.style.top  = top + "px";
         contextMenu.style.left = left + "px";
-
-        this.tableBody.style.overflowY = "hidden";
+        // block scroll
+        document.onmousewheel=document.onwheel=function(){
+            return false;
+        };
 
         if ( this.isContextMenuOpen ) {
             return
         }
 
         this.isContextMenuOpen = true;
-        document.addEventListener( "mousedown", this.nextClickHandler.bind( this, contextMenu ) )
+        // window.addEventListener( "mousedown", this.nextClickHandler.bind( this, contextMenu ) )
 
     }
 
-    nextClickHandler( contextMenu ) {
-        contextMenu.style.display = "none";
-        this.isContextMenuOpen    = false;
-        if ( this.tableBody && this.tableBody.style ) this.tableBody.style.overflowY = "auto";
-        document.removeEventListener( "mousedown", this.nextClickHandler )
+    nextClickHandler( ) {
+        let contextMenu = this.table.getElementsByClassName( 'simple-data-table__context-wrapper' )[ 0 ];
+        if (contextMenu.style.display === "block"){
+            contextMenu.style.display = "none";
+            this.isContextMenuOpen    = false;
+            // unblock scroll
+            document.onmousewheel=document.onwheel=function(){
+                return true;
+            };
+        }
+        if (this.state.isLimitSelectOpen){
+            this._onClickAfterSelectOpen()
+        }
     }
 
 
@@ -354,23 +368,42 @@ export class DumbTable extends React.Component {
         )
     }
 
-    _onLimitChangeHandler( e ) {
-        console.log( "index _onLimitChangeHandler", e );
-        this.props.limitSelectorHandler && this.props.limitSelectorHandler( Number( e.target.value ) )
+    _onLimitChangeHandler( item ) {
+        this.setState({isLimitSelectOpen:false});
+        this.props.limitSelectorHandler && this.props.limitSelectorHandler( item )
     }
 
 
+    _openSelect(){
+        this.setState({isLimitSelectOpen: true});
+    }
+
+    _onClickAfterSelectOpen(){
+        this.setState({isLimitSelectOpen:false})
+    }
+
+
+
+    _renderSelectItems( items ) {
+        if ( !items || items && items.length < 1 ) return null;
+        return items.map( ( item, index ) => {
+            return <div onMouseDown={this._onLimitChangeHandler.bind(this, item)}
+                        className="dumbTableSelect__listItem" key={index}>
+                {item}
+            </div>
+        } )
+    }
+
     _renderLimitSelector( limit, limitsList ) {
         return (
-            <div className="dumbTableSelect">
-                <select
-                    className="dumbTableSelect__select"
-                    value={limit}
-                    onChange={this._onLimitChangeHandler.bind( this )}>
-                    {limitsList.map( limit => {
-                        return <option key={limit} value={limit}>{limit}</option>
-                    } )}
-                </select>
+            <div className="dumbTableSelect" id="dumbTableSelect" onClick={this._openSelect.bind(this)} ref={(limitSelect)=>this.limitSelect = limitSelect}>
+                {
+                    this.state.isLimitSelectOpen && <div className="dumbTableSelect__list">
+                        {this._renderSelectItems(limitsList)}
+                    </div>
+
+                }
+                <div>{limit}</div>
                 <svg pointerEvents="none" className="dumbTableSelect__icon" xmlns="http://www.w3.org/2000/svg"
                      width="10" height="5" viewBox="0 0 10 5">
                     <polygon fillRule="nonzero" points="0 0 5 5 10 0"/>
@@ -468,7 +501,6 @@ export class DumbTable extends React.Component {
                 <div className={"simple-data-table__context-wrapper"}>
 
                 </div>
-
             </div>
         )
 
@@ -536,14 +568,5 @@ DumbTable.defaultProps = {
     orderChangeHandler: null,
     rightClickHandler:  null,
     contextMenuWidth:   150,
-    contextMenuItems:   ( row, index, key ) => {
-        return [
-            { title: "Edit row", onClickHandler: () => console.log( "index action menu click" ) },
-            { title: "Delete row", onClickHandler: () => console.log( "index action menu click" ) },
-            { type: "divider" },
-            { title: "Create new", onClickHandler: () => console.log( "index action menu click" ) },
-        ];
-    }
-
-
+    contextMenuItems:   null
 };

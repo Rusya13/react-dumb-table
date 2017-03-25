@@ -16,8 +16,9 @@
   "license": "ISC",
   "scripts": {
     "build": "gulp build",
-    "dev": "gulp dev; ",
-    "dev_story": "npm run build && (npm run storybook & npm run dev)",
+    "dev": "gulp dev",
+    "dev_story": "npm run build && (npm run storybook && npm run dev)",
+    "dev_story_win": "npm run build && (concurrently --kill-others \"npm run storybook\" \"npm run dev\")",
     "storybook": "start-storybook -p 9001 -c .storybook",
     "ghp": "build-storybook -c .storybook -o docs"
   },

@@ -60,10 +60,12 @@
   .dumbTable__headerSort {
     position: absolute;
     right: 4px;
-    top: 50%;
     margin-top: -10px;
+    bottom: 50%;
     width: 20px;
-    height: 20px; }
+    height: 20px;
+    -webkit-transform: translateY(50%);
+            transform: translateY(50%); }
     .dumbTable__headerSort svg {
       fill: #080808; }
   .dumbTable__headerCellResize {
@@ -75,7 +77,7 @@
     width: 8px;
     cursor: col-resize;
     z-index: 1;
-    height: 100%;
+    height: 40px;
     -webkit-transition: background 200ms ease-in-out;
     transition: background 200ms ease-in-out; }
     .dumbTable__headerCellResize:before {
@@ -93,6 +95,12 @@
     -webkit-box-flex: 1;
         -ms-flex: 1;
             flex: 1; }
+  .dumbTable__content::-webkit-scrollbar {
+    width: 8px; }
+  .dumbTable__content::-webkit-scrollbar-thumb {
+    background: rgba(128, 128, 128, 0.29);
+    border-radius: 5px;
+    cursor: pointer; }
   .dumbTable__contentRow {
     cursor: pointer; }
     .dumbTable__contentRow:nth-child(2n) {
@@ -339,7 +347,8 @@
 .dumbTableSelect {
   position: relative;
   border: 1px solid #E7EBED;
-  border-radius: 2px; }
+  border-radius: 2px;
+  padding: 2px 25px 2px 7px; }
   .dumbTableSelect__select {
     height: 100%;
     padding-left: 8px;
@@ -360,6 +369,22 @@
     right: 5px;
     fill: #818B9E;
     z-index: 1; }
+  .dumbTableSelect__list {
+    position: absolute;
+    z-index: 20;
+    border-radius: 3px;
+    bottom: 0;
+    width: 100%;
+    left: 0;
+    background: white;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175); }
+  .dumbTableSelect__listItem {
+    padding: 2px 0 2px 7px; }
+    .dumbTableSelect__listItem:hover {
+      cursor: default;
+      color: #262626;
+      text-decoration: none;
+      background-color: #f5f5f5; }
 
 .dumbTableInfo {
   color: #43516C;
