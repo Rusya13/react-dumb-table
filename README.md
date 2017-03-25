@@ -3,6 +3,16 @@
 
 ## Lates releases
 
+
+## v0.0.16
+
+### Fixes
+
+- custom limitSelect
+- custom scrollbar
+- one event listener on didMount
+
+
 ## v0.0.15
 
 ### Fixes
@@ -32,17 +42,9 @@
 for infinity scroll:
 - tableBottomStart
 - heightTriggerOnScrollEnd
-
-
-
-
-
 - showHeader
 
 
-### to Fix:
 
-- resize problem
-- reload button in the footer - add margin-right, margin-left
 
 

@@ -110,6 +110,8 @@
       .dumbTable__contentRow--selected > :first-child {
         border-left: 3px solid #3279fb;
         padding-left: 7px; }
+    .dumbTable__contentRow td:last-child {
+      padding-left: 17px; }
   .dumbTable__contentCell {
     text-overflow: ellipsis;
     white-space: nowrap;

@@ -161,6 +161,9 @@ $cell-font-size: 13px;
                 padding-left: 7px;
             }
         }
+        td:last-child{
+            padding-left: 17px;
+        }
     }
 
     &__contentCell{
@@ -173,6 +176,7 @@ $cell-font-size: 13px;
 
         padding-left: 10px;
         padding-right: 10px;
+
     }
 
 

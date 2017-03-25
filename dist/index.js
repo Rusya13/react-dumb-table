@@ -486,7 +486,8 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
 
             return _react2.default.createElement(
                 "div",
-                { className: "dumbTableSelect", id: "dumbTableSelect", onClick: this._openSelect.bind(this), ref: function ref(limitSelect) {
+                { className: "dumbTableSelect", id: "dumbTableSelect", onClick: this._openSelect.bind(this),
+                    ref: function ref(limitSelect) {
                         return _this8.limitSelect = limitSelect;
                     } },
                 this.state.isLimitSelectOpen && _react2.default.createElement(
