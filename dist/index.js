@@ -53,6 +53,13 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
             this._setColumnsSize(this.cachedColumnsSize);
         }
     }, {
+        key: "componentWillReceiveProps",
+        value: function componentWillReceiveProps(props) {
+            if (this.props.offset !== props.offset) {
+                this.tableBody.scrollTop = 0;
+            }
+        }
+    }, {
         key: "componentWillUnmount",
         value: function componentWillUnmount() {
             window.removeEventListener("mousedown", this.nextClickHandler.bind(this));

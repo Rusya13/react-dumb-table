@@ -24,6 +24,12 @@ export class DumbTable extends React.Component {
         this._setColumnsSize( this.cachedColumnsSize );
     }
 
+    componentWillReceiveProps(props){
+        if (this.props.offset !== props.offset){
+            this.tableBody.scrollTop = 0;
+        }
+    }
+
     componentWillUnmount() {
         window.removeEventListener( "mousedown", this.nextClickHandler.bind( this ) )
     }

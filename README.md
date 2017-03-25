@@ -3,6 +3,12 @@
 
 ## Lates releases
 
+## v0.0.17
+
+### Fixes
+
+- autoScroll to top when offset changed
+
 
 ## v0.0.16
 

@@ -139,6 +139,12 @@ $cell-font-size: 13px;
     }
     &__content::-webkit-scrollbar{
         width: 8px;
+
+    }
+    &__content::-webkit-scrollbar:window-inactive{
+
+        width: 20px;
+
     }
     &__content::-webkit-scrollbar-thumb{
         background: rgba(128, 128, 128, 0.29);

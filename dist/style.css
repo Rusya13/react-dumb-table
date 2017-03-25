@@ -97,6 +97,8 @@
             flex: 1; }
   .dumbTable__content::-webkit-scrollbar {
     width: 8px; }
+  .dumbTable__content::-webkit-scrollbar:window-inactive {
+    width: 20px; }
   .dumbTable__content::-webkit-scrollbar-thumb {
     background: rgba(128, 128, 128, 0.29);
     border-radius: 5px;
