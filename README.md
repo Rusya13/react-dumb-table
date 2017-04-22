@@ -3,6 +3,23 @@
 
 ## Lates releases
 
+
+## v0.0.18
+
+### Fixes
+
+- error if no contextMenu provider
+
+### Features
+
+- key in columns now can be deep like "company.name" or "company.employes[2].first_name"
+- add new property: defaultCellValue (undefined by default)
+
+### Warnings
+
+- Column with less than 5
+
+
 ## v0.0.17
 
 ### Fixes

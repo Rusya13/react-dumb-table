@@ -5,6 +5,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.DumbTable = undefined;
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = require("react");
@@ -136,6 +138,7 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
             var _this3 = this;
 
             columns.reduce(function (secondIndex, column, index) {
+                if (column.width < 5) console.error("Warning: A width in the column can not be less then 5. Change the width parameter in the column with index " + index + ".");
                 _this3.cols[index].style.width = column.width + '%';
                 _this3.cols[secondIndex].style.width = column.width + '%';
 
@@ -277,7 +280,7 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
         }
     }, {
         key: "_onCellClickHandler",
-        value: function _onCellClickHandler(e, row, index, column) {
+        value: function _onCellClickHandler(row, index, column, e) {
 
             if (this.props.cellClickHandler) {
                 this.props.cellClickHandler(row, index, column, {
@@ -288,13 +291,28 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
             }
         }
     }, {
+        key: "_get",
+        value: function _get(object, path, def) {
+            return path.replace(/\[/g, '.').replace(/\]/g, '').split('.').reduce(function (o, k) {
+                return (o || {})[k];
+            }, object) || def;
+        }
+    }, {
         key: "_renderRow",
         value: function _renderRow(row, index, columns) {
             var _this5 = this;
 
             return columns.map(function (column, cellIndex) {
                 // get value by key from object or by Getter from class object
-                var value = row[column.key] || row.get(column.key);
+
+                var value = null;
+                if ((typeof row === "undefined" ? "undefined" : _typeof(row)) === "object") {
+                    if (row.get && typeof row.get === "function") {
+                        value = row.get(column.key);
+                    } else {
+                        value = _this5._get(row, column.key, _this5.props.defaultCellValue);
+                    }
+                }
 
                 if (column.render) {
                     value = column.render(row, index, column);
@@ -321,16 +339,19 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
                 return _react2.default.createElement(
                     "td",
                     { className: "dumbTable__contentCell",
-                        onClick: function onClick(e) {
-                            return _this5._onCellClickHandler(e, row, index, column);
-                        },
-                        onContextMenu: function onContextMenu(e) {
-                            return _this5._contextClick(e, row, index, column.key);
-                        },
+                        onClick: _this5._onCellClickHandler.bind(_this5, row, index, column),
+                        onContextMenu: _this5._contextHandler.bind(_this5, row, index, column.key),
                         key: cellIndex },
                     value
                 );
             });
+        }
+    }, {
+        key: "_contextHandler",
+        value: function _contextHandler(row, index, key, e) {
+            if (this.props.contextMenuItems) {
+                this._contextClick(e, row, index, key);
+            }
         }
     }, {
         key: "_renderBody",
@@ -682,7 +703,8 @@ DumbTable.propTypes = {
     rightClickHandler: _react.PropTypes.func,
 
     contextMenuWidth: _react.PropTypes.number,
-    contextMenuItems: _react.PropTypes.func
+    contextMenuItems: _react.PropTypes.func,
+    defaultCellValue: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.number, _react.PropTypes.bool, _react.PropTypes.element])
 };
 
 DumbTable.defaultProps = {
@@ -712,5 +734,6 @@ DumbTable.defaultProps = {
     orderChangeHandler: null,
     rightClickHandler: null,
     contextMenuWidth: 150,
-    contextMenuItems: null
+    contextMenuItems: null,
+    defaultCellValue: undefined
 };

@@ -24,8 +24,8 @@ export class DumbTable extends React.Component {
         this._setColumnsSize( this.cachedColumnsSize );
     }
 
-    componentWillReceiveProps(props){
-        if (this.props.offset !== props.offset){
+    componentWillReceiveProps( props ) {
+        if ( this.props.offset !== props.offset ) {
             this.tableBody.scrollTop = 0;
         }
     }
@@ -98,6 +98,7 @@ export class DumbTable extends React.Component {
 
     _setColumnsSize( columns ) {
         columns.reduce( ( secondIndex, column, index ) => {
+            if ( column.width < 5 ) console.error( "Warning: A width in the column can not be less then 5. Change the width parameter in the column with index " +index +".");
             this.cols[ index ].style.width       = column.width + '%';
             this.cols[ secondIndex ].style.width = column.width + '%';
 
@@ -227,7 +228,7 @@ export class DumbTable extends React.Component {
     }
 
 
-    _onCellClickHandler( e, row, index, column ) {
+    _onCellClickHandler( row, index, column, e ) {
 
         if ( this.props.cellClickHandler ) {
             this.props.cellClickHandler( row, index, column, {
@@ -238,10 +239,23 @@ export class DumbTable extends React.Component {
         }
     }
 
+    _get( object, path, def ) {
+        return path.replace( /\[/g, '.' ).replace( /\]/g, '' ).split( '.' ).reduce( ( o, k ) => (o || {})[ k ], object ) || def;
+    }
+
     _renderRow( row, index, columns ) {
         return columns.map( ( column, cellIndex ) => {
             // get value by key from object or by Getter from class object
-            let value = row[ column.key ] || row.get( column.key );
+
+            let value = null;
+            if ( typeof row === "object" ) {
+                if ( row.get && typeof row.get === "function" ) {
+                    value = row.get( column.key )
+                } else {
+                    value = this._get( row, column.key, this.props.defaultCellValue )
+                }
+            }
+
 
             if ( column.render ) {
                 value = column.render( row, index, column )
@@ -260,13 +274,20 @@ export class DumbTable extends React.Component {
 
             return (
                 <td className="dumbTable__contentCell"
-                    onClick={( e ) => this._onCellClickHandler( e, row, index, column )}
-                    onContextMenu={( e ) => this._contextClick( e, row, index, column.key )}
+                    onClick={this._onCellClickHandler.bind( this, row, index, column )}
+                    onContextMenu={this._contextHandler.bind( this, row, index, column.key )}
                     key={cellIndex}>
                     {value}
                 </td>
             )
         } )
+    }
+
+
+    _contextHandler( row, index, key, e ) {
+        if ( this.props.contextMenuItems ) {
+            this._contextClick( e, row, index, key )
+        }
     }
 
 
@@ -544,7 +565,8 @@ DumbTable.propTypes = {
     rightClickHandler: PropTypes.func,
 
     contextMenuWidth: PropTypes.number,
-    contextMenuItems: PropTypes.func
+    contextMenuItems: PropTypes.func,
+    defaultCellValue: PropTypes.oneOfType( [ PropTypes.string, PropTypes.number, PropTypes.bool, PropTypes.element ] )
 };
 
 DumbTable.defaultProps = {
@@ -574,5 +596,6 @@ DumbTable.defaultProps = {
     orderChangeHandler: null,
     rightClickHandler:  null,
     contextMenuWidth:   150,
-    contextMenuItems:   null
+    contextMenuItems:   null,
+    defaultCellValue:   undefined
 };
