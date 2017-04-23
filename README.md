@@ -4,6 +4,22 @@
 ## Lates releases
 
 
+
+## v0.0.19
+
+### Fixes
+
+- error in getter
+
+### Features
+
+- now you can use in data:
+    - plain objects
+    - instance of class with get() method
+    - instance of class with getters
+
+- now you can use get("company.employes[2].firstname") if you have in your model class only the method get() which return only "company" object in this case
+
 ## v0.0.18
 
 ### Fixes

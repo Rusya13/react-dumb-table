@@ -31,6 +31,35 @@ stories.add( 'DumbTable', withReadme( TableReadme, () => {
 let Table = LoaderHOC( "data" )( DumbTable );
 
 
+class Model{
+
+    constructor(row){
+        this.attributes = {};
+        this.set(row)
+    }
+
+    get(key){
+        return this.attributes[key]
+    }
+
+    set(o, v){
+        if (typeof o === 'string' && v){
+            this.attributes[o] = v
+        } else {
+            let keys = Object.keys(o);
+            keys.forEach(key=>{
+                this.attributes[key] = o[key]
+            })
+        }
+    }
+
+    get name(){
+        return this.get("name")
+    }
+
+}
+
+
 class TableController extends React.Component {
 
     constructor( props ) {
@@ -51,8 +80,9 @@ class TableController extends React.Component {
     componentDidMount() {
         fetch( "https://api.hh.ru/vacancies" ).then( res => res.json() )
         .then( json => {
-            console.log( "Work json", json );
-            this.setState( { data: json.items } )
+            this.setState( { data: json.items.map(item=>{
+                return new Model(item)
+            }) } )
         } ).catch( e => {
             console.log( "Work e", e );
         } )
@@ -67,7 +97,8 @@ class TableController extends React.Component {
                 target: "_blank"
             },
             { name: "Зарплата", key: "salary.from", width: 30 },
-            { name: "Компания", key: "employer.name", width: 40 }
+            { name: "Компания", key: "employer.name", width: 40 },
+            { name: "Метро", key: "address.metro_stations[0].station_name", width: 40 }
         ]
     }
 

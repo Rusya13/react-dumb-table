@@ -247,14 +247,23 @@ export class DumbTable extends React.Component {
         return columns.map( ( column, cellIndex ) => {
             // get value by key from object or by Getter from class object
 
-            let value = null;
-            if ( typeof row === "object" ) {
-                if ( row.get && typeof row.get === "function" ) {
-                    value = row.get( column.key )
+            let value = this._get( row, column.key);
+            if (value === undefined) {
+                if ( typeof row === "object" ) {
+                    if ( row.get && typeof row.get === "function" ) {
+                        let object = column.key.split( "." );
+                        if ( object.length > 1 ) {
+                            let str = object.slice( 1 ).join( '.' );
+                            value   = this._get( row.get( object[ 0 ] ), str )
+                        } else {
+                            value = row.get( object[ 0 ] )
+                        }
+                    }
                 } else {
-                    value = this._get( row, column.key, this.props.defaultCellValue )
+                    value = this.props.defaultCellValue
                 }
             }
+
 
 
             if ( column.render ) {

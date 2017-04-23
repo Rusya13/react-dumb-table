@@ -305,12 +305,20 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
             return columns.map(function (column, cellIndex) {
                 // get value by key from object or by Getter from class object
 
-                var value = null;
-                if ((typeof row === "undefined" ? "undefined" : _typeof(row)) === "object") {
-                    if (row.get && typeof row.get === "function") {
-                        value = row.get(column.key);
+                var value = _this5._get(row, column.key);
+                if (value === undefined) {
+                    if ((typeof row === "undefined" ? "undefined" : _typeof(row)) === "object") {
+                        if (row.get && typeof row.get === "function") {
+                            var object = column.key.split(".");
+                            if (object.length > 1) {
+                                var str = object.slice(1).join('.');
+                                value = _this5._get(row.get(object[0]), str);
+                            } else {
+                                value = row.get(object[0]);
+                            }
+                        }
                     } else {
-                        value = _this5._get(row, column.key, _this5.props.defaultCellValue);
+                        value = _this5.props.defaultCellValue;
                     }
                 }
 
