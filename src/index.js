@@ -13,11 +13,13 @@ export class DumbTable extends React.Component {
         this.state = {
             isLimitSelectOpen: false
         }
+        this.nextClickHandler = this.nextClickHandler.bind(this);
+
     }
 
     componentDidMount() {
 
-        window.addEventListener( "mousedown", this.nextClickHandler.bind( this ) );
+        window.addEventListener( "mousedown", this.nextClickHandler );
 
         this.cols        = this.table.getElementsByTagName( 'col' ) || [];
         this.headerCells = this.table.getElementsByClassName( 'dumbTable__headerCell' );
@@ -31,7 +33,7 @@ export class DumbTable extends React.Component {
     }
 
     componentWillUnmount() {
-        window.removeEventListener( "mousedown", this.nextClickHandler.bind( this ) )
+        window.removeEventListener( "mousedown", this.nextClickHandler )
     }
 
     _saveCache( columns = this.props.columns ) {
@@ -62,16 +64,14 @@ export class DumbTable extends React.Component {
             let newSize = originalWidth + diff;
 
             let pieces  = (columns[ index ].width + columns[ index + 1 ].width);
-            //console.log("index pieces", pieces);
+
             let piecePx = summPx / pieces;
-            //console.log("index pieces px" , piecePx);
+
             let newDiff = diff / piecePx;
 
 
             let newLeftWidth  = Math.ceil( columns[ index ].width + newDiff );
             let newRightWidth = Math.ceil( columns[ index + 1 ].width - newDiff );
-
-            //console.log("index left", newLeftWidth, newRightWidth, newRightWidth + newLeftWidth);
 
             if ( newLeftWidth * piecePx < minColWidth || newRightWidth * piecePx < minColWidth ) { // min-width and max-width for each col
                 return
