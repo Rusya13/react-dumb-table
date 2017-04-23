@@ -46,12 +46,11 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
     _createClass(DumbTable, [{
         key: "componentDidMount",
         value: function componentDidMount() {
-            var table = this.refs.table;
 
             window.addEventListener("mousedown", this.nextClickHandler.bind(this));
-            this.table = table;
-            this.cols = table.getElementsByTagName('col') || [];
-            this.headerCells = table.getElementsByClassName('dumbTable__headerCell');
+
+            this.cols = this.table.getElementsByTagName('col') || [];
+            this.headerCells = this.table.getElementsByClassName('dumbTable__headerCell');
             this._setColumnsSize(this.cachedColumnsSize);
         }
     }, {
@@ -605,11 +604,11 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
             var first_num = offset + 1;
             var last_num = currentPage < pages ? currentPage * limit : total;
 
-            var contextMenuItems = this.props.contextMenuItems;
-
             return _react2.default.createElement(
                 "div",
-                { ref: "table", className: "dumbTable" },
+                { ref: function ref(_ref2) {
+                        return _this9.table = _ref2;
+                    }, className: "dumbTable" },
                 _react2.default.createElement(
                     "div",
                     { className: "dumbTable__header" },

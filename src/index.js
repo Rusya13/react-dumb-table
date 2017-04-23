@@ -16,11 +16,11 @@ export class DumbTable extends React.Component {
     }
 
     componentDidMount() {
-        const { table } = this.refs;
-        window.addEventListener( "mousedown", this.nextClickHandler.bind( this ) )
-        this.table       = table;
-        this.cols        = table.getElementsByTagName( 'col' ) || [];
-        this.headerCells = table.getElementsByClassName( 'dumbTable__headerCell' );
+
+        window.addEventListener( "mousedown", this.nextClickHandler.bind( this ) );
+
+        this.cols        = this.table.getElementsByTagName( 'col' ) || [];
+        this.headerCells = this.table.getElementsByClassName( 'dumbTable__headerCell' );
         this._setColumnsSize( this.cachedColumnsSize );
     }
 
