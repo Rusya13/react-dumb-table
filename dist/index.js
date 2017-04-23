@@ -17,6 +17,10 @@ var _reactDom = require("react-dom");
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
+var _propTypes = require("prop-types");
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -36,7 +40,6 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
         _this.isContextMenuOpen = false;
         _this.cachedColumnsSize = [];
         _this._saveCache();
-
         _this.state = {
             isLimitSelectOpen: false
         };
@@ -48,9 +51,7 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
     _createClass(DumbTable, [{
         key: "componentDidMount",
         value: function componentDidMount() {
-
             window.addEventListener("mousedown", this.nextClickHandler);
-
             this.cols = this.table.getElementsByTagName('col') || [];
             this.headerCells = this.table.getElementsByClassName('dumbTable__headerCell');
             this._setColumnsSize(this.cachedColumnsSize);
@@ -83,46 +84,29 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
         value: function handleMouseDown(e) {
             e.preventDefault();
             document.body.className += " no-selection";
-
             var minColWidth = this.props.minColWidth;
-
             var columns = this.cachedColumnsSize;
             var div = e.target.parentNode;
             var index = Number(div.getAttribute('data-index'));
             var originalOffset = e.clientX;
             var originalWidth = div.offsetWidth;
-
             var summPx = this.headerCells[index].offsetWidth + this.headerCells[index + 1].offsetWidth;
-
             document.onmousemove = function (e) {
                 var newOffset = e.clientX;
-
                 var diff = newOffset - originalOffset;
-
                 var newSize = originalWidth + diff;
-
                 var pieces = columns[index].width + columns[index + 1].width;
-
                 var piecePx = summPx / pieces;
-
                 var newDiff = diff / piecePx;
-
                 var newLeftWidth = Math.ceil(columns[index].width + newDiff);
                 var newRightWidth = Math.ceil(columns[index + 1].width - newDiff);
-
                 if (newLeftWidth * piecePx < minColWidth || newRightWidth * piecePx < minColWidth) {
                     // min-width and max-width for each col
                     return;
                 }
-
                 columns[index].width += newDiff;
                 columns[index + 1].width = pieces - columns[index].width;
-                var summ = columns.reduce(function (sum, col) {
-                    return col.width + sum;
-                }, 0);
-                //console.log("index sum", summ);
                 this._setColumnsSize(this.cachedColumnsSize);
-
                 originalWidth = newSize;
                 originalOffset = newOffset;
             }.bind(this);
@@ -140,7 +124,6 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
                 if (column.width < 5) console.error("Warning: A width in the column can not be less then 5. Change the width parameter in the column with index " + index + ".");
                 _this3.cols[index].style.width = column.width + '%';
                 _this3.cols[secondIndex].style.width = column.width + '%';
-
                 return secondIndex + 1;
             }, this.cols.length / 2);
         }
@@ -162,7 +145,6 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
             if (orderBy === key) {
                 dir = orderDirection === "ASC" ? "DESC" : "ASC";
             }
-
             this.props.orderChangeHandler && this.props.orderChangeHandler(key, dir);
         }
     }, {
@@ -177,7 +159,6 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
                     "tr",
                     null,
                     columns.map(function (col, index) {
-
                         return _react2.default.createElement(
                             "th",
                             { style: { height: headerHeight }, "data-index": index, key: index },
@@ -228,22 +209,16 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
                 renderList
             ), contextMenu);
             contextMenu.style.display = "block";
-
             var contextMenuHeight = contextMenuItems.length * 30 + 10;
-
             var windowHeight = window.innerHeight;
             var windowWidth = window.innerWidth;
-
             var top = e.clientY;
             var left = e.clientX;
-
             var rightDist = windowWidth - left;
             var bottomDist = windowHeight - top;
-
             if (rightDist - 15 < contextMenuWidth) {
                 left = left - contextMenuWidth - 25 + rightDist;
             }
-
             if (bottomDist - 25 < contextMenuHeight) {
                 top = top - contextMenuHeight - 25 + bottomDist;
             }
@@ -253,13 +228,10 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
             document.onmousewheel = document.onwheel = function () {
                 return false;
             };
-
             if (this.isContextMenuOpen) {
                 return;
             }
-
             this.isContextMenuOpen = true;
-            // window.addEventListener( "mousedown", this.nextClickHandler.bind( this, contextMenu ) )
         }
     }, {
         key: "nextClickHandler",
@@ -682,36 +654,36 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
 }(_react2.default.Component);
 
 DumbTable.propTypes = {
-    columns: _react.PropTypes.array.isRequired,
-    data: _react.PropTypes.any.isRequired,
-    rowHeight: _react.PropTypes.number,
-    minColWidth: _react.PropTypes.number,
+    columns: _propTypes2.default.array.isRequired,
+    data: _propTypes2.default.any.isRequired,
+    rowHeight: _propTypes2.default.number,
+    minColWidth: _propTypes2.default.number,
 
-    cellClickHandler: _react.PropTypes.func,
-    selectedRowIndexes: _react.PropTypes.any,
+    cellClickHandler: _propTypes2.default.func,
+    selectedRowIndexes: _propTypes2.default.any,
 
-    showFooter: _react.PropTypes.bool,
-    footerHeight: _react.PropTypes.any,
-    limit: _react.PropTypes.number,
-    offset: _react.PropTypes.number,
-    total: _react.PropTypes.number,
-    reloadButtonHandler: _react.PropTypes.func,
-    limitSelectorHandler: _react.PropTypes.func,
-    offsetChangeHandler: _react.PropTypes.func,
-    limitsList: _react.PropTypes.arrayOf(_react.PropTypes.number),
-    footerButtons: _react.PropTypes.array,
+    showFooter: _propTypes2.default.bool,
+    footerHeight: _propTypes2.default.any,
+    limit: _propTypes2.default.number,
+    offset: _propTypes2.default.number,
+    total: _propTypes2.default.number,
+    reloadButtonHandler: _propTypes2.default.func,
+    limitSelectorHandler: _propTypes2.default.func,
+    offsetChangeHandler: _propTypes2.default.func,
+    limitsList: _propTypes2.default.arrayOf(_propTypes2.default.number),
+    footerButtons: _propTypes2.default.array,
 
-    headerHeight: _react.PropTypes.number,
+    headerHeight: _propTypes2.default.number,
 
-    orderBy: _react.PropTypes.string,
-    orderDirection: _react.PropTypes.oneOf(["ASC", "DESC"]),
-    orderChangeHandler: _react.PropTypes.func,
+    orderBy: _propTypes2.default.string,
+    orderDirection: _propTypes2.default.oneOf(["ASC", "DESC"]),
+    orderChangeHandler: _propTypes2.default.func,
 
-    rightClickHandler: _react.PropTypes.func,
+    rightClickHandler: _propTypes2.default.func,
 
-    contextMenuWidth: _react.PropTypes.number,
-    contextMenuItems: _react.PropTypes.func,
-    defaultCellValue: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.number, _react.PropTypes.bool, _react.PropTypes.element])
+    contextMenuWidth: _propTypes2.default.number,
+    contextMenuItems: _propTypes2.default.func,
+    defaultCellValue: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.number, _propTypes2.default.bool, _propTypes2.default.element])
 };
 
 DumbTable.defaultProps = {

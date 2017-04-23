@@ -1,26 +1,23 @@
-import React, { PropTypes } from "react";
+import React from "react";
 import ReactDom from "react-dom";
+import PropTypes from "prop-types";
 
 export class DumbTable extends React.Component {
 
     constructor( props ) {
         super( props );
-
         this.isContextMenuOpen = false;
         this.cachedColumnsSize = [];
         this._saveCache();
-
-        this.state = {
+        this.state            = {
             isLimitSelectOpen: false
-        }
-        this.nextClickHandler = this.nextClickHandler.bind(this);
+        };
+        this.nextClickHandler = this.nextClickHandler.bind( this );
 
     }
 
     componentDidMount() {
-
         window.addEventListener( "mousedown", this.nextClickHandler );
-
         this.cols        = this.table.getElementsByTagName( 'col' ) || [];
         this.headerCells = this.table.getElementsByClassName( 'dumbTable__headerCell' );
         this._setColumnsSize( this.cachedColumnsSize );
@@ -45,47 +42,28 @@ export class DumbTable extends React.Component {
     handleMouseDown( e ) {
         e.preventDefault();
         document.body.className += " no-selection";
-
-        let minColWidth = this.props.minColWidth;
-
-        let columns        = this.cachedColumnsSize;
-        let div            = e.target.parentNode;
-        let index          = Number( div.getAttribute( 'data-index' ) );
-        let originalOffset = e.clientX;
-        let originalWidth  = div.offsetWidth;
-
-        let summPx = this.headerCells[ index ].offsetWidth + this.headerCells[ index + 1 ].offsetWidth;
-
+        let minColWidth      = this.props.minColWidth;
+        let columns          = this.cachedColumnsSize;
+        let div              = e.target.parentNode;
+        let index            = Number( div.getAttribute( 'data-index' ) );
+        let originalOffset   = e.clientX;
+        let originalWidth    = div.offsetWidth;
+        let summPx           = this.headerCells[ index ].offsetWidth + this.headerCells[ index + 1 ].offsetWidth;
         document.onmousemove = function ( e ) {
-            let newOffset = e.clientX;
-
-            let diff = newOffset - originalOffset;
-
-            let newSize = originalWidth + diff;
-
-            let pieces  = (columns[ index ].width + columns[ index + 1 ].width);
-
-            let piecePx = summPx / pieces;
-
-            let newDiff = diff / piecePx;
-
-
+            let newOffset     = e.clientX;
+            let diff          = newOffset - originalOffset;
+            let newSize       = originalWidth + diff;
+            let pieces        = (columns[ index ].width + columns[ index + 1 ].width);
+            let piecePx       = summPx / pieces;
+            let newDiff       = diff / piecePx;
             let newLeftWidth  = Math.ceil( columns[ index ].width + newDiff );
             let newRightWidth = Math.ceil( columns[ index + 1 ].width - newDiff );
-
             if ( newLeftWidth * piecePx < minColWidth || newRightWidth * piecePx < minColWidth ) { // min-width and max-width for each col
                 return
             }
-
             columns[ index ].width += newDiff;
             columns[ index + 1 ].width = pieces - columns[ index ].width;
-            let summ                   = columns.reduce( ( sum, col ) => {
-                return col.width + sum
-            }, 0 );
-            //console.log("index sum", summ);
             this._setColumnsSize( this.cachedColumnsSize );
-
-
             originalWidth  = newSize;
             originalOffset = newOffset;
 
@@ -101,7 +79,6 @@ export class DumbTable extends React.Component {
             if ( column.width < 5 ) console.error( "Warning: A width in the column can not be less then 5. Change the width parameter in the column with index " + index + "." );
             this.cols[ index ].style.width       = column.width + '%';
             this.cols[ secondIndex ].style.width = column.width + '%';
-
             return secondIndex + 1;
         }, this.cols.length / 2 );
     }
@@ -121,7 +98,6 @@ export class DumbTable extends React.Component {
         if ( orderBy === key ) {
             dir = (orderDirection === "ASC") ? "DESC" : "ASC"
         }
-
         this.props.orderChangeHandler && this.props.orderChangeHandler( key, dir );
     }
 
@@ -130,7 +106,6 @@ export class DumbTable extends React.Component {
             <thead>
             <tr>
                 {columns.map( ( col, index ) => {
-
                     return (
                         <th style={{ height: headerHeight }} data-index={index} key={index}>
                             <div
@@ -177,22 +152,16 @@ export class DumbTable extends React.Component {
         let renderList = this._renderContextMenuItems( list );
         ReactDom.render( <div>{renderList}</div>, contextMenu );
         contextMenu.style.display = "block";
-
-        let contextMenuHeight = contextMenuItems.length * 30 + 10;
-
-        let windowHeight = window.innerHeight;
-        let windowWidth  = window.innerWidth;
-
-        let top  = e.clientY;
-        let left = e.clientX;
-
-        let rightDist  = windowWidth - left;
-        let bottomDist = windowHeight - top;
-
+        let contextMenuHeight     = contextMenuItems.length * 30 + 10;
+        let windowHeight          = window.innerHeight;
+        let windowWidth           = window.innerWidth;
+        let top                   = e.clientY;
+        let left                  = e.clientX;
+        let rightDist             = windowWidth - left;
+        let bottomDist            = windowHeight - top;
         if ( (rightDist - 15) < contextMenuWidth ) {
             left = left - contextMenuWidth - 25 + rightDist;
         }
-
         if ( (bottomDist - 25) < contextMenuHeight ) {
             top = top - contextMenuHeight - 25 + bottomDist;
         }
@@ -202,13 +171,11 @@ export class DumbTable extends React.Component {
         document.onmousewheel  = document.onwheel = function () {
             return false;
         };
-
         if ( this.isContextMenuOpen ) {
             return
         }
-
         this.isContextMenuOpen = true;
-        // window.addEventListener( "mousedown", this.nextClickHandler.bind( this, contextMenu ) )
+
 
     }
 

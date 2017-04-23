@@ -4,7 +4,11 @@
 ## Lates releases
 
 
-## v0.0.20b
+## v0.0.21
+
+### Features
+
+- added PropTypes
 
 ### Fixes
 

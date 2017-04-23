@@ -1,6 +1,6 @@
 {
   "name": "react-dumb-table",
-  "version": "0.0.20a",
+  "version": "0.0.21",
   "description": "React table component with pagination, columns resize, fixed header and footer.",
   "repository": {
     "type": "git",
@@ -23,6 +23,7 @@
     "ghp": "build-storybook -c .storybook -o docs"
   },
   "dependencies": {
+    "prop-types": "^15.5.8",
     "react": "^15.0.0",
     "react-dom": "^15.0.0"
   },
