@@ -98,7 +98,7 @@ export class DumbTable extends React.Component {
 
     _setColumnsSize( columns ) {
         columns.reduce( ( secondIndex, column, index ) => {
-            if ( column.width < 5 ) console.error( "Warning: A width in the column can not be less then 5. Change the width parameter in the column with index " +index +".");
+            if ( column.width < 5 ) console.error( "Warning: A width in the column can not be less then 5. Change the width parameter in the column with index " + index + "." );
             this.cols[ index ].style.width       = column.width + '%';
             this.cols[ secondIndex ].style.width = column.width + '%';
 
@@ -247,8 +247,8 @@ export class DumbTable extends React.Component {
         return columns.map( ( column, cellIndex ) => {
             // get value by key from object or by Getter from class object
 
-            let value = this._get( row, column.key);
-            if (value === undefined) {
+            let value = this._get( row, column.key );
+            if ( value === undefined ) {
                 if ( typeof row === "object" ) {
                     if ( row.get && typeof row.get === "function" ) {
                         let object = column.key.split( "." );
@@ -263,7 +263,6 @@ export class DumbTable extends React.Component {
                     value = this.props.defaultCellValue
                 }
             }
-
 
 
             if ( column.render ) {
@@ -502,10 +501,9 @@ export class DumbTable extends React.Component {
         let first_num = offset + 1;
         let last_num  = (currentPage < pages) ? currentPage * limit : total;
 
-        let contextMenuItems = this.props.contextMenuItems;
 
         return (
-            <div ref="table" className="dumbTable">
+            <div ref={( ref ) => this.table = ref } className="dumbTable">
                 <div className="dumbTable__header">
                     <table>
                         {this._renderColumnsSync( cachedColumns )}
