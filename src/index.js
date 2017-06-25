@@ -107,7 +107,11 @@ export class DumbTable extends React.Component {
             <tr>
                 {columns.map( ( col, index ) => {
                     return (
-                        <th style={{ height: headerHeight }} data-index={index} key={index}>
+                        <th
+                            style={{ height: headerHeight }}
+                            onContextMenu={this._contextHeaderHandler.bind( this, col, index, col.key )}
+                            data-index={index}
+                            key={index}>
                             <div
                                 onClick={this._orderChangeHandler.bind( this, orderBy, col.sortKey || col.key, orderDirection )}
                                 className="dumbTable__headerCell">
@@ -138,14 +142,13 @@ export class DumbTable extends React.Component {
         )
     }
 
-    _contextClick( e, row, index, key ) {
+    _contextClick( e, row, index, key, contextMenuItems) {
         if ( this.props.rightClickHandler ) {
             this.props.rightClickHandler( e, row, index, key );
             return
         }
         e.preventDefault();
         let contextMenuWidth = this.props.contextMenuWidth;
-        let contextMenuItems = this.props.contextMenuItems;
         let contextMenu      = this.table.getElementsByClassName( 'simple-data-table__context-wrapper' )[ 0 ];
         let list             = contextMenuItems( row, index, key );
         if ( !list || list.length < 1 ) return;
@@ -258,10 +261,15 @@ export class DumbTable extends React.Component {
         } )
     }
 
+    _contextHeaderHandler(coll, index, key, e) {
+        if(this.props.contextMenuItems){
+            this._contextClick(e, coll, index, key, this.props.contextHeaderMenuItems);
+        }
+    }
 
     _contextHandler( row, index, key, e ) {
-        if ( this.props.contextMenuItems ) {
-            this._contextClick( e, row, index, key )
+        if(this.props.contextMenuItems){
+            this._contextClick(e, row, index, key, this.props.contextMenuItems);
         }
     }
 
@@ -539,6 +547,7 @@ DumbTable.propTypes = {
     rightClickHandler: PropTypes.func,
 
     contextMenuWidth: PropTypes.number,
+    contextHeaderMenuItems: PropTypes.func,
     contextMenuItems: PropTypes.func,
     defaultCellValue: PropTypes.oneOfType( [ PropTypes.string, PropTypes.number, PropTypes.bool, PropTypes.element ] )
 };
@@ -570,6 +579,7 @@ DumbTable.defaultProps = {
     orderChangeHandler: null,
     rightClickHandler:  null,
     contextMenuWidth:   150,
+    contextHeaderMenuItems:   null,
     contextMenuItems:   null,
     defaultCellValue:   undefined
 };

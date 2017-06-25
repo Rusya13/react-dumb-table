@@ -104,12 +104,23 @@ class TableController extends React.Component {
 
     getContextMenu( row, index, key ) {
         this.setState( { selected: [ index ] } );
+
         return (
             [
-                { title: "Edit row", onClickHandler: action( 'edit row' ) },
+                { title: "Edit row", onClickHandler: (...args) => {
+                    console.log('Edit Row Context Click', args);
+                } },
                 { title: "Delete row", onClickHandler: action( ('delete row') ) },
                 { type: "divider" },
                 { title: "Create new", onClickHandler: action( 'create new row' ) },
+            ]
+        )
+    }
+
+    getContextHeaderMenu( cell, index, key ) {
+        return (
+            [
+                { title: "Header Action", onClickHandler: action( ('header action') ) }
             ]
         )
     }
@@ -169,6 +180,7 @@ class TableController extends React.Component {
                 limitsList={[ 10, 25, 50, 100 ]}
                 limitSelectorHandler={this.changeLimit.bind( this )}
                 contextMenuItems={this.getContextMenu.bind( this )}
+                contextHeaderMenuItems={this.getContextHeaderMenu.bind( this )}
             />
         )
     }
