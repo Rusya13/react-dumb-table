@@ -4,6 +4,13 @@
 ## Lates releases
 
 
+## v0.0.22
+
+### Features
+
+- new Props
+
+
 ## v0.0.21
 
 ### Features
