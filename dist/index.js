@@ -113,6 +113,9 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
             document.onmouseup = function () {
                 document.body.className = document.body.className.replace(/(?:^|\s)no-selection(?!\S)/g, '');
                 document.onmousemove = document.onmouseup = null;
+                if (this.props.onResizeColumns) {
+                    this.props.onResizeColumns(this.cachedColumnsSize);
+                }
             }.bind(this);
         }
     }, {
@@ -561,7 +564,7 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
         value: function render() {
             var _this9 = this;
 
-            var columns = this.props.columns;
+            var columns = this.props.columns.length > 0 ? this.props.columns : [{ width: 100, name: "no columns", key: "_" }];
             var cachedColumns = this.cachedColumnsSize;
             var data = this.props.data;
             var rowHeight = this.props.rowHeight;
@@ -694,7 +697,8 @@ DumbTable.propTypes = {
     contextMenuWidth: _propTypes2.default.number,
     contextHeaderMenuItems: _propTypes2.default.func,
     contextMenuItems: _propTypes2.default.func,
-    defaultCellValue: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.number, _propTypes2.default.bool, _propTypes2.default.element])
+    defaultCellValue: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.number, _propTypes2.default.bool, _propTypes2.default.element]),
+    onResizeColumns: _propTypes2.default.func
 };
 
 DumbTable.defaultProps = {

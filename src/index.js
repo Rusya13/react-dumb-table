@@ -71,6 +71,9 @@ export class DumbTable extends React.Component {
         document.onmouseup   = function () {
             document.body.className = document.body.className.replace( /(?:^|\s)no-selection(?!\S)/g, '' );
             document.onmousemove    = document.onmouseup = null;
+            if (this.props.onResizeColumns){
+                this.props.onResizeColumns(this.cachedColumnsSize)
+            }
         }.bind( this );
     }
 
@@ -449,7 +452,7 @@ export class DumbTable extends React.Component {
     }
 
     render() {
-        let columns       = this.props.columns;
+        let columns       = (this.props.columns.length > 0)?this.props.columns:[{width:100, name:"no columns", key:"_"}];
         let cachedColumns = this.cachedColumnsSize;
         let data          = this.props.data;
         let rowHeight     = this.props.rowHeight;
@@ -549,7 +552,8 @@ DumbTable.propTypes = {
     contextMenuWidth: PropTypes.number,
     contextHeaderMenuItems: PropTypes.func,
     contextMenuItems: PropTypes.func,
-    defaultCellValue: PropTypes.oneOfType( [ PropTypes.string, PropTypes.number, PropTypes.bool, PropTypes.element ] )
+    defaultCellValue: PropTypes.oneOfType( [ PropTypes.string, PropTypes.number, PropTypes.bool, PropTypes.element ] ),
+    onResizeColumns: PropTypes.func
 };
 
 DumbTable.defaultProps = {

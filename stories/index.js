@@ -89,6 +89,7 @@ class TableController extends React.Component {
     }
 
     getColumns() {
+        return []
         return [
             { name: "Название", key: "name", width: 20},
             {
@@ -161,6 +162,9 @@ class TableController extends React.Component {
         this.setState( { offset } )
     };
 
+    onResizeColumns(columns){
+        console.log("cols:", columns)
+    }
 
     render() {
         let data = this.state.data;
@@ -181,6 +185,7 @@ class TableController extends React.Component {
                 limitSelectorHandler={this.changeLimit.bind( this )}
                 contextMenuItems={this.getContextMenu.bind( this )}
                 contextHeaderMenuItems={this.getContextHeaderMenu.bind( this )}
+                onResizeColumns={this.onResizeColumns.bind(this)}
             />
         )
     }
