@@ -78,7 +78,6 @@
     cursor: col-resize;
     z-index: 1;
     height: 40px;
-    -webkit-transition: background 200ms ease-in-out;
     transition: background 200ms ease-in-out; }
     .dumbTable__headerCellResize:before {
       content: '';
@@ -413,7 +412,6 @@
 
 .dumbTablePagination__btn svg {
   fill: #818B9E;
-  -webkit-transition: fill 200ms ease-in-out;
   transition: fill 200ms ease-in-out; }
 
 .dumbTablePagination__btn:hover svg {
@@ -432,7 +430,6 @@
   line-height: 24px;
   font-size: 12px;
   color: #43516C;
-  -webkit-transition: background 200ms, color 200ms ease-in-out;
   transition: background 200ms, color 200ms ease-in-out; }
   .dumbTablePagination__page:hover {
     color: #377DF7; }

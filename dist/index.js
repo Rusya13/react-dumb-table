@@ -39,12 +39,11 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
 
         _this.isContextMenuOpen = false;
         _this.cachedColumnsSize = [];
-        _this._saveCache();
-        _this.state = {
-            isLimitSelectOpen: false
-        };
+        _this.state = { isLimitSelectOpen: false };
+
         _this.nextClickHandler = _this.nextClickHandler.bind(_this);
 
+        _this._saveCache(props.columns);
         return _this;
     }
 
@@ -62,6 +61,9 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
             if (this.props.offset !== props.offset) {
                 this.tableBody.scrollTop = 0;
             }
+
+            this.cols = this.table.getElementsByTagName('col') || [];
+            this._saveCache(props.columns);
         }
     }, {
         key: "componentWillUnmount",
@@ -71,12 +73,10 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
     }, {
         key: "_saveCache",
         value: function _saveCache() {
-            var _this2 = this;
-
             var columns = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.props.columns;
 
-            columns.map(function (col) {
-                _this2.cachedColumnsSize.push({ width: col.width });
+            this.cachedColumnsSize = columns.map(function (col) {
+                return { width: col.width };
             });
         }
     }, {
@@ -121,12 +121,12 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
     }, {
         key: "_setColumnsSize",
         value: function _setColumnsSize(columns) {
-            var _this3 = this;
+            var _this2 = this;
 
             columns.reduce(function (secondIndex, column, index) {
                 if (column.width < 5) console.error("Warning: A width in the column can not be less then 5. Change the width parameter in the column with index " + index + ".");
-                _this3.cols[index].style.width = column.width + '%';
-                _this3.cols[secondIndex].style.width = column.width + '%';
+                _this2.cols[index].style.width = column.width + '%';
+                _this2.cols[secondIndex].style.width = column.width + '%';
                 return secondIndex + 1;
             }, this.cols.length / 2);
         }
@@ -153,7 +153,7 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
     }, {
         key: "_renderHeader",
         value: function _renderHeader(columns, headerHeight, orderBy, orderDirection) {
-            var _this4 = this;
+            var _this3 = this;
 
             return _react2.default.createElement(
                 "thead",
@@ -166,13 +166,13 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
                             "th",
                             {
                                 style: { height: headerHeight },
-                                onContextMenu: _this4._contextHeaderHandler.bind(_this4, col, index, col.key),
+                                onContextMenu: _this3._contextHeaderHandler.bind(_this3, col, index, col.key),
                                 "data-index": index,
                                 key: index },
                             _react2.default.createElement(
                                 "div",
                                 {
-                                    onClick: _this4._orderChangeHandler.bind(_this4, orderBy, col.sortKey || col.key, orderDirection),
+                                    onClick: _this3._orderChangeHandler.bind(_this3, orderBy, col.sortKey || col.key, orderDirection),
                                     className: "dumbTable__headerCell" },
                                 col.name
                             ),
@@ -189,7 +189,7 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
                                     _react2.default.createElement("path", { d: "M7 10l5 5 5-5z" })
                                 )
                             ),
-                            index != columns.length - 1 && _react2.default.createElement("div", { onMouseDown: _this4.handleMouseDown.bind(_this4),
+                            index != columns.length - 1 && _react2.default.createElement("div", { onMouseDown: _this3.handleMouseDown.bind(_this3),
                                 className: "dumbTable__headerCellResize" })
                         );
                     })
@@ -277,25 +277,25 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
     }, {
         key: "_renderRow",
         value: function _renderRow(row, index, columns) {
-            var _this5 = this;
+            var _this4 = this;
 
             return columns.map(function (column, cellIndex) {
                 // get value by key from object or by Getter from class object
 
-                var value = _this5._get(row, column.key);
+                var value = _this4._get(row, column.key);
                 if (value === undefined) {
                     if ((typeof row === "undefined" ? "undefined" : _typeof(row)) === "object") {
                         if (row.get && typeof row.get === "function") {
                             var object = column.key.split(".");
                             if (object.length > 1) {
                                 var str = object.slice(1).join('.');
-                                value = _this5._get(row.get(object[0]), str);
+                                value = _this4._get(row.get(object[0]), str);
                             } else {
                                 value = row.get(object[0]);
                             }
                         }
                     } else {
-                        value = _this5.props.defaultCellValue;
+                        value = _this4.props.defaultCellValue;
                     }
                 }
 
@@ -324,8 +324,8 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
                 return _react2.default.createElement(
                     "td",
                     { className: "dumbTable__contentCell",
-                        onClick: _this5._onCellClickHandler.bind(_this5, row, index, column),
-                        onContextMenu: _this5._contextHandler.bind(_this5, row, index, column.key),
+                        onClick: _this4._onCellClickHandler.bind(_this4, row, index, column),
+                        onContextMenu: _this4._contextHandler.bind(_this4, row, index, column.key),
                         key: cellIndex },
                     value
                 );
@@ -348,7 +348,7 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
     }, {
         key: "_renderBody",
         value: function _renderBody(data, columns, rowHeight, selectedRowIndexes) {
-            var _this6 = this;
+            var _this5 = this;
 
             return _react2.default.createElement(
                 "tbody",
@@ -367,7 +367,7 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
                         { style: { height: rowHeight },
                             className: className,
                             key: index },
-                        _this6._renderRow(row, index, columns)
+                        _this5._renderRow(row, index, columns)
                     );
                 })
             );
@@ -487,13 +487,13 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
     }, {
         key: "_renderSelectItems",
         value: function _renderSelectItems(items) {
-            var _this7 = this;
+            var _this6 = this;
 
             if (!items || items && items.length < 1) return null;
             return items.map(function (item, index) {
                 return _react2.default.createElement(
                     "div",
-                    { onMouseDown: _this7._onLimitChangeHandler.bind(_this7, item),
+                    { onMouseDown: _this6._onLimitChangeHandler.bind(_this6, item),
                         className: "dumbTableSelect__listItem", key: index },
                     item
                 );
@@ -502,13 +502,13 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
     }, {
         key: "_renderLimitSelector",
         value: function _renderLimitSelector(limit, limitsList) {
-            var _this8 = this;
+            var _this7 = this;
 
             return _react2.default.createElement(
                 "div",
                 { className: "dumbTableSelect", id: "dumbTableSelect", onClick: this._openSelect.bind(this),
                     ref: function ref(limitSelect) {
-                        return _this8.limitSelect = limitSelect;
+                        return _this7.limitSelect = limitSelect;
                     } },
                 this.state.isLimitSelectOpen && _react2.default.createElement(
                     "div",
@@ -562,7 +562,7 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
     }, {
         key: "render",
         value: function render() {
-            var _this9 = this;
+            var _this8 = this;
 
             var columns = this.props.columns.length > 0 ? this.props.columns : [{ width: 100, name: "no columns", key: "_" }];
             var cachedColumns = this.cachedColumnsSize;
@@ -592,7 +592,7 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
             return _react2.default.createElement(
                 "div",
                 { ref: function ref(_ref2) {
-                        return _this9.table = _ref2;
+                        return _this8.table = _ref2;
                     }, className: "dumbTable" },
                 _react2.default.createElement(
                     "div",
@@ -607,7 +607,7 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
                 _react2.default.createElement(
                     "div",
                     { ref: function ref(_ref) {
-                            return _this9.tableBody = _ref;
+                            return _this8.tableBody = _ref;
                         }, className: "dumbTable__content" },
                     _react2.default.createElement(
                         "table",

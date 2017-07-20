@@ -3,40 +3,40 @@ import ReactDom from "react-dom";
 import PropTypes from "prop-types";
 
 export class DumbTable extends React.Component {
-
-    constructor( props ) {
-        super( props );
+    constructor(props) {
+        super(props);
         this.isContextMenuOpen = false;
         this.cachedColumnsSize = [];
-        this._saveCache();
-        this.state            = {
-            isLimitSelectOpen: false
-        };
-        this.nextClickHandler = this.nextClickHandler.bind( this );
+        this.state             = { isLimitSelectOpen: false };
 
+        this.nextClickHandler  = this.nextClickHandler.bind(this);
+
+        this._saveCache(props.columns)
     }
 
     componentDidMount() {
-        window.addEventListener( "mousedown", this.nextClickHandler );
-        this.cols        = this.table.getElementsByTagName( 'col' ) || [];
-        this.headerCells = this.table.getElementsByClassName( 'dumbTable__headerCell' );
-        this._setColumnsSize( this.cachedColumnsSize );
+        window.addEventListener("mousedown", this.nextClickHandler);
+        this.cols        = this.table.getElementsByTagName('col') || [];
+        this.headerCells = this.table.getElementsByClassName('dumbTable__headerCell');
+        this._setColumnsSize(this.cachedColumnsSize);
+
     }
 
     componentWillReceiveProps( props ) {
-        if ( this.props.offset !== props.offset ) {
-            this.tableBody.scrollTop = 0;
+        if (this.props.offset !== props.offset) {
+            this.tableBody.scrollTop = 0
         }
+
+        this.cols        = this.table.getElementsByTagName('col') || [];
+        this._saveCache(props.columns);
     }
 
     componentWillUnmount() {
-        window.removeEventListener( "mousedown", this.nextClickHandler )
+        window.removeEventListener("mousedown", this.nextClickHandler)
     }
 
-    _saveCache( columns = this.props.columns ) {
-        columns.map( ( col ) => {
-            this.cachedColumnsSize.push( { width: col.width } );
-        } );
+    _saveCache(columns = this.props.columns) {
+        this.cachedColumnsSize = columns.map(col => ({ width: col.width }))
     }
 
     handleMouseDown( e ) {
@@ -77,11 +77,11 @@ export class DumbTable extends React.Component {
         }.bind( this );
     }
 
-    _setColumnsSize( columns ) {
-        columns.reduce( ( secondIndex, column, index ) => {
+    _setColumnsSize(columns) {
+        columns.reduce((secondIndex, column, index) => {
             if ( column.width < 5 ) console.error( "Warning: A width in the column can not be less then 5. Change the width parameter in the column with index " + index + "." );
-            this.cols[ index ].style.width       = column.width + '%';
-            this.cols[ secondIndex ].style.width = column.width + '%';
+            this.cols[index].style.width       = column.width + '%';
+            this.cols[secondIndex].style.width = column.width + '%';
             return secondIndex + 1;
         }, this.cols.length / 2 );
     }

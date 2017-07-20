@@ -89,7 +89,6 @@ class TableController extends React.Component {
     }
 
     getColumns() {
-        return []
         return [
             { name: "Название", key: "name", width: 20},
             {
