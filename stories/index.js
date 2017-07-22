@@ -12,15 +12,6 @@ import "../dist/style.css";
 
 const stories = storiesOf( 'React-dumb-table', module );
 
-// stories.addDecorator( withKnobs );
-// stories.addDecorator( host( {
-//     title:        'React-dumb-table in the container',
-//     align:        'top',
-//     height:       '60%',
-//     width:        '100%',
-//     mobXDevTools: false
-// } ) );
-
 stories.add( 'DumbTable', withReadme( TableReadme, () => {
     return (
         <TableController/>
