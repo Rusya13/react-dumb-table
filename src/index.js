@@ -79,7 +79,6 @@ export class DumbTable extends React.Component {
 
     _setColumnsSize(columns) {
         columns.reduce((secondIndex, column, index) => {
-            if ( column.width < 5 ) console.error( "Warning: A width in the column can not be less then 5. Change the width parameter in the column with index " + index + "." );
             this.cols[index].style.width       = column.width + '%';
             this.cols[secondIndex].style.width = column.width + '%';
             return secondIndex + 1;
@@ -117,7 +116,7 @@ export class DumbTable extends React.Component {
                             key={index}>
                             <div
                                 onClick={this._orderChangeHandler.bind( this, orderBy, col.sortKey || col.key, orderDirection )}
-                                className="dumbTable__headerCell">
+                                className={"dumbTable__headerCell"+((col.number)?" number":"")}>
                                 {col.name}
                             </div>
                             {(orderBy === col.sortKey || orderBy === col.key) &&
@@ -254,7 +253,7 @@ export class DumbTable extends React.Component {
 
 
             return (
-                <td className="dumbTable__contentCell"
+                <td className={"dumbTable__contentCell" + ((column.number)?" number":"")}
                     onClick={this._onCellClickHandler.bind( this, row, index, column )}
                     onContextMenu={this._contextHandler.bind( this, row, index, column.key )}
                     key={cellIndex}>
@@ -301,7 +300,7 @@ export class DumbTable extends React.Component {
 
     _offsetChangeHandler( key, currentPage, limit ) {
         if ( currentPage === key ) return;
-        console.log( key );
+        //console.log( key );
         if ( key === "back" ) {
             key = ( currentPage - 2) * limit;
         } else if ( key === "forward" ) {

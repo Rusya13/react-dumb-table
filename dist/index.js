@@ -124,7 +124,6 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
             var _this2 = this;
 
             columns.reduce(function (secondIndex, column, index) {
-                if (column.width < 5) console.error("Warning: A width in the column can not be less then 5. Change the width parameter in the column with index " + index + ".");
                 _this2.cols[index].style.width = column.width + '%';
                 _this2.cols[secondIndex].style.width = column.width + '%';
                 return secondIndex + 1;
@@ -173,7 +172,7 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
                                 "div",
                                 {
                                     onClick: _this3._orderChangeHandler.bind(_this3, orderBy, col.sortKey || col.key, orderDirection),
-                                    className: "dumbTable__headerCell" },
+                                    className: "dumbTable__headerCell" + (col.number ? " number" : "") },
                                 col.name
                             ),
                             (orderBy === col.sortKey || orderBy === col.key) && _react2.default.createElement(
@@ -323,7 +322,7 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
 
                 return _react2.default.createElement(
                     "td",
-                    { className: "dumbTable__contentCell",
+                    { className: "dumbTable__contentCell" + (column.number ? " number" : ""),
                         onClick: _this4._onCellClickHandler.bind(_this4, row, index, column),
                         onContextMenu: _this4._contextHandler.bind(_this4, row, index, column.key),
                         key: cellIndex },
@@ -376,7 +375,7 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
         key: "_offsetChangeHandler",
         value: function _offsetChangeHandler(key, currentPage, limit) {
             if (currentPage === key) return;
-            console.log(key);
+            //console.log( key );
             if (key === "back") {
                 key = (currentPage - 2) * limit;
             } else if (key === "forward") {

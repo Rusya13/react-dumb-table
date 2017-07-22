@@ -57,6 +57,9 @@
     padding-left: 10px;
     padding-right: 18px;
     cursor: pointer; }
+  .dumbTable__headerCell.number {
+    text-align: right;
+    margin-right: 3px; }
   .dumbTable__headerSort {
     position: absolute;
     right: 4px;
@@ -122,6 +125,9 @@
     overflow: hidden;
     padding-left: 10px;
     padding-right: 10px; }
+  .dumbTable__contentCell.number {
+    text-align: right;
+    padding-right: 22px; }
 
 .simple-data-table__footer {
   display: -webkit-box;

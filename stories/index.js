@@ -12,7 +12,7 @@ import "../dist/style.css";
 
 const stories = storiesOf( 'React-dumb-table', module );
 
-stories.add( 'DumbTable', withReadme( TableReadme, () => {
+stories.add( 'Top movies IMDB', withReadme( TableReadme, () => {
     return (
         <TableController/>
     )
@@ -22,30 +22,30 @@ stories.add( 'DumbTable', withReadme( TableReadme, () => {
 let Table = LoaderHOC( "data" )( DumbTable );
 
 
-class Model{
+class Model {
 
-    constructor(row){
+    constructor( row ) {
         this.attributes = {};
-        this.set(row)
+        this.set( row )
     }
 
-    get(key){
-        return this.attributes[key]
+    get( key ) {
+        return this.attributes[ key ]
     }
 
-    set(o, v){
-        if (typeof o === 'string' && v){
-            this.attributes[o] = v
+    set( o, v ) {
+        if ( typeof o === 'string' && v ) {
+            this.attributes[ o ] = v
         } else {
-            let keys = Object.keys(o);
-            keys.forEach(key=>{
-                this.attributes[key] = o[key]
-            })
+            let keys = Object.keys( o );
+            keys.forEach( key => {
+                this.attributes[ key ] = o[ key ]
+            } )
         }
     }
 
-    get name(){
-        return this.get("name")
+    get name() {
+        return this.get( "name" )
     }
 
 }
@@ -57,39 +57,43 @@ class TableController extends React.Component {
         super( props );
 
         this.state = {
-            limit:          25,
-            offset:         0,
+            limit:          20,
+            page:           1,
             selected:       [],
-            orderBy:        "first_name",
+            orderBy:        "title",
             orderDirection: "ASC",
-            data:           []
+            data:           [],
+            api_key: "5f87f7d4c3a7c0aaa3b6653b919968af"
         }
 
 
     }
 
     componentDidMount() {
-        fetch( "https://api.hh.ru/vacancies" ).then( res => res.json() )
+        this.fetch()
+    }
+
+    fetch = ( page = 1 ) => {
+        fetch( "https://api.themoviedb.org/3/movie/top_rated?api_key="+this.state.api_key+ "&page=" + page ).then( res => res.json() )
         .then( json => {
-            this.setState( { data: json.items.map(item=>{
-                return new Model(item)
-            }) } )
+            this.setState( {
+                data:  json.results.map( item => {
+                    return new Model( item )
+                } ),
+                page:  json.page,
+                total: json.total_results
+            } )
         } ).catch( e => {
-            console.log( "Work e", e );
+            console.log( "Error api", e );
         } )
     }
 
     getColumns() {
         return [
-            { name: "Название", key: "name", width: 20},
-            {
-                link: "url", name: "Ссылка", key: "url", width: 50, type: "link",
-
-                target: "_blank"
-            },
-            { name: "Зарплата", key: "salary.from", width: 30 },
-            { name: "Компания", key: "employer.name", width: 40 },
-            { name: "Метро", key: "address.metro_stations[0].station_name", width: 40 }
+            { name: "Title", key: "title", width: 20 },
+            { name: "Original title", key: "original_title", width: 20 },
+            { name: "Vote", key: "vote_average", width: 20, type:"number", number:true },
+            { name: "Release date", key: "release_date", width: 20 },
         ]
     }
 
@@ -98,12 +102,12 @@ class TableController extends React.Component {
 
         return (
             [
-                { title: "Edit row", onClickHandler: (...args) => {
-                    console.log('Edit Row Context Click', args);
-                } },
-                { title: "Delete row", onClickHandler: action( ('delete row') ) },
+                {
+                    title: "Edit row", onClickHandler: action( ('Edit row action') )
+                },
+                { title: "Delete row", onClickHandler: action( ('Delete row') ) },
                 { type: "divider" },
-                { title: "Create new", onClickHandler: action( 'create new row' ) },
+                { title: "Create new", onClickHandler: action( 'Create new row' ) },
             ]
         )
     }
@@ -127,33 +131,18 @@ class TableController extends React.Component {
 
     cellClickHandler( row, index, column ) {
         this.setState( { selected: [ index ] } )
+
     }
 
-    sort = ( a, b ) => {
-        let f = a[ this.state.orderBy ];
-        let s = b[ this.state.orderBy ];
-
-        if ( this.state.orderDirection === "ASC" ) {
-            if ( f > s ) {
-                return 1
-            } else {
-                return -1
-            }
-        } else {
-            if ( f < s ) {
-                return 1
-            } else {
-                return -1
-            }
-        }
-    };
-
     offsetChangeHandler = ( offset ) => {
-        this.setState( { offset } )
+        console.log( 'index offsetChangeHandler', offset );
+        let page = offset / this.state.limit + 1
+        console.log( 'index offsetChangeHandler', page )
+        this.fetch( page )
     };
 
-    onResizeColumns(columns){
-        console.log("cols:", columns)
+    onResizeColumns( columns ) {
+        console.log( "cols:", columns )
     }
 
     render() {
@@ -169,13 +158,14 @@ class TableController extends React.Component {
                 orderDirection={this.state.orderDirection}
                 orderChangeHandler={this.orderChangeHandler.bind( this )}
                 offsetChangeHandler={this.offsetChangeHandler}
-                offset={this.state.offset}
+                offset={(this.state.page - 1) * this.state.limit}
+                total={this.state.total}
                 limit={this.state.limit}
-                limitsList={[ 10, 25, 50, 100 ]}
+                limitsList={[ 20 ]}
                 limitSelectorHandler={this.changeLimit.bind( this )}
                 contextMenuItems={this.getContextMenu.bind( this )}
                 contextHeaderMenuItems={this.getContextHeaderMenu.bind( this )}
-                onResizeColumns={this.onResizeColumns.bind(this)}
+                onResizeColumns={this.onResizeColumns.bind( this )}
             />
         )
     }

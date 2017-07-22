@@ -3,6 +3,13 @@
 
 ## Lates releases
 
+## v0.0.25
+
+### Features
+
+- row property "number" (true/false) - right alignment in a column
+
+
 ## v0.0.24
 
 ### Fixes
