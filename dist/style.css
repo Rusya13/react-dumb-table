@@ -45,7 +45,18 @@
   .dumbTable__icon {
     fill: #818B9E; }
   .dumbTable__header {
-    border-bottom: 1px solid #E7EBED; }
+    border-bottom: 1px solid #E7EBED;
+    overflow-y: scroll; }
+    .dumbTable__header th {
+      border-right: 1px solid #E7EBED; }
+  .dumbTable__header::-webkit-scrollbar {
+    width: 8px; }
+  .dumbTable__header::-webkit-scrollbar:window-inactive {
+    width: 20px; }
+  .dumbTable__header::-webkit-scrollbar-thumb {
+    background: rgba(128, 128, 128, 0.29);
+    border-radius: 5px;
+    cursor: pointer; }
   .dumbTable__headerCell {
     font-weight: normal;
     color: #080808;
@@ -76,21 +87,18 @@
     right: -4px;
     bottom: 0;
     top: 0;
-    background: #fff;
     width: 8px;
     cursor: col-resize;
     z-index: 1;
-    height: 40px;
-    -webkit-transition: background 200ms ease-in-out;
     transition: background 200ms ease-in-out; }
     .dumbTable__headerCellResize:before {
       content: '';
       position: absolute;
       bottom: 0px;
       top: 0px;
-      left: 50%;
-      border-right: 1px solid #E7EBED; }
+      left: 50%; }
     .dumbTable__headerCellResize:hover {
+      border-right: 1px solid #E7EBED;
       background: #f6f7f8; }
   .dumbTable__content {
     overflow-y: auto;
@@ -108,26 +116,28 @@
     cursor: pointer; }
   .dumbTable__contentRow {
     cursor: pointer; }
+    .dumbTable__contentRow td {
+      padding-left: 4px;
+      border-right: 1px solid #E7EBED; }
+    .dumbTable__contentRow:hover {
+      background-color: #b8d1f7 !important; }
     .dumbTable__contentRow:nth-child(2n) {
       background: #F9FAFA; }
     .dumbTable__contentRow--selected {
       background: #dee9fc !important; }
       .dumbTable__contentRow--selected > :first-child {
-        border-left: 3px solid #3279fb;
-        padding-left: 7px; }
-    .dumbTable__contentRow td:last-child {
-      padding-left: 17px; }
+        border-left: 2px solid #3279fb;
+        padding-left: 2px !important; }
   .dumbTable__contentCell {
     text-overflow: ellipsis;
     white-space: nowrap;
     font-size: 13px;
     color: #43516C;
     overflow: hidden;
-    padding-left: 10px;
-    padding-right: 10px; }
+    padding: 0 2px; }
   .dumbTable__contentCell.number {
     text-align: right;
-    padding-right: 22px; }
+    padding-right: 2px; }
 
 .simple-data-table__footer {
   display: -webkit-box;
@@ -419,7 +429,6 @@
 
 .dumbTablePagination__btn svg {
   fill: #818B9E;
-  -webkit-transition: fill 200ms ease-in-out;
   transition: fill 200ms ease-in-out; }
 
 .dumbTablePagination__btn:hover svg {
@@ -438,7 +447,6 @@
   line-height: 24px;
   font-size: 12px;
   color: #43516C;
-  -webkit-transition: background 200ms, color 200ms ease-in-out;
   transition: background 200ms, color 200ms ease-in-out; }
   .dumbTablePagination__page:hover {
     color: #377DF7; }

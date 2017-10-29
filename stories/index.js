@@ -142,7 +142,7 @@ class TableController extends React.Component {
     };
 
     onResizeColumns( columns ) {
-        console.log( "cols:", columns )
+        // console.log( "cols:", columns )
     }
 
     render() {
@@ -151,6 +151,8 @@ class TableController extends React.Component {
         return (
             <Table
                 data={data}
+                rowHeight={20}
+                headerHeight={20}
                 columns={this.getColumns()}
                 selectedRowIndexes={this.state.selected}
                 cellClickHandler={this.cellClickHandler.bind( this )}
