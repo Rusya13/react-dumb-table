@@ -478,9 +478,10 @@ export class DumbTable extends React.Component {
         let first_num = offset + 1;
         let last_num  = (currentPage < pages) ? currentPage * limit : total;
 
+        let fontSize = this.props.fontSize;
 
         return (
-            <div ref={( ref ) => this.table = ref } className="dumbTable">
+            <div ref={( ref ) => this.table = ref } className="dumbTable" style={fontSize && { fontSize }}>
                 <div className="dumbTable__header">
                     <table>
                         {this._renderColumnsSync( cachedColumns )}
@@ -532,6 +533,7 @@ DumbTable.propTypes = {
     showFooter:           PropTypes.bool,
     footerHeight:         PropTypes.any,
     limit:                PropTypes.number,
+    fontSize:             PropTypes.number,
     offset:               PropTypes.number,
     total:                PropTypes.number,
     reloadButtonHandler:  PropTypes.func,

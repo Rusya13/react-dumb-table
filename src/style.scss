@@ -3,7 +3,6 @@ $cell-font-color: #43516C;
 $header-font-size: 14px;
 $active-color: #377DF7;
 $border-color: #E7EBED;
-$cell-font-size: 13px;
 
 .dumbTable{
     display: flex;
@@ -20,6 +19,7 @@ $cell-font-size: 13px;
 
     border: 1px solid $border-color;
     border-radius: 3px;
+		font-size: 13px;
 
     & *, & *:before, & *:after {
         -moz-box-sizing: border-box;
@@ -76,14 +76,18 @@ $cell-font-size: 13px;
     &__headerCell{
         font-weight: normal;
         color: $header-font-color;
-        font-size: $header-font-size;
+        font-size: 0.929em;
         text-overflow: ellipsis;
         white-space: nowrap;
         text-align: left;
         overflow: hidden;
 
-        padding-left: 10px;
-        padding-right: 18px;
+        padding-left: 5px;
+        padding-right: 8px;
+
+	      padding-top: 5px;
+	      padding-bottom: 5px;
+	      line-height: 0.929em;
 
         cursor: pointer;
     }
@@ -180,13 +184,14 @@ $cell-font-size: 13px;
     &__contentCell{
         text-overflow: ellipsis;
         white-space: nowrap;
-        font-size: $cell-font-size;
+        font-size: 1em;
         color: $cell-font-color;
 
         overflow: hidden;
 
-        padding-left: 10px;
-        padding-right: 10px;
+        padding-left: 5px;
+        padding-right: 8px;
+	      line-height: 1em;
 
 
     }
