@@ -82,12 +82,12 @@ $border-color: #E7EBED;
         text-align: left;
         overflow: hidden;
 
-        padding-left: 5px;
-        padding-right: 18px;
+        padding-left: 3px;
+        padding-right: 15px;
 
-	      padding-top: 5px;
-	      padding-bottom: 5px;
-	      line-height: 0.929em;
+	      padding-top: 3px;
+	      padding-bottom: 3px;
+	      line-height: 1.1em;
 
         cursor: pointer;
     }
@@ -121,7 +121,7 @@ $border-color: #E7EBED;
 
         cursor: col-resize;
         z-index: 1;
-        height: 40px;
+        height: 100%;
 
         transition: background 200ms ease-in-out;
 
@@ -170,19 +170,20 @@ $border-color: #E7EBED;
         }
 
         &--selected{
-            background: #dee9fc !important;
+            //background: #dee9fc !important;
+            background: #3279fb !important;
 
-            & > :first-child{
-                border-left: 3px solid #3279fb;
-                padding-left: 7px;
-            }
-        }
-        td:last-child{
-            padding-left: 17px;
+	          td {
+		          color: #fff;
+	          }
         }
 
 	      &:last-child td {
 		      border-bottom: 0;
+	      }
+
+	      &:hover {
+		      background: #dee9fc;
 	      }
     }
 
@@ -196,8 +197,9 @@ $border-color: #E7EBED;
 
         overflow: hidden;
 
-        padding-left: 5px;
-        padding-right: 8px;
+        //padding-left: 4px;
+        //padding-right: 6px;
+	      padding: 1px 6px 2px 4px;
 	      line-height: 1em;
 
 	      &:last-child {
@@ -206,7 +208,6 @@ $border-color: #E7EBED;
     }
     &__contentCell.number{
         text-align: right;
-        padding-right: 22px;
     }
 
 

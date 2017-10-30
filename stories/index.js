@@ -59,6 +59,7 @@ class TableController extends React.Component {
         this.state = {
             limit:          20,
             page:           1,
+            fontSize:       12,
             selected:       [],
             orderBy:        "title",
             orderDirection: "ASC",
@@ -66,7 +67,10 @@ class TableController extends React.Component {
             api_key: "5f87f7d4c3a7c0aaa3b6653b919968af"
         }
 
-
+        setTimeout(() => this.setState({ fontSize: 14 }), 2000);
+        setTimeout(() => this.setState({ fontSize: 20 }), 3000);
+        setTimeout(() => this.setState({ fontSize: 8 }), 5000);
+        setTimeout(() => this.setState({ fontSize: 12 }), 8000);
     }
 
     componentDidMount() {
@@ -162,6 +166,7 @@ class TableController extends React.Component {
                 total={this.state.total}
                 limit={this.state.limit}
                 limitsList={[ 20 ]}
+                fontSize={this.state.fontSize}
                 limitSelectorHandler={this.changeLimit.bind( this )}
                 contextMenuItems={this.getContextMenu.bind( this )}
                 contextHeaderMenuItems={this.getContextHeaderMenu.bind( this )}

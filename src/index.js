@@ -560,7 +560,6 @@ DumbTable.propTypes = {
 DumbTable.defaultProps = {
     columns:            [],
     data:               [],
-    rowHeight:          30,
     bottomRow:          false,
     minColWidth:        60,
     cellClickHandler:   null,
@@ -576,8 +575,6 @@ DumbTable.defaultProps = {
     total:                0,
     limitsList:           [ 10, 25, 50 ],
     footerButtons:        [],
-
-    headerHeight: 40,
 
     orderBy:            "id",
     orderDirection:     "ASC",

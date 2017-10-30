@@ -588,11 +588,13 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
             var first_num = offset + 1;
             var last_num = currentPage < pages ? currentPage * limit : total;
 
+            var fontSize = this.props.fontSize;
+
             return _react2.default.createElement(
                 "div",
                 { ref: function ref(_ref2) {
                         return _this8.table = _ref2;
-                    }, className: "dumbTable" },
+                    }, className: "dumbTable", style: fontSize && { fontSize: fontSize } },
                 _react2.default.createElement(
                     "div",
                     { className: "dumbTable__header" },
@@ -677,6 +679,7 @@ DumbTable.propTypes = {
     showFooter: _propTypes2.default.bool,
     footerHeight: _propTypes2.default.any,
     limit: _propTypes2.default.number,
+    fontSize: _propTypes2.default.number,
     offset: _propTypes2.default.number,
     total: _propTypes2.default.number,
     reloadButtonHandler: _propTypes2.default.func,
@@ -703,7 +706,6 @@ DumbTable.propTypes = {
 DumbTable.defaultProps = {
     columns: [],
     data: [],
-    rowHeight: 30,
     bottomRow: false,
     minColWidth: 60,
     cellClickHandler: null,
@@ -719,8 +721,6 @@ DumbTable.defaultProps = {
     total: 0,
     limitsList: [10, 25, 50],
     footerButtons: [],
-
-    headerHeight: 40,
 
     orderBy: "id",
     orderDirection: "ASC",
