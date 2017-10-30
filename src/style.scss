@@ -83,7 +83,7 @@ $border-color: #E7EBED;
         overflow: hidden;
 
         padding-left: 5px;
-        padding-right: 8px;
+        padding-right: 18px;
 
 	      padding-top: 5px;
 	      padding-bottom: 5px;
@@ -112,7 +112,7 @@ $border-color: #E7EBED;
 
     &__headerCellResize{
         position: absolute;
-        right: -4px;
+        right: -3px;
         bottom: 0;
         top: 0;
 
@@ -163,6 +163,7 @@ $border-color: #E7EBED;
 
     &__contentRow{
         cursor: pointer;
+	      border-bottom: 1px solid #E7EBED;
 
         &:nth-child(2n){
             background: #F9FAFA;
@@ -179,6 +180,10 @@ $border-color: #E7EBED;
         td:last-child{
             padding-left: 17px;
         }
+
+	      &:last-child td {
+		      border-bottom: 0;
+	      }
     }
 
     &__contentCell{
@@ -186,6 +191,8 @@ $border-color: #E7EBED;
         white-space: nowrap;
         font-size: 1em;
         color: $cell-font-color;
+	      border-right: 1px solid #E7EBED;
+	      border-bottom: 1px solid #E7EBED;
 
         overflow: hidden;
 
@@ -193,7 +200,9 @@ $border-color: #E7EBED;
         padding-right: 8px;
 	      line-height: 1em;
 
-
+	      &:last-child {
+		      border-right: 0;
+	      }
     }
     &__contentCell.number{
         text-align: right;
