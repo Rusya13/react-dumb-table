@@ -167,12 +167,14 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
                                 style: { height: headerHeight },
                                 onContextMenu: _this3._contextHeaderHandler.bind(_this3, col, index, col.key),
                                 "data-index": index,
-                                key: index },
+                                key: index,
+                                onClick: _this3._orderChangeHandler.bind(_this3, orderBy, col.sortKey || col.key, orderDirection)
+                            },
                             _react2.default.createElement(
                                 "div",
                                 {
-                                    onClick: _this3._orderChangeHandler.bind(_this3, orderBy, col.sortKey || col.key, orderDirection),
-                                    className: "dumbTable__headerCell" + (col.number ? " number" : "") },
+
+                                    className: "dumbTable__headerCell" + (orderBy === col.sortKey || orderBy === col.key ? " sorted" : "") + (col.number ? " number" : "") },
                                 col.name
                             ),
                             (orderBy === col.sortKey || orderBy === col.key) && _react2.default.createElement(

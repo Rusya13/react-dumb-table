@@ -3,6 +3,15 @@
 
 ## Lates releases
 
+## v0.1.0
+
+Changes:
+
+No more height and headerHeight properties
+
+New property "font-size"
+
+
 ## v0.0.25
 
 ### Features

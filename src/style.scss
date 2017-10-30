@@ -81,20 +81,21 @@ $border-color: #E7EBED;
         white-space: nowrap;
         text-align: left;
         overflow: hidden;
-
         padding-left: 3px;
         padding-right: 15px;
-
-	      padding-top: 3px;
-	      padding-bottom: 3px;
-	      line-height: 1.1em;
-
+	    padding-top: 3px;
+	    padding-bottom: 3px;
+	    line-height: 1.1em;
         cursor: pointer;
+
+        &.sorted{
+            font-weight: bold;
+        }
     }
 
     &__headerCell.number{
         text-align: right;
-        margin-right: 3px;
+        margin-right: 6px;
     }
 
     &__headerSort{
@@ -105,6 +106,7 @@ $border-color: #E7EBED;
         width: 20px;
         height: 20px;
         transform: translateY(50%);
+        cursor: pointer;
         & svg{
             fill: $header-font-color;
         }

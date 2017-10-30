@@ -113,10 +113,12 @@ export class DumbTable extends React.Component {
                             style={{ height: headerHeight }}
                             onContextMenu={this._contextHeaderHandler.bind( this, col, index, col.key )}
                             data-index={index}
-                            key={index}>
+                            key={index}
+                            onClick={this._orderChangeHandler.bind( this, orderBy, col.sortKey || col.key, orderDirection )}
+                        >
                             <div
-                                onClick={this._orderChangeHandler.bind( this, orderBy, col.sortKey || col.key, orderDirection )}
-                                className={"dumbTable__headerCell"+((col.number)?" number":"")}>
+                                
+                                className={"dumbTable__headerCell"+((orderBy === col.sortKey || orderBy === col.key)?" sorted":"") + ((col.number)?" number":"")}>
                                 {col.name}
                             </div>
                             {(orderBy === col.sortKey || orderBy === col.key) &&

@@ -61,9 +61,11 @@
     padding-bottom: 3px;
     line-height: 1.1em;
     cursor: pointer; }
+    .dumbTable__headerCell.sorted {
+      font-weight: bold; }
   .dumbTable__headerCell.number {
     text-align: right;
-    margin-right: 3px; }
+    margin-right: 6px; }
   .dumbTable__headerSort {
     position: absolute;
     right: 4px;
@@ -72,7 +74,8 @@
     width: 20px;
     height: 20px;
     -webkit-transform: translateY(50%);
-            transform: translateY(50%); }
+            transform: translateY(50%);
+    cursor: pointer; }
     .dumbTable__headerSort svg {
       fill: #080808; }
   .dumbTable__headerCellResize {
