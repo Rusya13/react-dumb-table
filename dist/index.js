@@ -112,7 +112,7 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
       this.cols = this.table.getElementsByTagName('col') || [];
       this.headerCells = this.table.getElementsByClassName('dumbTable__headerCell');
       this._setColumnsSize(this.cachedColumnsSize);
-      console.log('componentDidMount DumbTable', this.tableBody.children[0]);
+      // console.log('componentDidMount DumbTable', this.tableBody.children[0]);
     }
   }, {
     key: 'componentWillReceiveProps',

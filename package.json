@@ -1,6 +1,6 @@
 {
   "name": "react-dumb-table",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "React table component with pagination, columns resize, fixed header and footer.",
   "repository": {
     "type": "git",
