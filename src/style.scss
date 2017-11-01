@@ -5,6 +5,7 @@ $active-color: #377DF7;
 $border-color: #E7EBED;
 
 .dumbTable{
+    font-family: arial, helvetica, sans-serif;
     display: flex;
     flex-direction: column;
 
@@ -71,7 +72,10 @@ $border-color: #E7EBED;
 
     &__header{
         border-bottom: 1px solid $border-color;
+        padding-right: 8px;
+
     }
+
 
     &__headerCell{
         font-weight: normal;
@@ -144,19 +148,17 @@ $border-color: #E7EBED;
     }
 
     &__content{
-        overflow-y: auto;
+        overflow-y: scroll;
         overflow-x: hidden;
         flex: 1;
     }
     &__content::-webkit-scrollbar{
         width: 8px;
-
+        border-left: 1px solid #E7EBED;
     }
-    &__content::-webkit-scrollbar:window-inactive{
 
-        width: 20px;
 
-    }
+
     &__content::-webkit-scrollbar-thumb{
         background: rgba(128, 128, 128, 0.29);
         border-radius: 5px;
@@ -194,15 +196,15 @@ $border-color: #E7EBED;
         white-space: nowrap;
         font-size: 1em;
         color: $cell-font-color;
-	      border-right: 1px solid #E7EBED;
-	      border-bottom: 1px solid #E7EBED;
-
+        border-right: 1px solid #E7EBED;
+        border-bottom: 1px solid #E7EBED;
+        min-height: 15px;
         overflow: hidden;
 
         //padding-left: 4px;
         //padding-right: 6px;
-	      padding: 1px 6px 2px 4px;
-	      line-height: 1em;
+        padding: 0 3px;
+        line-height: 1.4em;
 
 	      &:last-child {
 		      border-right: 0;

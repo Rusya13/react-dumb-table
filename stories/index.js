@@ -126,7 +126,7 @@ class TableController extends React.Component {
     }
 
     orderChangeHandler( orderBy, orderDirection ) {
-        this.setState( { orderBy, orderDirection } );
+        // this.setState( { orderBy, orderDirection } );
     }
 
     cellClickHandler( row, index, column ) {
@@ -162,7 +162,7 @@ class TableController extends React.Component {
                 total={this.state.total}
                 limit={this.state.limit}
                 limitsList={[ 20 ]}
-                fontSize={this.state.fontSize}
+                // fontSize={this.state.fontSize}
                 limitSelectorHandler={this.changeLimit.bind( this )}
                 contextMenuItems={this.getContextMenu.bind( this )}
                 contextHeaderMenuItems={this.getContextHeaderMenu.bind( this )}
