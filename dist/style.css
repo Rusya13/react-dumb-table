@@ -1,5 +1,5 @@
 .dumbTable {
-  font-family: arial, helvetica, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -57,11 +57,12 @@
     white-space: nowrap;
     text-align: left;
     overflow: hidden;
-    padding-left: 3px;
+    padding-left: 4px;
     padding-right: 15px;
     padding-top: 3px;
     padding-bottom: 3px;
     line-height: 1.1em;
+    margin-right: 3px;
     cursor: pointer; }
     .dumbTable__headerCell.sorted {
       font-weight: bold; }
@@ -70,7 +71,7 @@
     margin-right: 6px; }
   .dumbTable__headerSort {
     position: absolute;
-    right: 4px;
+    right: 6px;
     margin-top: -10px;
     bottom: 50%;
     width: 20px;
@@ -122,8 +123,6 @@
       background: #3279fb !important; }
       .dumbTable__contentRow--selected td {
         color: #fff; }
-    .dumbTable__contentRow:last-child td {
-      border-bottom: 0; }
     .dumbTable__contentRow:hover {
       background: #dee9fc; }
   .dumbTable__contentCell {
@@ -160,8 +159,7 @@
   -ms-flex-preferred-size: 33.33333%;
       flex-basis: 33.33333%;
   max-width: 33.33333%;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding: 3px 10px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -177,8 +175,7 @@
   -ms-flex-preferred-size: 33.33333%;
       flex-basis: 33.33333%;
   max-width: 33.33333%;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding: 3px 10px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -202,8 +199,7 @@
   -ms-flex-preferred-size: 33.33333%;
       flex-basis: 33.33333%;
   max-width: 33.33333%;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding: 3px 10px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -411,51 +407,54 @@
 
 .dumbTableInfo {
   color: #43516C;
-  font-size: 13px; }
+  font-size: 0.9em; }
 
-.dumbTablePagination__pages {
-  display: inline-block;
-  list-style: none;
-  padding: 0;
-  margin: 0; }
-
-.dumbTablePagination__btn, .dumbTablePagination__page {
-  display: inline-block;
-  vertical-align: top;
-  background: #fff;
-  cursor: pointer;
-  min-width: 22px;
-  padding: 0 4px;
-  height: 24px;
-  border: 0;
-  outline: none; }
-
-.dumbTablePagination__btn svg {
-  fill: #818B9E;
-  transition: fill 200ms ease-in-out; }
-
-.dumbTablePagination__btn:hover svg {
-  fill: #377DF7; }
-
-.dumbTablePagination__btn[disabled] {
-  cursor: not-allowed; }
-  .dumbTablePagination__btn[disabled]:hover svg {
-    fill: #C3C8D1; }
-  .dumbTablePagination__btn[disabled] svg {
-    fill: #C3C8D1; }
-
-.dumbTablePagination__page {
-  border-radius: 2px;
-  text-align: center;
-  line-height: 24px;
-  font-size: 12px;
-  color: #43516C;
-  transition: background 200ms, color 200ms ease-in-out; }
-  .dumbTablePagination__page:hover {
-    color: #377DF7; }
-  .dumbTablePagination__page--active {
-    background: #377DF7;
-    color: #fff;
-    cursor: default; }
-    .dumbTablePagination__page--active:hover {
-      color: #fff; }
+.dumbTablePagination {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row; }
+  .dumbTablePagination__pages {
+    list-style: none;
+    padding: 0;
+    margin: 0; }
+  .dumbTablePagination__btn, .dumbTablePagination__page {
+    display: inline-block;
+    vertical-align: top;
+    background: #fff;
+    cursor: pointer;
+    min-width: 22px;
+    padding: 3px 6px;
+    border: 0;
+    outline: none; }
+  .dumbTablePagination__btn {
+    line-height: 1em; }
+    .dumbTablePagination__btn svg {
+      fill: #818B9E;
+      transition: fill 200ms ease-in-out; }
+    .dumbTablePagination__btn:hover svg {
+      fill: #377DF7; }
+    .dumbTablePagination__btn[disabled] {
+      cursor: not-allowed; }
+      .dumbTablePagination__btn[disabled]:hover svg {
+        fill: #C3C8D1; }
+      .dumbTablePagination__btn[disabled] svg {
+        fill: #C3C8D1; }
+  .dumbTablePagination__page {
+    border-radius: 2px;
+    text-align: center;
+    line-height: 1em;
+    font-size: 1em;
+    color: #43516C;
+    transition: background 200ms, color 200ms ease-in-out; }
+    .dumbTablePagination__page:hover {
+      color: #377DF7; }
+    .dumbTablePagination__page--active {
+      background: #377DF7;
+      color: #fff;
+      cursor: default; }
+      .dumbTablePagination__page--active:hover {
+        color: #fff; }

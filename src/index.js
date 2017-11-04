@@ -2,14 +2,13 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import PropTypes from 'prop-types';
 
-
 export class DumbTable extends React.Component {
   constructor(props) {
     super(props);
-    
+
     this.isContextMenuOpen = false;
     this.cachedColumnsSize = [];
-    this.state = { isLimitSelectOpen: false};
+    this.state = { isLimitSelectOpen: false };
     this._saveCache(props.columns);
   }
 
@@ -44,33 +43,31 @@ export class DumbTable extends React.Component {
   unBlockSelection() {
     document.body.className = document.body.className.replace(/(?:^|\s)no-selection(?!\S)/g, '');
   }
-  
-  
-  
-  
+
   handleMouseDown(event) {
     event.preventDefault();
     this.blockSelection();
-    
+
     let div = event.target.parentNode;
     this.currentIndex = Number(div.getAttribute('data-index'));
     this.originalOffset = event.clientX;
     this.originalWidth = div.offsetWidth;
-    
+
     document.onmousemove = this._onMouseMove;
     document.onmouseup = this._onMouseUp;
   }
 
-  
-  _onMouseMove = (e) =>{
+  _onMouseMove = e => {
     let columns = this.cachedColumnsSize;
     let minColWidth = this.props.minColWidth;
     let newOffset = e.clientX;
-    
+
     let diff = newOffset - this.originalOffset;
     let newSize = this.originalWidth + diff;
     let pieces = columns[this.currentIndex].width + columns[this.currentIndex + 1].width;
-    let summPx = this.headerCells[this.currentIndex].offsetWidth + this.headerCells[this.currentIndex + 1].offsetWidth;
+    let summPx =
+      this.headerCells[this.currentIndex].offsetWidth +
+      this.headerCells[this.currentIndex + 1].offsetWidth;
     let piecePx = summPx / pieces;
     let newDiff = +(diff / piecePx).toFixed(2);
     let newLeftWidth = Math.ceil(columns[this.currentIndex].width + newDiff);
@@ -85,19 +82,16 @@ export class DumbTable extends React.Component {
     this.originalWidth = newSize;
     this.originalOffset = newOffset;
   };
-  
-  _onMouseUp=()=> {
+
+  _onMouseUp = () => {
     this.unBlockSelection();
     document.onmousemove = document.onmouseup = null;
     if (this.props.onResizeColumns) {
       this.props.onResizeColumns(this.cachedColumnsSize);
     }
-  }
-    
-    
-    
-    
-    _setColumnsSize(columns) {
+  };
+
+  _setColumnsSize(columns) {
     columns.reduce((secondIndex, column, index) => {
       this.cols[index].style.width = column.width + '%';
       this.cols[secondIndex].style.width = column.width + '%';
@@ -134,14 +128,14 @@ export class DumbTable extends React.Component {
                 onContextMenu={this._contextHeaderHandler.bind(this, col, index, col.key)}
                 data-index={index}
                 key={index}
-                onClick={this._orderChangeHandler.bind(
-                  this,
-                  orderBy,
-                  col.sortKey || col.key,
-                  orderDirection
-                )}
               >
                 <div
+                  onClick={this._orderChangeHandler.bind(
+                    this,
+                    orderBy,
+                    col.sortKey || col.key,
+                    orderDirection
+                  )}
                   className={
                     'dumbTable__headerCell' +
                     (orderBy === col.sortKey || orderBy === col.key ? ' sorted' : '') +
@@ -215,7 +209,7 @@ export class DumbTable extends React.Component {
     this.isContextMenuOpen = true;
   }
 
-  nextClickHandler=()=> {
+  nextClickHandler = () => {
     let contextMenu = this.table.getElementsByClassName('simple-data-table__context-wrapper')[0];
     if (contextMenu.style.display === 'block') {
       contextMenu.style.display = 'none';
@@ -228,7 +222,7 @@ export class DumbTable extends React.Component {
     if (this.state.isLimitSelectOpen) {
       this._onClickAfterSelectOpen();
     }
-  }
+  };
 
   _onCellClickHandler(row, index, column, e) {
     if (this.props.cellClickHandler) {
@@ -643,7 +637,7 @@ DumbTable.defaultProps = {
   total: 0,
   limitsList: [10, 25, 50],
   footerButtons: [],
-  fontSize:12,
+  fontSize: 12,
   orderBy: 'id',
   orderDirection: 'ASC',
   orderChangeHandler: null,

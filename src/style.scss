@@ -5,7 +5,7 @@ $active-color: #377DF7;
 $border-color: #E7EBED;
 
 .dumbTable{
-    font-family: arial, helvetica, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     display: flex;
     flex-direction: column;
 
@@ -85,11 +85,12 @@ $border-color: #E7EBED;
         white-space: nowrap;
         text-align: left;
         overflow: hidden;
-        padding-left: 3px;
+        padding-left: 4px;
         padding-right: 15px;
 	    padding-top: 3px;
 	    padding-bottom: 3px;
-	    line-height: 1.1em;
+        line-height: 1.1em;
+        margin-right: 3px;
         cursor: pointer;
 
         &.sorted{
@@ -104,7 +105,7 @@ $border-color: #E7EBED;
 
     &__headerSort{
         position: absolute;
-        right: 4px;
+        right: 6px;
         margin-top: -10px;
         bottom:50%;
         width: 20px;
@@ -181,11 +182,6 @@ $border-color: #E7EBED;
 		          color: #fff;
 	          }
         }
-
-	      &:last-child td {
-		      border-bottom: 0;
-	      }
-
 	      &:hover {
 		      background: #dee9fc;
 	      }
@@ -232,8 +228,7 @@ $border-color: #E7EBED;
 .simple-data-table__footer > .simple-data-table__footer-info{
     flex-basis: 33.33333%;
     max-width: 33.33333%;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding: 3px 10px;
 
     display: flex;
     flex-direction: column;
@@ -243,8 +238,7 @@ $border-color: #E7EBED;
 .simple-data-table__footer > .simple-data-table__footer-pagination{
     flex-basis: 33.33333%;
     max-width: 33.33333%;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding: 3px 10px;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -258,8 +252,7 @@ $border-color: #E7EBED;
 .simple-data-table__footer > .simple-data-table__footer-settings{
     flex-basis: 33.33333%;
     max-width: 33.33333%;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding: 3px 10px;
 
     display: flex;
     flex-direction: row;
@@ -502,15 +495,17 @@ $border-color: #E7EBED;
 
 .dumbTableInfo{
     color: $cell-font-color;
-    font-size: 13px;
+    font-size: 0.9em;
 }
 
 
 // Pagination
 
 .dumbTablePagination{
+    display: flex;
+    flex-direction: row;
     &__pages{
-        display: inline-block;
+
         list-style: none;
         padding: 0;
         margin: 0;
@@ -523,15 +518,18 @@ $border-color: #E7EBED;
         background: #fff;
         cursor: pointer;
         min-width: 22px;
-        padding: 0 4px;
-        height: 24px;
+        padding: 3px 6px;
+        // height: 24px;
+        // line-height: 1em;
         border: 0;
         outline: none;
+        
     }
     &__btn{
+        line-height: 1em;
         svg{
             fill: #818B9E;
-            transition: fill 200ms ease-in-out;
+            transition: fill 200ms ease-in-out;            
         }
 
         &:hover svg{
@@ -554,8 +552,8 @@ $border-color: #E7EBED;
     &__page{
         border-radius: 2px;
         text-align: center;
-        line-height: 24px;
-        font-size: 12px;
+        line-height: 1em;
+        font-size: 1em;
         color: $cell-font-color;
 
         transition: background 200ms, color 200ms ease-in-out;
