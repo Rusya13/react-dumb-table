@@ -1,17 +1,13 @@
 language: node_js
 node_js:
   - "7"
-  - "6"
-  - "5"
-  - "4"
-
 jobs:
   include:
     - stage: npm build
       node_js: "7"
       deploy:
         provider: npm
-        email: $email
-        api_key: $token
+        email: $EMAIL
+        api_key: $TOKEN
         on:
             tags: true
