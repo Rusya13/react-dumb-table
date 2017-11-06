@@ -1,0 +1,6 @@
+deploy:
+  provider: npm
+  email: $EMAIL
+  api_key: $TOKEN
+  on:
+      tags: true
