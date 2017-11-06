@@ -7,7 +7,7 @@ jobs:
       node_js: "7"
       deploy:
         provider: npm
-        email: $EMAIL
-        api_key: $TOKEN
+        email: $email
+        api_key: $token
         on:
             tags: true
