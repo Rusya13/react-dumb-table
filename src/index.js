@@ -540,8 +540,11 @@ export class DumbTable extends React.Component {
 
     let fontSize = this.props.fontSize;
 
+    let className = 'dumbTable';
+    if(this.props.className) className += ` ${this.props.className}`;
+
     return (
-      <div ref={ref => (this.table = ref)} className="dumbTable" style={fontSize && { fontSize }}>
+      <div ref={ref => (this.table = ref)} className={className} style={fontSize && { fontSize }}>
         <div className="dumbTable__header">
           <table>
             {this._renderColumnsSync(cachedColumns)}
@@ -604,6 +607,8 @@ DumbTable.propTypes = {
   orderBy: PropTypes.string,
   orderDirection: PropTypes.oneOf(['ASC', 'DESC']),
   orderChangeHandler: PropTypes.func,
+
+  className: PropTypes.string,
 
   rightClickHandler: PropTypes.func,
 
