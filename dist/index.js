@@ -643,6 +643,7 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
       var orderBy = this.props.orderBy;
       var orderDirection = this.props.orderDirection;
       var footerButtons = this.props.footerButtons;
+      var footerControls = this.props.footerControls;
 
       var pages = Math.ceil(total / limit);
       var currentPage = offset / limit + 1;
@@ -652,11 +653,14 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
 
       var fontSize = this.props.fontSize;
 
+      var className = 'dumbTable';
+      if (this.props.className) className += ' ' + this.props.className;
+
       return _react2.default.createElement(
         'div',
         { ref: function ref(_ref2) {
             return _this8.table = _ref2;
-          }, className: 'dumbTable', style: fontSize && { fontSize: fontSize } },
+          }, className: className, style: fontSize && { fontSize: fontSize } },
         _react2.default.createElement(
           'div',
           { className: 'dumbTable__header' },
@@ -706,6 +710,11 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
                 ' ',
                 total
               )
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'simple-data-table__footer-controls' },
+              footerControls
             )
           ),
           _react2.default.createElement(
@@ -748,12 +757,15 @@ DumbTable.propTypes = {
   offsetChangeHandler: _propTypes2.default.func,
   limitsList: _propTypes2.default.arrayOf(_propTypes2.default.number),
   footerButtons: _propTypes2.default.array,
+  footerControls: _propTypes2.default.arrayOf(_propTypes2.default.element),
 
   headerHeight: _propTypes2.default.number,
 
   orderBy: _propTypes2.default.string,
   orderDirection: _propTypes2.default.oneOf(['ASC', 'DESC']),
   orderChangeHandler: _propTypes2.default.func,
+
+  className: _propTypes2.default.string,
 
   rightClickHandler: _propTypes2.default.func,
 

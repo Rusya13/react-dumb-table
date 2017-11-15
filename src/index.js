@@ -531,6 +531,7 @@ export class DumbTable extends React.Component {
     let orderBy = this.props.orderBy;
     let orderDirection = this.props.orderDirection;
     let footerButtons = this.props.footerButtons;
+    let footerControls = this.props.footerControls;
 
     let pages = Math.ceil(total / limit);
     let currentPage = offset / limit + 1;
@@ -563,6 +564,9 @@ export class DumbTable extends React.Component {
               <div className="dumbTableInfo">
                 <span>{first_num}</span> - <span>{last_num}</span> of
                 <span> {total}</span>
+              </div>
+              <div className="simple-data-table__footer-controls">
+                {footerControls}
               </div>
             </div>
             <div className="simple-data-table__footer-pagination">
@@ -601,6 +605,7 @@ DumbTable.propTypes = {
   offsetChangeHandler: PropTypes.func,
   limitsList: PropTypes.arrayOf(PropTypes.number),
   footerButtons: PropTypes.array,
+  footerControls: PropTypes.arrayOf(PropTypes.element),
 
   headerHeight: PropTypes.number,
 

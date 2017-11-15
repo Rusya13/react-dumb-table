@@ -231,8 +231,8 @@ $border-color: #E7EBED;
     padding: 3px 10px;
 
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    flex-direction: row;
+		align-items: center;
 }
 
 .simple-data-table__footer > .simple-data-table__footer-pagination{
@@ -495,9 +495,9 @@ $border-color: #E7EBED;
 
 .dumbTableInfo{
     color: $cell-font-color;
+		margin-right: 10px;
     font-size: 0.9em;
 }
-
 
 // Pagination
 
