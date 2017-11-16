@@ -364,7 +364,7 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
   }, {
     key: '_contextHeaderHandler',
     value: function _contextHeaderHandler(coll, index, key, e) {
-      if (this.props.contextMenuItems) {
+      if (this.props.contextHeaderMenuItems) {
         this._contextClick(e, coll, index, key, this.props.contextHeaderMenuItems);
       }
     }

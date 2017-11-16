@@ -296,7 +296,7 @@ export class DumbTable extends React.Component {
   }
 
   _contextHeaderHandler(coll, index, key, e) {
-    if (this.props.contextMenuItems) {
+    if (this.props.contextHeaderMenuItems) {
       this._contextClick(e, coll, index, key, this.props.contextHeaderMenuItems);
     }
   }
