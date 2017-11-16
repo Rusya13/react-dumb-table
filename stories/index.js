@@ -135,6 +135,9 @@ class TableController extends React.Component {
   onResizeColumns(columns) {
     console.log('cols:', columns);
   }
+  
+  footerControls = [<div key="c1"><button>test</button></div>]
+  
 
   render() {
     let data = this.state.data;
@@ -158,6 +161,7 @@ class TableController extends React.Component {
         contextMenuItems={this.getContextMenu.bind(this)}
         contextHeaderMenuItems={this.getContextHeaderMenu.bind(this)}
         onResizeColumns={this.onResizeColumns.bind(this)}
+        footerControls={this.footerControls}
       />
     );
   }

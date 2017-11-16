@@ -220,7 +220,6 @@ $border-color: #E7EBED;
     flex-direction: row;
     align-items: stretch;
     border-top: 1px solid #E9E3E6;
-
     background-color: white;
 
 }
@@ -229,18 +228,18 @@ $border-color: #E7EBED;
     flex-basis: 33.33333%;
     max-width: 33.33333%;
     padding: 3px 10px;
-
     display: flex;
     flex-direction: row;
 	align-items: center;
-    &__footer-controls{
-        flex: 1;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-    }
-
 }
+
+.simple-data-table__footer-controls{
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
 
 .simple-data-table__footer > .simple-data-table__footer-pagination{
     flex-basis: 33.33333%;
@@ -260,7 +259,6 @@ $border-color: #E7EBED;
     flex-basis: 33.33333%;
     max-width: 33.33333%;
     padding: 3px 10px;
-
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
@@ -325,7 +323,6 @@ $border-color: #E7EBED;
 
 .simple-data-table__button > svg {
     fill: #7a7578;
-
 }
 
 
@@ -378,10 +375,8 @@ $border-color: #E7EBED;
     bottom: 0;
     left: 0;
     top: 0;
-
     background: black;
     width: 5px;
-
     display: none;
 }
 
@@ -530,7 +525,6 @@ $border-color: #E7EBED;
         // line-height: 1em;
         border: 0;
         outline: none;
-        
     }
     &__btn{
         line-height: 1em;
