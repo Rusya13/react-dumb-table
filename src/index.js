@@ -136,6 +136,8 @@ export class DumbTable extends React.Component {
                     col.sortKey || col.key,
                     orderDirection
                   )}
+                  onMouseOver={this._onCellMouseOverHandler.bind(this)}
+                  onMouseOut={this._onCellMouseOutHandler.bind(this)}
                   className={
                     'dumbTable__headerCell' +
                     (orderBy === col.sortKey || orderBy === col.key ? ' sorted' : '') +
@@ -244,6 +246,21 @@ export class DumbTable extends React.Component {
     );
   }
 
+  _onCellMouseOverHandler(e) {
+    if(this.props.overflowTooltip && e.target.offsetWidth < e.target.scrollWidth) {
+      if(!e.target.getAttribute('data-tooltip')) {
+        e.target.setAttribute('data-tooltip', e.target.textContent);
+      }
+    }
+
+  }
+
+  _onCellMouseOutHandler(e) {
+    if(this.props.overflowTooltip && e.target.getAttribute('data-tooltip')) {
+      e.target.removeAttribute('data-tooltip', e.target.textContent);
+    }
+  }
+
   _renderRow(row, index, columns) {
     return columns.map((column, cellIndex) => {
       // get value by key from object or by Getter from class object
@@ -286,6 +303,8 @@ export class DumbTable extends React.Component {
         <td
           className={'dumbTable__contentCell' + (column.number ? ' number' : '')}
           onClick={this._onCellClickHandler.bind(this, row, index, column)}
+          onMouseOver={this._onCellMouseOverHandler.bind(this)}
+          onMouseOut={this._onCellMouseOutHandler.bind(this)}
           onContextMenu={this._contextHandler.bind(this, row, index, column.key)}
           key={cellIndex}
         >
@@ -613,6 +632,8 @@ DumbTable.propTypes = {
   orderDirection: PropTypes.oneOf(['ASC', 'DESC']),
   orderChangeHandler: PropTypes.func,
 
+  overflowTooltip: PropTypes.bool,
+
   className: PropTypes.string,
 
   rightClickHandler: PropTypes.func,
@@ -636,6 +657,7 @@ DumbTable.defaultProps = {
   minColWidth: 60,
   cellClickHandler: null,
   selectedRowIndexes: [],
+  overflowTooltip: true,
 
   showFooter: true,
   // footerHeight: 40 + 'px',

@@ -216,6 +216,8 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
                 'div',
                 {
                   onClick: _this3._orderChangeHandler.bind(_this3, orderBy, col.sortKey || col.key, orderDirection),
+                  onMouseOver: _this3._onCellMouseOverHandler.bind(_this3),
+                  onMouseOut: _this3._onCellMouseOutHandler.bind(_this3),
                   className: 'dumbTable__headerCell' + (orderBy === col.sortKey || orderBy === col.key ? ' sorted' : '') + (col.number ? ' number' : '')
                 },
                 col.name
@@ -304,6 +306,22 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
       }, object) || def;
     }
   }, {
+    key: '_onCellMouseOverHandler',
+    value: function _onCellMouseOverHandler(e) {
+      if (this.props.overflowTooltip && e.target.offsetWidth < e.target.scrollWidth) {
+        if (!e.target.getAttribute('data-tooltip')) {
+          e.target.setAttribute('data-tooltip', e.target.textContent);
+        }
+      }
+    }
+  }, {
+    key: '_onCellMouseOutHandler',
+    value: function _onCellMouseOutHandler(e) {
+      if (this.props.overflowTooltip && e.target.getAttribute('data-tooltip')) {
+        e.target.removeAttribute('data-tooltip', e.target.textContent);
+      }
+    }
+  }, {
     key: '_renderRow',
     value: function _renderRow(row, index, columns) {
       var _this4 = this;
@@ -354,6 +372,8 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
           {
             className: 'dumbTable__contentCell' + (column.number ? ' number' : ''),
             onClick: _this4._onCellClickHandler.bind(_this4, row, index, column),
+            onMouseOver: _this4._onCellMouseOverHandler.bind(_this4),
+            onMouseOut: _this4._onCellMouseOutHandler.bind(_this4),
             onContextMenu: _this4._contextHandler.bind(_this4, row, index, column.key),
             key: cellIndex
           },
@@ -765,6 +785,8 @@ DumbTable.propTypes = {
   orderDirection: _propTypes2.default.oneOf(['ASC', 'DESC']),
   orderChangeHandler: _propTypes2.default.func,
 
+  overflowTooltip: _propTypes2.default.bool,
+
   className: _propTypes2.default.string,
 
   rightClickHandler: _propTypes2.default.func,
@@ -783,6 +805,7 @@ DumbTable.defaultProps = {
   minColWidth: 60,
   cellClickHandler: null,
   selectedRowIndexes: [],
+  overflowTooltip: true,
 
   showFooter: true,
   // footerHeight: 40 + 'px',
