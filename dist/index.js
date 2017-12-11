@@ -805,7 +805,7 @@ DumbTable.defaultProps = {
   minColWidth: 60,
   cellClickHandler: null,
   selectedRowIndexes: [],
-  overflowTooltip: true,
+  overflowTooltip: false,
 
   showFooter: true,
   // footerHeight: 40 + 'px',
