@@ -247,21 +247,24 @@ export class DumbTable extends React.Component {
   }
 
   _onCellMouseOverHandler(e) {
+    const parent = e.target.parentNode;
     if(this.props.overflowTooltip && e.target.offsetWidth < e.target.scrollWidth) {
-      if(!e.target.getAttribute('data-tooltip')) {
-        e.target.setAttribute('data-tooltip', e.target.textContent);
+      if(!parent.getAttribute('data-tooltip')) {
+        parent.setAttribute('data-tooltip', e.target.textContent);
       }
     }
-
   }
 
   _onCellMouseOutHandler(e) {
-    if(this.props.overflowTooltip && e.target.getAttribute('data-tooltip')) {
-      e.target.removeAttribute('data-tooltip', e.target.textContent);
+    const parent = e.target.parentNode;
+    if(parent.getAttribute('data-tooltip')) {
+      parent.removeAttribute('data-tooltip');
     }
   }
 
   _renderRow(row, index, columns) {
+    const { overflowTooltip } = this.props;
+
     return columns.map((column, cellIndex) => {
       // get value by key from object or by Getter from class object
 
@@ -299,12 +302,21 @@ export class DumbTable extends React.Component {
         }
       }
 
+      if(overflowTooltip) {
+        value = (
+          <div
+            onMouseOver={this._onCellMouseOverHandler.bind(this)}
+            onMouseOut={this._onCellMouseOutHandler.bind(this)}
+            className="dumbTable__overflowCell">
+            {value}
+          </div>
+        )
+      }
+
       return (
         <td
           className={'dumbTable__contentCell' + (column.number ? ' number' : '')}
           onClick={this._onCellClickHandler.bind(this, row, index, column)}
-          onMouseOver={this._onCellMouseOverHandler.bind(this)}
-          onMouseOut={this._onCellMouseOutHandler.bind(this)}
           onContextMenu={this._contextHandler.bind(this, row, index, column.key)}
           key={cellIndex}
         >

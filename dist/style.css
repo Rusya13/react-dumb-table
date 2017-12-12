@@ -125,15 +125,16 @@
         color: #fff; }
     .dumbTable__contentRow:hover {
       background: #dee9fc; }
-  .dumbTable__contentCell {
+  .dumbTable__overflowCell {
+    overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-size: 1em;
+    font-size: 1em; }
+  .dumbTable__contentCell {
     color: #43516C;
     border-right: 1px solid #E7EBED;
     border-bottom: 1px solid #E7EBED;
     min-height: 15px;
-    overflow: hidden;
     padding: 0 3px;
     line-height: 1.4em; }
     .dumbTable__contentCell:last-child {

@@ -308,23 +308,28 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
   }, {
     key: '_onCellMouseOverHandler',
     value: function _onCellMouseOverHandler(e) {
+      var parent = e.target.parentNode;
       if (this.props.overflowTooltip && e.target.offsetWidth < e.target.scrollWidth) {
-        if (!e.target.getAttribute('data-tooltip')) {
-          e.target.setAttribute('data-tooltip', e.target.textContent);
+        if (!parent.getAttribute('data-tooltip')) {
+          parent.setAttribute('data-tooltip', e.target.textContent);
         }
       }
     }
   }, {
     key: '_onCellMouseOutHandler',
     value: function _onCellMouseOutHandler(e) {
-      if (this.props.overflowTooltip && e.target.getAttribute('data-tooltip')) {
-        e.target.removeAttribute('data-tooltip', e.target.textContent);
+      var parent = e.target.parentNode;
+      if (parent.getAttribute('data-tooltip')) {
+        parent.removeAttribute('data-tooltip');
       }
     }
   }, {
     key: '_renderRow',
     value: function _renderRow(row, index, columns) {
       var _this4 = this;
+
+      var overflowTooltip = this.props.overflowTooltip;
+
 
       return columns.map(function (column, cellIndex) {
         // get value by key from object or by Getter from class object
@@ -367,13 +372,22 @@ var DumbTable = exports.DumbTable = function (_React$Component) {
           }
         }
 
+        if (overflowTooltip) {
+          value = _react2.default.createElement(
+            'div',
+            {
+              onMouseOver: _this4._onCellMouseOverHandler.bind(_this4),
+              onMouseOut: _this4._onCellMouseOutHandler.bind(_this4),
+              className: 'dumbTable__overflowCell' },
+            value
+          );
+        }
+
         return _react2.default.createElement(
           'td',
           {
             className: 'dumbTable__contentCell' + (column.number ? ' number' : ''),
             onClick: _this4._onCellClickHandler.bind(_this4, row, index, column),
-            onMouseOver: _this4._onCellMouseOverHandler.bind(_this4),
-            onMouseOut: _this4._onCellMouseOutHandler.bind(_this4),
             onContextMenu: _this4._contextHandler.bind(_this4, row, index, column.key),
             key: cellIndex
           },
