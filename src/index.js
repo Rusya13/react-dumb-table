@@ -136,8 +136,7 @@ export class DumbTable extends React.Component {
                     col.sortKey || col.key,
                     orderDirection
                   )}
-                  onMouseOver={this._onCellMouseOverHandler.bind(this)}
-                  onMouseOut={this._onCellMouseOutHandler.bind(this)}
+                  data-tooltip={this.props.overflowTooltip ? col.name : null}
                   className={
                     'dumbTable__headerCell' +
                     (orderBy === col.sortKey || orderBy === col.key ? ' sorted' : '') +
@@ -239,27 +238,11 @@ export class DumbTable extends React.Component {
   _get(object, path, def) {
     return (
       path
-        .replace(/\[/g, '.')
-        .replace(/\]/g, '')
-        .split('.')
-        .reduce((o, k) => (o || {})[k], object) || def
+      .replace(/\[/g, '.')
+      .replace(/\]/g, '')
+      .split('.')
+      .reduce((o, k) => (o || {})[k], object) || def
     );
-  }
-
-  _onCellMouseOverHandler(e) {
-    const parent = e.target.parentNode;
-    if(this.props.overflowTooltip && e.target.offsetWidth < e.target.scrollWidth) {
-      if(!parent.getAttribute('data-tooltip')) {
-        parent.setAttribute('data-tooltip', e.target.textContent);
-      }
-    }
-  }
-
-  _onCellMouseOutHandler(e) {
-    const parent = e.target.parentNode;
-    if(parent.getAttribute('data-tooltip')) {
-      parent.removeAttribute('data-tooltip');
-    }
   }
 
   _renderRow(row, index, columns) {
@@ -302,22 +285,12 @@ export class DumbTable extends React.Component {
         }
       }
 
-      if(overflowTooltip) {
-        value = (
-          <div
-            onMouseOver={this._onCellMouseOverHandler.bind(this)}
-            onMouseOut={this._onCellMouseOutHandler.bind(this)}
-            className="dumbTable__overflowCell">
-            {value}
-          </div>
-        )
-      }
-
       return (
         <td
-          className={'dumbTable__contentCell' + (column.number ? ' number' : '')}
+          className={'dumbTable__contentCell' + (column.number ? ' number' : '' + (overflowTooltip ? ' dumbTable__overflowCell' : ''))}
           onClick={this._onCellClickHandler.bind(this, row, index, column)}
           onContextMenu={this._contextHandler.bind(this, row, index, column.key)}
+          data-tooltip={overflowTooltip ? value.props ? value.props.children : value : null}
           key={cellIndex}
         >
           {value}
