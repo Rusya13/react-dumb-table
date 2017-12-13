@@ -19,7 +19,6 @@ $border-color: #E7EBED;
     zoom: 1;
 
     border: 1px solid $border-color;
-    border-radius: 3px;
 		font-size: 13px;
 
     & *, & *:before, & *:after {
@@ -71,9 +70,8 @@ $border-color: #E7EBED;
     }
 
     &__header{
-        border-bottom: 1px solid $border-color;
+	      background: rgba(129, 151, 160, 0.3);
         padding-right: 8px;
-
     }
 
 
@@ -123,7 +121,6 @@ $border-color: #E7EBED;
         bottom: 0;
         top: 0;
 
-        background: #fff;
         width: 8px;
 
         cursor: col-resize;
@@ -141,10 +138,6 @@ $border-color: #E7EBED;
             left: 50%;
 
             border-right: 1px solid $border-color;
-        }
-
-        &:hover{
-            background: lighten($border-color, 5%);
         }
     }
 

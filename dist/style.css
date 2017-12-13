@@ -15,7 +15,6 @@
   overflow-x: hidden;
   zoom: 1;
   border: 1px solid #E7EBED;
-  border-radius: 3px;
   font-size: 13px; }
   .dumbTable *, .dumbTable *:before, .dumbTable *:after {
     box-sizing: border-box; }
@@ -47,7 +46,7 @@
   .dumbTable__icon {
     fill: #818B9E; }
   .dumbTable__header {
-    border-bottom: 1px solid #E7EBED;
+    background: rgba(129, 151, 160, 0.3);
     padding-right: 8px; }
   .dumbTable__headerCell {
     font-weight: normal;
@@ -86,7 +85,6 @@
     right: -3px;
     bottom: 0;
     top: 0;
-    background: #fff;
     width: 8px;
     cursor: col-resize;
     z-index: 1;
@@ -99,8 +97,6 @@
       top: 0px;
       left: 50%;
       border-right: 1px solid #E7EBED; }
-    .dumbTable__headerCellResize:hover {
-      background: #f6f7f8; }
   .dumbTable__content {
     overflow-y: scroll;
     overflow-x: hidden;
